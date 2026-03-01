@@ -1,0 +1,18 @@
+{
+  "name": "swiftmeals",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "nx run-many -t dev serve --parallel",
+    "dev:frontend": "nx dev frontend",
+    "dev:backend": "source apps/backend/.venv/bin/activate && nx serve backend",
+    "build": "nx build frontend",
+    "migrate": "nx migrate backend"
+  },
+  "devDependencies": {
+    "nx": "^22.3.3"
+  }
+}
