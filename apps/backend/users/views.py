@@ -3,12 +3,19 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.decorators import action
+from .models import User, StudentProfile, RestaurantProfile
 from .serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
-    UserListSerializer,
+    UserDetailSerializer,
+    StudentProfileSerializer,
+    RestaurantProfileSerializer,
 )
+from .permissions import IsStudent, IsRestaurantOwner, IsOwnerOrReadOnly
 
 from .models import User
 
@@ -61,28 +68,49 @@ class UserLoginView(APIView):
             return Response(response, status=status_code)
 
 
-class UserListView(APIView):
-    serializer_class = UserListSerializer
-    permission_classes = (IsAuthenticated,)
+class ProfileViewSet(viewsets.GenericViewSet):
+    """Mixed viewset for /me and profile updates"""
 
-    def get(self, request):
-        user = request.user
-        if user.role != 1:
-            response = {
-                "success": False,
-                "status_code": status.HTTP_403_FORBIDDEN,
-                "message": "You are not authorized to perform this action",
-            }
-            return Response(response, status.HTTP_403_FORBIDDEN)
-        else:
-            users = User.objects.all()
-            serializer = self.serializer_class(users, many=True)
-            response = {
-                "success": True,
-                "status_code": status.HTTP_200_OK,
-                "message": "Successfully fetched users",
-                "users": serializer.data,
-            }
-            return Response(response, status=status.HTTP_200_OK)
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=["get"])
+    def me(self, request):
+        serializer = UserDetailSerializer(request.user)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["patch"], url_path="student/update")
+    def update_student(self, request):
+        if not hasattr(request.user, "student_profile"):
+            return Response({"detail": "Not a student"}, status=403)
+        profile = request.user.student_profile
+        serializer = StudentProfileSerializer(profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["patch"], url_path="restaurant/update")
+    def update_restaurant(self, request):
+        if not hasattr(request.user, "restaurant_profile"):
+            return Response({"detail": "Not a restaurant owner"}, status=403)
+        profile = request.user.restaurant_profile
+        serializer = RestaurantProfileSerializer(
+            profile, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
+class RestaurantProfileViewSet(viewsets.ModelViewSet):
+    queryset = RestaurantProfile.objects.all()
+    serializer_class = RestaurantProfileSerializer
+    permission_classes = [IsAuthenticated, IsRestaurantOwner, IsOwnerOrReadOnly]
+
+    def get_queryset(self):
+        # Vendors only see their own
+        if self.request.user.role == "restaurant":
+            return RestaurantProfile.objects.filter(user=self.request.user)
+        return RestaurantProfile.objects.none()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

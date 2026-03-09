@@ -127,3 +127,5 @@ yarn-error.log*
 *.tmp
 *.temp
 .cache/
+
+restaurant_logos/
