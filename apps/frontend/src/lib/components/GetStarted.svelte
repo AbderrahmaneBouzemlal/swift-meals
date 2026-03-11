@@ -1,0 +1,28 @@
+<script>
+	import { goto } from '$app/navigation';
+	import HeroImage from '$lib/components/HeroImage.svelte';
+	import Button from '$lib/components/Button.svelte';
+</script>
+
+<div
+	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
+>
+	<HeroImage />
+	<div
+		class="flex shrink-0 flex-col items-center gap-4 rounded-t-3xl bg-white px-8 pt-7 pb-4 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]"
+	>
+		<p class="text-xl text-brand-gray-dark italic">Let's get started</p>
+		<Button />
+		<div class="flex items-center gap-1.5 pb-2">
+			<div
+				class="h-2 w-6 rounded bg-brand-yellow transition-all duration-300"
+			></div>
+			<div
+				class="h-2 w-2 rounded-full bg-brand-yellow transition-all duration-300"
+			></div>
+			<div
+				class="h-2 w-2 rounded-full bg-brand-yellow transition-all duration-300"
+			></div>
+		</div>
+	</div>
+</div>

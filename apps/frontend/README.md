@@ -1,42 +1,60 @@
-# sv
+# Swift Meals — Svelte + Tailwind UI
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Mobile-first food delivery app built with Svelte and Tailwind CSS. This frontend serves as the user interface for both buyers and sellers, providing a seamless experience for ordering meals and managing accounts.
 
-## Creating a project
+## Pages
 
-If you're seeing this, you've probably already done this step. Congrats!
+| Page                    | Route         | Description                    |
+| ----------------------- | ------------- | ------------------------------ |
+| Get Started             | `get-started` | Splash / onboarding screen     |
+| **Choose Role** _(new)_ | `choose-role` | Select **Buyer** or **Seller** |
+| Login                   | `login`       | Sign In / Sign Up choice       |
+| Sign In                 | `sign-in`     | Email + password form          |
+| Sign Up                 | `sign-up`     | Registration form              |
+| My Account              | `account`     | Profile & navigation menu      |
 
-```sh
-# create a new project
-npx sv create my-app
+## Navigation Flow
+
+```
+Get Started → Choose Role → Login → Sign In ──┐
+                                  └── Sign Up ──┤→ My Account
 ```
 
-To recreate this project with the same configuration:
+## Setup
 
-```sh
-# recreate this project
-npx sv create --template minimal --no-types --add prettier eslint tailwindcss="plugins:none" sveltekit-adapter="adapter:static" --install npm frontend/
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+## Design Tokens
 
-To create a production version of your app:
+| Token          | Value          | Usage                         |
+| -------------- | -------------- | ----------------------------- |
+| Primary Yellow | `#FCBD0B`      | Buttons, accents, CTA         |
+| Dark           | `#595454`      | Text, icons, headers          |
+| Gray           | `#BDBDBD`      | Placeholders, secondary icons |
+| Input BG       | `#F6F6F6`      | Form field backgrounds        |
+| Font           | ABeeZee Italic | All typography                |
 
-```sh
-npm run build
+## Component Structure
+
+```
+src/
+├── App.svelte                    # Root router
+└── lib/
+    └── components/
+        ├── GetStarted.svelte     # Splash screen with animated logo
+        ├── ChooseRole.svelte     # 🆕 Buyer vs Seller selection
+        ├── Login.svelte          # Welcome + sign in/up choice
+        ├── SignIn.svelte         # Email/password login
+        ├── SignUp.svelte         # Registration form
+        └── MyAccount.svelte      # Profile page with menu
 ```
 
-You can preview the production build with `npm run preview`.
+## Notes
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- All components use `createEventDispatcher` and emit `navigate` events
+- The `App.svelte` handles routing via a simple reactive `currentPage` variable
+- The `ChooseRole` component passes the selected role downstream so `Login` can display role-specific UI
+- Components are self-contained with scoped `<style>` blocks; Tailwind is used for utility classes where appropriate

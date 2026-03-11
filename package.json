@@ -7,12 +7,22 @@
   ],
   "scripts": {
     "dev": "nx run-many -t dev serve --parallel",
+    "format": "prettier --write .",
     "dev:frontend": "nx dev frontend",
     "dev:backend": "source apps/backend/.venv/bin/activate && nx serve backend",
     "build": "nx build frontend",
     "migrate": "nx migrate backend"
   },
   "devDependencies": {
-    "nx": "^22.3.3"
+    "nx": "^22.3.3",
+    "prettier": "^3.8.1",
+    "prettier-plugin-svelte": "^3.5.1",
+    "prettier-plugin-tailwindcss": "^0.7.2"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/cli": "^8.2.0",
+    "@capacitor/core": "^8.2.0",
+    "@capacitor/ios": "^8.2.0"
   }
 }

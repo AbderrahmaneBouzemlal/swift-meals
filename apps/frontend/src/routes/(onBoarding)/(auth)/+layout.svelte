@@ -1,0 +1,3 @@
+<div class="phone-frame">
+	<slot />
+</div>

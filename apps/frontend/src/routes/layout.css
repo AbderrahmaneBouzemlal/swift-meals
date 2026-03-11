@@ -1,1 +1,14 @@
 @import 'tailwindcss';
+
+@theme {
+	--color-brand-yellow: #fcbd0b;
+	--color-brand-dark: #595454;
+	--color-brand-gray: #bdbdbd;
+	--color-brand-light: #f4f3f3;
+	--color-brand-gray-dark: #757373;
+	--color-brand-gray-light: #e8e8e8;
+	--color-subtext-gray: #9e9b9b;
+	--color-brand-yelow-light: #f5b400;
+	--font-abeezee: 'ABeeZee', sans-serif;
+	--radius-phone: 40px;
+}
