@@ -6,6 +6,7 @@
 	import InputField from './ui/InputField.svelte';
 	import PasswordInput from './ui/PasswordInput.svelte';
 	import PrimaryButton from './ui/PrimaryButton.svelte';
+	import Title from './ui/Title.svelte';
 
 	let email = '';
 	let password = '';
@@ -22,7 +23,7 @@
 
 	<!-- Page title -->
 	<div class="shrink-0 px-8 pt-2 pb-4">
-		<h1 class="m-0 text-[28px] font-normal text-brand-dark italic">Sign In</h1>
+		<Title size="medium">Sign In</Title>
 	</div>
 
 	<!-- Form -->

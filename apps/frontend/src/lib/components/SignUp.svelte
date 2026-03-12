@@ -6,6 +6,7 @@
 	import PasswordInput from './ui/PasswordInput.svelte';
 	import Icon from './ui/Icon.svelte';
 	import PrimaryButton from './ui/PrimaryButton.svelte';
+	import Title from './ui/Title.svelte';
 	import { goto } from '$app/navigation';
 	import { registration } from '$lib/stores/registration.svelte.js';
 
@@ -35,7 +36,7 @@
 
 	<!-- Page title -->
 	<div class="shrink-0 px-8 pt-1.5 pb-3">
-		<h1 class="m-0 text-[28px] font-normal text-brand-dark italic">Sign Up</h1>
+		<Title size="medium">Sign Up</Title>
 		<!-- subtle role badge so the user knows which flow they're in -->
 		<span
 			class="mt-1 inline-block rounded-full px-3 py-0.5 text-xs text-white italic

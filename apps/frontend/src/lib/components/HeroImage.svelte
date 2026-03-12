@@ -1,5 +1,7 @@
 <script>
   import logo from '../assets/logo.svg';
+  import Title from '$lib/components/ui/Title.svelte';
+  import Subtitle from '$lib/components/ui/Subtitle.svelte';
 </script>
 
 <div class="relative flex flex-1 items-center justify-center overflow-hidden bg-[#FDFAF4]">
@@ -22,12 +24,12 @@
 
     <!-- tight text stack -->
     <div class="flex flex-col items-center gap-1.5">
-      <h1 class="text-4xl font-bold italic tracking-tight text-stone-800">
+      <Title size="large" weight="bold" color="stone-800" class="tracking-tight">
         Swift Meals
-      </h1>
-      <p class="text-sm italic text-stone-400 tracking-wide">
+      </Title>
+      <Subtitle size="small" color="stone-400" class="tracking-wide">
         Delicious, delivered fast
-      </p>
+      </Subtitle>
     </div>
 
   </div>

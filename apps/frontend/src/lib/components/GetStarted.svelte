@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import HeroImage from '$lib/components/HeroImage.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Subtitle from '$lib/components/ui/Subtitle.svelte';
 </script>
 
 <div
@@ -11,7 +12,7 @@
 	<div
 		class="flex shrink-0 flex-col items-center gap-4 rounded-t-3xl bg-white px-8 pt-7 pb-4 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]"
 	>
-		<p class="text-xl text-brand-gray-dark italic">Let's get started</p>
+		<Subtitle size="xl" color="brand-gray-dark">Let's get started</Subtitle>
 		<Button />
 		<div class="flex items-center gap-1.5 pb-2">
 			<div

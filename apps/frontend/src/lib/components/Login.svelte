@@ -3,6 +3,8 @@
 	import ChatButton from './ui/ChatButton.svelte';
 	import PrimaryButton from './ui/PrimaryButton.svelte';
 	import Header from './Header.svelte';
+	import Title from './ui/Title.svelte';
+	import Subtitle from './ui/Subtitle.svelte';
 </script>
 
 <div
@@ -11,12 +13,8 @@
 	<Header backUrl="/" />
 	<div class="flex flex-1 flex-col items-center gap-20 px-8 pt-5">
 		<div class="flex flex-col items-center gap-2 text-center">
-			<h1 class="m-0 mt-8 text-4xl font-normal text-brand-dark italic">
-				Hello!
-			</h1>
-			<p class="m-0 text-[15px] text-subtext-gray italic">
-				Welcome to Swift Meals
-			</p>
+			<Title size="large" align="center" class="mt-8">Hello!</Title>
+			<Subtitle size="medium" align="center">Welcome to Swift Meals</Subtitle>
 		</div>
 
 		<div class="flex w-full flex-col items-center">
