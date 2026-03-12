@@ -4,11 +4,13 @@
 	import { createEventDispatcher } from 'svelte';
 	import ChatButton from './ui/ChatButton.svelte';
 	import Icon from './ui/Icon.svelte';
+	import { setRole } from '$lib/stores/registration.svelte.js';
 
 	let selected = null;
 
 	function choose(role) {
-		goto('/sign-up/?role=' + role);
+		setRole(role);
+		goto('/sign-up');
 	}
 </script>
 
@@ -29,15 +31,13 @@
 			</p>
 		</div>
 
-		<!-- Role cards -->
 		<div class="flex flex-col gap-0">
-			<!-- Buyer card -->
 			<button
-				class="relative flex w-full cursor-pointer items-center gap-4 rounded-[14px] border-2 border-transparent bg-brand-light p-5 text-left transition-all duration-[0.25s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 hover:border-brand-yellow hover:bg-white hover:shadow-[0_4px_20px_rgba(252,189,11,0.2)] {selected ===
-				'buyer'
+				class="relative flex w-full cursor-pointer items-center gap-4 rounded-[14px] border-2 border-transparent bg-brand-light p-5 text-left transition-all duration-[0.25s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 hover:border-brand-yellow hover:bg-white hover:shadow-[0_4px_20px_rgba(252,189,11,0.2)]
+				{selected === 'customer'
 					? 'scale-[1.01] border-brand-yellow! bg-white! shadow-[0_6px_24px_rgba(252,189,11,0.25)]'
 					: ''}"
-				onclick={() => choose('buyer')}
+				onclick={() => choose('customer')}
 			>
 				<div
 					class="flex h-18 w-18 shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
@@ -100,17 +100,15 @@
 					<h2
 						class="m-0 mt-0 mb-1 text-[20px] font-normal text-brand-dark italic"
 					>
-						Buyer
+						customer
 					</h2>
 					<p class="m-0 text-[12px] leading-[1.4] text-subtext-gray italic">
 						Order food from your favourite restaurants
 					</p>
 				</div>
 				<div
-					class="absolute top-3 right-9 origin-center transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] {selected ===
-					'buyer'
-						? 'scale-100 opacity-100'
-						: 'scale-50 opacity-0'}"
+					class="absolute top-3 right-9 origin-center transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]
+					{selected === 'customer' ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}"
 				>
 					<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
 						<circle cx="10" cy="10" r="10" fill="#FCBD0B" />
@@ -144,17 +142,17 @@
 			</div>
 
 			<button
-				class="relative flex w-full cursor-pointer items-center gap-4 rounded-[14px] border-2 border-transparent bg-brand-light p-5 text-left transition-all duration-[0.25s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 hover:border-brand-yellow hover:bg-white hover:shadow-[0_4px_20px_rgba(252,189,11,0.2)] {selected ===
-				'seller'
+				class="relative flex w-full cursor-pointer items-center gap-4 rounded-[14px] border-2 border-transparent bg-brand-light p-5 text-left transition-all duration-[0.25s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 hover:border-brand-yellow hover:bg-white hover:shadow-[0_4px_20px_rgba(252,189,11,0.2)]
+				{selected === 'business'
 					? 'scale-[1.01] border-brand-yellow! bg-white! shadow-[0_6px_24px_rgba(252,189,11,0.25)]'
 					: ''}"
-				onclick={() => choose('seller')}
+				onclick={() => choose('business')}
 			>
 				<div
 					class="flex h-18 w-18 shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
 				>
 					<svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-						<!-- Shop/restaurant front -->
+						<!-- Shop/business front -->
 						<rect
 							x="10"
 							y="28"
@@ -235,17 +233,15 @@
 					<h2
 						class="m-0 mt-0 mb-1 text-[20px] font-normal text-brand-dark italic"
 					>
-						Seller
+						business
 					</h2>
 					<p class="m-0 text-[12px] leading-[1.4] text-subtext-gray italic">
-						List your restaurant and manage orders
+						List your business and manage orders
 					</p>
 				</div>
 				<div
-					class="absolute top-3 right-9 origin-center transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] {selected ===
-					'seller'
-						? 'scale-100 opacity-100'
-						: 'scale-50 opacity-0'}"
+					class="absolute top-3 right-9 origin-center transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]
+					{selected === 'business' ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}"
 				>
 					<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
 						<circle cx="10" cy="10" r="10" fill="#FCBD0B" />
@@ -283,7 +279,7 @@
 				class="m-0 flex items-center gap-2.5 text-[13px] text-subtext-gray italic"
 			>
 				<div class="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-yellow"></div>
-				<span>Grow your restaurant business</span>
+				<span>Grow your business business</span>
 			</div>
 			<div
 				class="m-0 flex items-center gap-2.5 text-[13px] text-subtext-gray italic"

@@ -10,12 +10,6 @@
 	aria-label={ariaLabel}
 >
 	<div class="flex items-center justify-center">
-		{#if provider === 'apple'}
-			<Icon name="apple" width="22" height="26" />
-		{:else if provider === 'google'}
-			<Icon name="google" width="24" height="24" />
-		{:else if provider === 'facebook'}
-			<Icon name="facebook" width="22" height="22" />
-		{/if}
+		<Icon name="google" width="24" height="24" />
 	</div>
 </button>

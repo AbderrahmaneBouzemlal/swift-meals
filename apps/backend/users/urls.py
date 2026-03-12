@@ -11,7 +11,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r"profiles", ProfileViewSet, basename="profile")
-router.register(r"restaurants", RestaurantProfileViewSet, basename="restaurant")
+router.register(r"restaurants", RestaurantProfileViewSet, basename="business")
 
 
 urlpatterns = [

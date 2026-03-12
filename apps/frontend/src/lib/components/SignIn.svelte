@@ -58,26 +58,18 @@
 			<div class="h-px flex-1 bg-brand-gray"></div>
 		</div>
 
-		<p class="m-0 text-[18px] text-brand-gray-dark italic">Sign In using</p>
+		<p class="m-0 text-lg text-brand-gray-dark italic">Sign In using</p>
 
 		<div class="flex items-center justify-center gap-4">
-			<!-- Apple -->
-			<SocialLoginButton provider="apple" />
-
-			<!-- Google -->
 			<SocialLoginButton provider="google" />
-
-			<!-- Facebook -->
-			<SocialLoginButton provider="facebook" />
 		</div>
 	</div>
 
 	<!-- Bottom: Need an account -->
 	<div class="flex flex-1 shrink-0 items-end justify-center gap-2 pt-4 pb-3">
-		<span class="text-[18px] text-brand-gray-dark italic">Need An Account?</span
-		>
+		<span class="text-lg text-brand-gray-dark italic">Need An Account?</span>
 		<button
-			class="cursor-pointer border-none bg-transparent p-0 font-abeezee text-[18px] font-semibold text-brand-yellow italic transition-opacity duration-200 hover:opacity-80"
+			class="cursor-pointer border-none bg-transparent p-0 font-abeezee text-lg font-semibold text-brand-yellow italic transition-opacity duration-200 hover:opacity-80"
 			onclick={() => goto('/sign-up')}>Sign Up</button
 		>
 	</div>

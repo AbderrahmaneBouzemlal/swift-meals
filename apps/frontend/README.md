@@ -1,17 +1,17 @@
 # Swift Meals — Svelte + Tailwind UI
 
-Mobile-first food delivery app built with Svelte and Tailwind CSS. This frontend serves as the user interface for both buyers and sellers, providing a seamless experience for ordering meals and managing accounts.
+Mobile-first food delivery app built with Svelte and Tailwind CSS. This frontend serves as the user interface for both customers and Businesss, providing a seamless experience for ordering meals and managing accounts.
 
 ## Pages
 
-| Page                    | Route         | Description                    |
-| ----------------------- | ------------- | ------------------------------ |
-| Get Started             | `get-started` | Splash / onboarding screen     |
-| **Choose Role** _(new)_ | `choose-role` | Select **Buyer** or **Seller** |
-| Login                   | `login`       | Sign In / Sign Up choice       |
-| Sign In                 | `sign-in`     | Email + password form          |
-| Sign Up                 | `sign-up`     | Registration form              |
-| My Account              | `account`     | Profile & navigation menu      |
+| Page                    | Route         | Description                         |
+| ----------------------- | ------------- | ----------------------------------- |
+| Get Started             | `get-started` | Splash / onboarding screen          |
+| **Choose Role** _(new)_ | `choose-role` | Select **customer** or **business** |
+| Login                   | `login`       | Sign In / Sign Up choice            |
+| Sign In                 | `sign-in`     | Email + password form               |
+| Sign Up                 | `sign-up`     | Registration form                   |
+| My Account              | `account`     | Profile & navigation menu           |
 
 ## Navigation Flow
 
@@ -45,7 +45,7 @@ src/
 └── lib/
     └── components/
         ├── GetStarted.svelte     # Splash screen with animated logo
-        ├── ChooseRole.svelte     # 🆕 Buyer vs Seller selection
+        ├── ChooseRole.svelte     # 🆕 customer vs business selection
         ├── Login.svelte          # Welcome + sign in/up choice
         ├── SignIn.svelte         # Email/password login
         ├── SignUp.svelte         # Registration form

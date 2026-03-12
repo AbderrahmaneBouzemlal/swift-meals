@@ -11,10 +11,14 @@ from .managers import CustomUserManager
 class User(AbstractBaseUser, PermissionsMixin):
 
     ADMIN = 1
-    RESTAURANT = 2
-    STUDENT = 3
+    BUSINESS = 2
+    CUSTOMER = 3
 
-    ROLE_CHOICES = ((ADMIN, "Admin"), (RESTAURANT, "Restaurant"), (STUDENT, "Student"))
+    ROLE_CHOICES = (
+        (ADMIN, "Admin"),
+        (BUSINESS, "Business"),
+        (CUSTOMER, "customer"),
+    )
 
     uid = models.UUIDField(
         primary_key=False,
@@ -28,7 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(
         max_length=20,
         choices=ROLE_CHOICES,
-        default=STUDENT,
+        default=CUSTOMER,
         help_text="User role determines which profile is active",
     )
     is_active = models.BooleanField(default=True)
@@ -60,10 +64,10 @@ class StudentProfile(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="student_profile",
-        limit_choices_to={"role": User.STUDENT},  # Optional: enforce role
+        limit_choices_to={"role": User.CUSTOMER},  # Optional: enforce role
     )
     student_id = models.CharField(
-        max_length=20, unique=True, verbose_name="Student/Matric ID"
+        max_length=20, unique=True, verbose_name="customer/Matric ID"
     )
     gender = models.CharField(
         max_length=10,
@@ -76,11 +80,11 @@ class StudentProfile(models.Model):
     phone_number = models.CharField(max_length=15, blank=True)
 
     class Meta:
-        verbose_name = "student profile"
-        verbose_name_plural = "student profiles"
+        verbose_name = "customer profile"
+        verbose_name_plural = "customer profiles"
 
     def __str__(self):
-        return f"Student: {self.user.email}"
+        return f"customer: {self.user.email}"
 
 
 class RestaurantProfile(models.Model):
@@ -88,7 +92,7 @@ class RestaurantProfile(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="restaurant_profile",
-        limit_choices_to={"role": User.RESTAURANT},
+        limit_choices_to={"role": User.BUSINESS},
     )
     restaurant_name = models.CharField(max_length=150)
     location = models.CharField(max_length=200, help_text="Campus or nearby address")
@@ -96,17 +100,15 @@ class RestaurantProfile(models.Model):
     cuisine_type = models.CharField(max_length=100, blank=True)  # e.g. "Malay, Indian"
     phone_number = models.CharField(max_length=15, blank=True)
     logo = models.ImageField(upload_to="restaurant_logos/", blank=True, null=True)
-    ssm_registration = models.CharField(
-        max_length=50, blank=True
-    )
+    ssm_registration = models.CharField(max_length=50, blank=True)
     pickup_locations = models.TextField(
         blank=True,
         help_text="Comma-separated pickup points, e.g. Hostel Lobby, Library Entrance",
     )
 
     class Meta:
-        verbose_name = "restaurant profile"
-        verbose_name_plural = "restaurant profiles"
+        verbose_name = "business profile"
+        verbose_name_plural = "business profiles"
 
     def __str__(self):
-        return f"Restaurant: {self.restaurant_name} ({self.user.email})"
+        return f"Business: {self.restaurant_name} ({self.user.email})"

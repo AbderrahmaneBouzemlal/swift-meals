@@ -6,9 +6,9 @@ from .models import User, StudentProfile, RestaurantProfile
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        if instance.role == User.STUDENT:
+        if instance.role == User.CUSTOMER:
             StudentProfile.objects.create(user=instance)
-        elif instance.role == User.RESTAURANT:
+        elif instance.role == User.BUSINESS:
             RestaurantProfile.objects.create(user=instance)
 
 

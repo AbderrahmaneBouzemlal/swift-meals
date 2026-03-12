@@ -15,7 +15,7 @@ from .serializers import (
     StudentProfileSerializer,
     RestaurantProfileSerializer,
 )
-from .permissions import IsStudent, IsRestaurantOwner, IsOwnerOrReadOnly
+from .permissions import isCustomer, isBusinessOwner, IsOwnerOrReadOnly
 
 from .models import User
 
@@ -78,20 +78,20 @@ class ProfileViewSet(viewsets.GenericViewSet):
         serializer = UserDetailSerializer(request.user)
         return Response(serializer.data)
 
-    @action(detail=False, methods=["patch"], url_path="student/update")
+    @action(detail=False, methods=["patch"], url_path="customer/update")
     def update_student(self, request):
         if not hasattr(request.user, "student_profile"):
-            return Response({"detail": "Not a student"}, status=403)
+            return Response({"detail": "Not a customer"}, status=403)
         profile = request.user.student_profile
         serializer = StudentProfileSerializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
 
-    @action(detail=False, methods=["patch"], url_path="restaurant/update")
+    @action(detail=False, methods=["patch"], url_path="business/update")
     def update_restaurant(self, request):
         if not hasattr(request.user, "restaurant_profile"):
-            return Response({"detail": "Not a restaurant owner"}, status=403)
+            return Response({"detail": "Not a business owner"}, status=403)
         profile = request.user.restaurant_profile
         serializer = RestaurantProfileSerializer(
             profile, data=request.data, partial=True
@@ -104,11 +104,11 @@ class ProfileViewSet(viewsets.GenericViewSet):
 class RestaurantProfileViewSet(viewsets.ModelViewSet):
     queryset = RestaurantProfile.objects.all()
     serializer_class = RestaurantProfileSerializer
-    permission_classes = [IsAuthenticated, IsRestaurantOwner, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, isBusinessOwner, IsOwnerOrReadOnly]
 
     def get_queryset(self):
         # Vendors only see their own
-        if self.request.user.role == "restaurant":
+        if self.request.user.role == "business":
             return RestaurantProfile.objects.filter(user=self.request.user)
         return RestaurantProfile.objects.none()
 
