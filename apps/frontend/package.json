@@ -16,20 +16,23 @@
 		"@eslint/js": "^9.39.2",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.53.2",
-		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/vite": "^4.1.18",
+		"vite": "^6.0.0",
+		"svelte": "^5.51.0",
 		"@types/node": "^22",
+		"autoprefixer": "^10.4.16",
 		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.14.0",
 		"globals": "^17.3.0",
+		"postcss": "^8.4.32",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.4.1",
 		"prettier-plugin-tailwindcss": "^0.7.2",
-		"autoprefixer": "^10.4.16",
-		"postcss": "^8.4.32",
-		"svelte": "^5.51.0",
-		"tailwindcss": "^4.1.18",
-		"vite": "^7.3.1"
+		"tailwindcss": "^4.1.18"
+	},
+	"dependencies": {
+		"zod": "^4.3.6"
 	}
 }
