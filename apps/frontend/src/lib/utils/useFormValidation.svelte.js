@@ -31,7 +31,6 @@ export function useFormValidation(schema, getData) {
 	}
 
 	function touchAll(fields) {
-		console.log(fields);
 		touched = Object.fromEntries(fields?.map((f) => [f, true]));
 	}
 

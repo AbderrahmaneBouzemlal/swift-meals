@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-// ── shared ────────────────────────────────────────────────────
+export const signInSchema = z.object({
+	email: z.string().min(1, 'Email is required'),
+	password: z.string().min(1, 'Password is required')
+});
+
 export const accountSchema = z
 	.object({
 		name: z
@@ -24,10 +28,9 @@ export const accountSchema = z
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: 'Passwords do not match',
-		path: ['confirmPassword'] // error appears on confirmPassword field
+		path: ['confirmPassword']
 	});
 
-// ── customer ──────────────────────────────────────────────────
 export const customerProfileSchema = z.object({
 	student_id: z
 		.string()
@@ -48,7 +51,6 @@ export const customerProfileSchema = z.object({
 		.optional()
 });
 
-// ── business details ──────────────────────────────────────────
 export const businessDetailsSchema = z.object({
 	restaurant_name: z
 		.string()
@@ -77,7 +79,6 @@ export const businessDetailsSchema = z.object({
 		.optional()
 });
 
-// ── business setup ────────────────────────────────────────────
 export const businessSetupSchema = z.object({
 	description: z
 		.string()

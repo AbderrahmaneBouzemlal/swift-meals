@@ -1,4 +1,5 @@
 <script>
+	import LogoPreview from '$lib/components/LogoPreview.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import ChatButton from '$lib/components/ui/ChatButton.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
@@ -182,22 +183,7 @@
 
 		{#if isBusiness}
 			{#if logoPreview}
-				<div
-					class="flex items-center gap-3 rounded-lg border border-[#E8E8E8]
-                    bg-[#F6F6F6] p-3"
-				>
-					<img
-						src={logoPreview}
-						alt="Restaurant logo"
-						class="h-14 w-14 rounded-lg object-cover shadow-sm"
-					/>
-					<div>
-						<p class="text-xs text-brand-gray italic">Restaurant Logo</p>
-						<p class="truncate text-sm text-brand-dark italic">
-							{registration.logo?.name}
-						</p>
-					</div>
-				</div>
+				<LogoPreview previewUrl={logoPreview} Deleteable={false} />
 			{/if}
 
 			<!-- Business details -->

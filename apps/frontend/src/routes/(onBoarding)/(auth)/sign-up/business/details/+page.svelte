@@ -14,8 +14,10 @@
 
 	let errors = $state({});
 
+	//TODO:
 	// cuisine_type is a comma-separated string in Django
-	// we manage it as an array locally for better UX then join on submit
+	// update the backend to store it as an array and return as an array to avoid this hacky splitting/joining
+
 	let cuisineTags = $state(
 		registration.cuisine_type
 			? registration.cuisine_type.split(',').map((c) => c.trim())

@@ -10,8 +10,14 @@
 	import { validate } from '$lib/utils/validate';
 	import { businessSetupSchema } from '$lib/utils/schemas';
 	import { useFormValidation } from '$lib/utils/useFormValidation.svelte';
+	import LogoPreview from '$lib/components/LogoPreview.svelte';
+	import DropZone from '$lib/components/DropZone.svelte';
 
 	let errors = $state({});
+
+	// TODO:
+	// make pickup locations in the backend as an endpoint that returns an array,
+	// not a comma-separated string. For now, we do this hacky splitting/joining
 
 	let pickupTags = $state(
 		registration.pickup_locations
@@ -63,31 +69,19 @@
 		registration.pickup_locations = pickupTags.join(', ');
 	}
 
-	// ── Logo upload ───────────────────────────────────────────────
-	let previewUrl = $state(null);
-	let isDragging = $state(false);
-	let fileInput;
+	let fileInput = $state(null);
+
+	let previewUrl = $derived(
+		registration.logo ? URL.createObjectURL(registration.logo) : null
+	);
 
 	function handleFileSelect(file) {
 		if (!file || !file.type.startsWith('image/')) return;
 		registration.logo = file;
-		previewUrl = URL.createObjectURL(file);
 	}
 
 	function handleInputChange(e) {
 		handleFileSelect(e.target.files?.[0]);
-	}
-
-	function handleDrop(e) {
-		e.preventDefault();
-		isDragging = false;
-		handleFileSelect(e.dataTransfer.files?.[0]);
-	}
-
-	function removeLogo() {
-		registration.logo = null;
-		previewUrl = null;
-		if (fileInput) fileInput.value = '';
 	}
 
 	function handleSubmit() {
@@ -124,91 +118,15 @@
 		<div>
 			<p class="mb-1.5 text-sm text-brand-dark italic">Restaurant Logo</p>
 
-			{#if previewUrl}
-				<!-- Preview -->
-				<div class="relative w-full">
-					<div
-						class="flex items-center gap-4 rounded-lg border border-brand-yellow
-                      bg-[#FFFBEF] p-3"
-					>
-						<img
-							src={previewUrl}
-							alt="Logo preview"
-							class="h-16 w-16 rounded-lg object-cover shadow-sm"
-						/>
-						<div class="flex-1 overflow-hidden">
-							<p class="truncate text-sm text-brand-dark italic">
-								{registration.logo?.name}
-							</p>
-							<p class="text-xs text-brand-gray italic">
-								{(registration.logo?.size / 1024).toFixed(0)} KB
-							</p>
-						</div>
-						<button
-							type="button"
-							onclick={removeLogo}
-							class="flex h-7 w-7 shrink-0 items-center justify-center
-                     rounded-full bg-white shadow-sm transition-opacity hover:opacity-70"
-							aria-label="Remove logo"
-						>
-							<svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-								<path
-									d="M1 1L9 9M9 1L1 9"
-									stroke="#595454"
-									stroke-width="1.5"
-									stroke-linecap="round"
-								/>
-							</svg>
-						</button>
-					</div>
-				</div>
+			{#if registration.logo}
+				<LogoPreview {previewUrl} {fileInput} />
 			{:else}
-				<!-- Drop zone -->
-				<button
-					type="button"
-					class="flex w-full flex-col items-center justify-center gap-2 rounded-lg
-                 border-2 border-dashed py-7 transition-colors duration-200
-                 {isDragging
-						? 'border-brand-yellow bg-[#FFFBEF]'
-						: 'border-[#E8E8E8] bg-[#F6F6F6] hover:border-brand-yellow hover:bg-[#FFFBEF]'}"
-					onclick={() => fileInput?.click()}
-					ondragover={(e) => {
-						e.preventDefault();
-						isDragging = true;
-					}}
-					ondragleave={() => (isDragging = false)}
-					ondrop={handleDrop}
-				>
-					<div
-						class="flex h-10 w-10 items-center justify-center rounded-full
-                      bg-white shadow-sm"
-					>
-						<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-							<path
-								d="M10 13V4M10 4L7 7M10 4L13 7"
-								stroke="#BDBDBD"
-								stroke-width="1.5"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-							<path
-								d="M3 14V16C3 16.6 3.4 17 4 17H16C16.6 17 17 16.6 17 16V14"
-								stroke="#BDBDBD"
-								stroke-width="1.5"
-								stroke-linecap="round"
-							/>
-						</svg>
-					</div>
-					<p class="text-sm text-brand-gray italic">
-						Tap to upload or drag & drop
-					</p>
-					<p class="text-xs text-brand-gray italic opacity-60">
-						PNG, JPG up to 5MB
-					</p>
-				</button>
+				<DropZone {handleFileSelect} {fileInput} />
+			{/if}
+			{#if form.errors.logo}
+				<p class="mt-1 text-xs text-red-500 italic">{form.errors.logo}</p>
 			{/if}
 
-			<!-- hidden file input -->
 			<input
 				bind:this={fileInput}
 				type="file"
