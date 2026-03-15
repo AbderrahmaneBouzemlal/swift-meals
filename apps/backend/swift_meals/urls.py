@@ -36,5 +36,5 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
-    path("api/auth/", include("users.urls")),
+    path("api/", include("users.urls")),
 ]

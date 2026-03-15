@@ -15,7 +15,6 @@
 	let errors = $state({});
 
 	const form = useFormValidation(customerProfileSchema, () => ({
-		student_id: registration.student_id,
 		phone_number: registration.phone_number,
 		gender: registration.gender,
 		default_pickup_location: registration.default_pickup_location
@@ -24,7 +23,6 @@
 	function handleSubmit() {
 		if (
 			!form.submitValidate([
-				'student_id',
 				'phone_number',
 				'gender',
 				'default_pickup_location'
@@ -54,14 +52,6 @@
 	<StepTracker steps={CUSTOMER_SIGNUP_STEPS} currentStep={1} />
 
 	<div class="flex shrink-0 flex-col gap-2.5 px-8">
-		<!-- Student ID -->
-		<InputField
-			placeholder="Student / Matric ID"
-			bind:value={registration.student_id}
-			error={form.errors.student_id}
-			onblur={() => form.touch('student_id')}
-		/>
-
 		<!-- Phone -->
 		<InputField
 			type="tel"

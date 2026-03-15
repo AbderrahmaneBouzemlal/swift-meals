@@ -32,11 +32,6 @@ export const accountSchema = z
 	});
 
 export const customerProfileSchema = z.object({
-	student_id: z
-		.string()
-		.min(1, 'Student ID is required')
-		.max(20, 'Student ID must be under 20 characters'),
-
 	phone_number: z
 		.string()
 		.regex(/^\+?[\d\s\-]{7,15}$/, 'Enter a valid phone number')

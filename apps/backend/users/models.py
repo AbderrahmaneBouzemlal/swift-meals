@@ -59,15 +59,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         return dict(self.ROLE_CHOICES).get(self.role, self.role)
 
 
-class StudentProfile(models.Model):
+class CustomerProfile(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         related_name="student_profile",
         limit_choices_to={"role": User.CUSTOMER},  # Optional: enforce role
     )
-    student_id = models.CharField(
-        max_length=20, unique=True, verbose_name="customer/Matric ID"
+    profile_picture = models.ImageField(
+        upload_to="profile_pictures/", blank=True, null=True
     )
     gender = models.CharField(
         max_length=10,
@@ -97,7 +97,7 @@ class RestaurantProfile(models.Model):
     restaurant_name = models.CharField(max_length=150)
     location = models.CharField(max_length=200, help_text="Campus or nearby address")
     description = models.TextField(blank=True)
-    cuisine_type = models.CharField(max_length=100, blank=True)  # e.g. "Malay, Indian"
+    cuisine_type = models.CharField(max_length=100, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)
     logo = models.ImageField(upload_to="restaurant_logos/", blank=True, null=True)
     ssm_registration = models.CharField(max_length=50, blank=True)

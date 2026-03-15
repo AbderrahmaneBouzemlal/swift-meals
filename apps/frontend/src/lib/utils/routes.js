@@ -24,3 +24,9 @@ export const ROUTES = {
 	account: '/account',
 	orders: '/orders'
 };
+
+export function reviewBackRoute(role) {
+	return role === 'business'
+		? ROUTES.signUp.business.setup
+		: ROUTES.signUp.customer.profile;
+}

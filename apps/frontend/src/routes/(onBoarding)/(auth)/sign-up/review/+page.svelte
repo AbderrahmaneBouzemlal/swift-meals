@@ -1,24 +1,74 @@
 <script>
-	import LogoPreview from './../../../../../lib/components/LogoPreview.svelte';
+	import LogoPreview from '$lib/components/LogoPreview.svelte';
 	import { goto } from '$app/navigation';
 	import { registration, reset } from '$lib/stores/registration.svelte.js';
 	import {
+		BUSINESS_SIGNUP_STEPS,
+		CUSTOMER_SIGNUP_STEPS
+	} from '$lib/utils/constants.js';
+	import {
 		registerCustomer,
 		registerBusiness
-	} from '$lib/utils/registration.js';
-	import { ApiError } from '$lib/utils/api.js';
+	} from '$lib/utils/registrationApi.js';
+	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
+	import { ApiError } from '$lib/utils/apiError.js';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
 	import { ROUTES, reviewBackRoute } from '$lib/utils/routes.js';
+	import Header from '$lib/components/Header.svelte';
+	import Title from '$lib/components/ui/Title.svelte';
+	import StepTracker from '$lib/components/StepTracker.svelte';
+	import { onMount } from 'svelte';
 
 	const isBusiness = $derived(registration.role === 'business');
-	const backUrl = $derived(reviewBackRoute(registration.role));
+	const backUrl = reviewBackRoute(registration.role);
 
 	let isSubmitting = $state(false);
 	let fieldErrors = $state({});
 
+	onMount(() => {
+		if (!registration.role) {
+			toastStore.error('Something went wrong. Please start again.');
+			goto(ROUTES.chooseRole);
+		}
+	});
+	const logoPreview = $derived(
+		registration.logo ? URL.createObjectURL(registration.logo) : null
+	);
+	const steps =
+		registration.role === 'business'
+			? BUSINESS_SIGNUP_STEPS
+			: CUSTOMER_SIGNUP_STEPS;
+
+	let serverError = $state(null);
+
+	const accountFields = $derived([
+		{ label: 'Name', value: registration.name || '—' },
+		{ label: 'Email', value: registration.email || '—' },
+		{ label: 'Password', value: '••••••••' }
+	]);
+
+	const customerFields = $derived([
+		{ label: 'Phone', value: registration.phone_number || '—' },
+		{ label: 'Gender', value: registration.gender || '—' },
+		{
+			label: 'Pickup location',
+			value: registration.default_pickup_location || '—'
+		}
+	]);
+
+	const businessFields = $derived([
+		{ label: 'Restaurant', value: registration.restaurant_name || '—' },
+		{ label: 'Location', value: registration.location || '—' },
+		{ label: 'Phone', value: registration.phone_number || '—' },
+		{ label: 'Cuisine', value: registration.cuisine_type || '—' },
+		{ label: 'SSM number', value: registration.ssm_registration || '—' },
+		{ label: 'Description', value: registration.description || '—' },
+		{ label: 'Pickup points', value: registration.pickup_locations || '—' }
+	]);
 	async function handleSubmit() {
 		isSubmitting = true;
 		fieldErrors = {};
+		serverError = null;
 
 		try {
 			const register = isBusiness ? registerBusiness : registerCustomer;
@@ -30,9 +80,11 @@
 		} catch (err) {
 			if (err instanceof ApiError) {
 				if (err.type === 'validation') {
-					fieldErrors = err.fieldErrors;
+					toastStore.error('Please fix the errors in the form.');
+					fieldErrors = err.fieldErrors || {};
 				} else {
 					toastStore.error(err.message);
+					serverError = err.message;
 				}
 			} else {
 				toastStore.error('Something unexpected happened.');
@@ -111,7 +163,7 @@
 			</div>
 		{:else}
 			<div class="overflow-hidden rounded-lg border border-[#E8E8E8]">
-				{@render sectionHeader('Student Profile')}
+				{@render sectionHeader('customer Profile')}
 				<div class="divide-y divide-[#F6F6F6]">
 					{#each customerFields as field}
 						{@render reviewRow(field.label, field.value)}
@@ -151,14 +203,25 @@
 				<button
 					class="text-left text-sm text-brand-yellow italic underline-offset-2
                  hover:underline"
-					onclick={() => goto('ROUTES.signUp.customer.profile')}
+					onclick={() => goto(ROUTES.signUp.customer.profile)}
 				>
-					Edit student profile
+					Edit customer profile
 				</button>
+			{/if}
+			{#if Object.keys(fieldErrors).length}
+				<div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+					<p class="mb-2 text-xs font-semibold text-red-500 italic">
+						Please fix the following:
+					</p>
+					{#each Object.entries(fieldErrors) as [field, message]}
+						<p class="text-xs text-red-400 italic">
+							<span class="capitalize">{field.replace(/_/g, ' ')}</span>: {message}
+						</p>
+					{/each}
+				</div>
 			{/if}
 		</div>
 
-		<!-- Server error -->
 		{#if serverError}
 			<div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
 				<p class="text-sm text-red-500 italic">{serverError}</p>

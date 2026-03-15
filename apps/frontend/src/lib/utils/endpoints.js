@@ -5,15 +5,17 @@ export const ENDPOINTS = {
 		register: `${BASE}/auth/register`,
 		login: `${BASE}/auth/login`,
 		logout: `${BASE}/auth/logout`,
-		refresh: `${BASE}/auth/token/refresh`
+		refresh: `${BASE}/auth/token/refresh`,
+		obtain: `${BASE}/auth/token/obtain`
 	},
-	student: {
-		profile: `${BASE}/student/profile`
+	profile: {
+		customer: `${BASE}/profile/customer/update`,
+		business: `${BASE}/profile/business/update`,
+		picture: `${BASE}/profile/picture`
 	},
-	restaurant: {
-		profile: `${BASE}/restaurant/profile`,
-		list: `${BASE}/restaurant`,
-		byId: (id) => `${BASE}/restaurant/${id}`
+	business: {
+		list: `${BASE}/restaurants`,
+		byId: (id) => `${BASE}/business/${id}`
 	},
 	orders: {
 		list: `${BASE}/orders`,

@@ -6,19 +6,24 @@ export async function registerCustomer(data) {
 		email: data.email,
 		name: data.name,
 		password: data.password,
-		role: 'STUDENT'
+		role: 'CUSTOMER'
 	});
 
-	await api.post(
-		ENDPOINTS.student.profile,
+	await api.patch(
+		ENDPOINTS.profile.customer,
 		{
-			student_id: data.student_id,
 			phone_number: data.phone_number,
 			gender: data.gender,
 			default_pickup_location: data.default_pickup_location
 		},
 		{ token }
 	);
+
+	if (data.profilePicture instanceof File) {
+		const form = new FormData();
+		form.append(data.role === 'logo', data.profilePicture);
+		await api.patch(ENDPOINTS.profile.picture, form, { token });
+	}
 
 	return token;
 }
@@ -28,27 +33,29 @@ export async function registerBusiness(data) {
 		email: data.email,
 		name: data.name,
 		password: data.password,
-		role: 'RESTAURANT'
+		role: 'BUSINESS'
 	});
 
-	const form = new FormData();
-	const fields = [
-		'restaurant_name',
-		'location',
-		'phone_number',
-		'cuisine_type',
-		'ssm_registration',
-		'description',
-		'pickup_locations',
-		'logo'
-	];
-	for (const key of fields) {
-		if (data[key] !== null && data[key] !== undefined) {
-			form.append(key, data[key]);
-		}
-	}
+	await api.patch(
+		ENDPOINTS.profile.business,
+		{
+			restaurant_name: data.restaurant_name,
+			phone_number: data.phone_number,
+			location: data.location,
+			cuisine_type: data.cuisine_type,
+			ssm_registration: data.ssm_registration,
+			description: data.description,
+			gender: data.gender,
+			pickup_location: data.pickup_location
+		},
+		{ token }
+	);
 
-	await api.post(ENDPOINTS.restaurant.profile, form, { token });
+	if (data.logo instanceof File) {
+		const form = new FormData();
+		form.append(data.role === 'logo', data.logo);
+		await api.patch(ENDPOINTS.profile.picture, form, { token });
+	}
 
 	return token;
 }

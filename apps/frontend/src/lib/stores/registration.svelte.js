@@ -5,7 +5,6 @@ export const registration = $state({
 	password: '',
 
 	// customer profile
-	student_id: '',
 	phone_number: '',
 	gender: '',
 	default_pickup_location: '',
@@ -31,7 +30,6 @@ export function reset() {
 		email: '',
 		name: '',
 		password: '',
-		student_id: '',
 		phone_number: '',
 		gender: '',
 		default_pickup_location: '',
@@ -50,7 +48,6 @@ export function studentPayload() {
 		email: registration.email,
 		name: registration.name,
 		password: registration.password,
-		student_id: registration.student_id,
 		phone_number: registration.phone_number,
 		gender: registration.gender,
 		default_pickup_location: registration.default_pickup_location

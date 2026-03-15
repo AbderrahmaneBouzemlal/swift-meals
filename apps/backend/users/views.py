@@ -7,17 +7,17 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
-from .models import User, StudentProfile, RestaurantProfile
+from rest_framework.parsers import MultiPartParser
 from .serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
     UserDetailSerializer,
-    StudentProfileSerializer,
+    CustomerProfileSerializer,
     RestaurantProfileSerializer,
+    CustomerPictureSerializer,
+    RestaurantLogoSerializer,
 )
 from .permissions import isCustomer, isBusinessOwner, IsOwnerOrReadOnly
-
-from .models import User
 
 
 class UserRegistrationView(APIView):
@@ -68,6 +68,10 @@ class UserLoginView(APIView):
             return Response(response, status=status_code)
 
 
+class UserLogoutView(APIView):
+    pass
+
+
 class ProfileViewSet(viewsets.GenericViewSet):
     """Mixed viewset for /me and profile updates"""
 
@@ -83,7 +87,7 @@ class ProfileViewSet(viewsets.GenericViewSet):
         if not hasattr(request.user, "student_profile"):
             return Response({"detail": "Not a customer"}, status=403)
         profile = request.user.student_profile
-        serializer = StudentProfileSerializer(profile, data=request.data, partial=True)
+        serializer = CustomerProfileSerializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -101,16 +105,19 @@ class ProfileViewSet(viewsets.GenericViewSet):
         return Response(serializer.data)
 
 
-class RestaurantProfileViewSet(viewsets.ModelViewSet):
-    queryset = RestaurantProfile.objects.all()
-    serializer_class = RestaurantProfileSerializer
-    permission_classes = [IsAuthenticated, isBusinessOwner, IsOwnerOrReadOnly]
+class ProfilePictureView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser]
 
-    def get_queryset(self):
-        # Vendors only see their own
-        if self.request.user.role == "business":
-            return RestaurantProfile.objects.filter(user=self.request.user)
-        return RestaurantProfile.objects.none()
+    def patch(self, request):
+        if request.user.role == "CUSTOMER":
+            profile = request.user.CustomerProfile
+            Serializer = CustomerPictureSerializer
+        else:
+            profile = request.user.restaurantprofile
+            Serializer = RestaurantLogoSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer = Serializer(profile, data=request.files, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)

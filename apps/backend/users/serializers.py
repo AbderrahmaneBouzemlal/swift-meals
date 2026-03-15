@@ -3,7 +3,7 @@ from django.contrib.auth.models import update_last_login
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, StudentProfile, RestaurantProfile
+from .models import User, CustomerProfile, RestaurantProfile
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -90,7 +90,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     def get_student_profile(self, obj):
         if hasattr(obj, "student_profile"):
-            return StudentProfileSerializer(obj.student_profile).data
+            return CustomerProfileSerializer(obj.student_profile).data
         return None
 
     def get_restaurant_profile(self, obj):
@@ -99,17 +99,16 @@ class UserDetailSerializer(serializers.ModelSerializer):
         return None
 
 
-class StudentProfileSerializer(serializers.ModelSerializer):
+class CustomerProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email", read_only=True)
     name = serializers.CharField(source="user.name", required=False)
 
     class Meta:
-        model = StudentProfile
+        model = CustomerProfile
         fields = [
             "id",
             "email",
             "name",
-            "student_id",
             "gender",
             "university",
             "default_pickup_location",
@@ -155,3 +154,15 @@ class RestaurantProfileSerializer(serializers.ModelSerializer):
         if instance.logo:
             ret["logo"] = instance.logo.url
         return ret
+
+
+class CustomerPictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerProfile
+        fields = ["profile_picture"]
+
+
+class RestaurantLogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RestaurantProfile
+        fields = ["logo"]
