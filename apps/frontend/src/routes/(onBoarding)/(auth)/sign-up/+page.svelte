@@ -1,6 +1,5 @@
 <script>
 	import Header from '$lib/components/Header.svelte';
-	import ChatButton from '$lib/components/ui/ChatButton.svelte';
 	import SocialLoginButton from '$lib/components/ui/SocialLoginButton.svelte';
 	import InputField from '$lib/components/ui/InputField.svelte';
 	import PasswordInput from '$lib/components/ui/PasswordInput.svelte';
@@ -16,6 +15,7 @@
 	import StepTracker from '$lib/components/StepTracker.svelte';
 	import { validate } from '$lib/utils/validate';
 	import { accountSchema } from '$lib/utils/schemas';
+	import { ROUTES } from '$lib/utils/routes.js';
 
 	let password = $state('');
 	let confirmPassword = $state('');
@@ -35,7 +35,7 @@
 	);
 
 	const nextRoute = $derived(
-		isBusiness ? '/sign-up/business/details' : '/sign-up/customer/profile'
+		isBusiness ? ROUTES.signUp.business.details : ROUTES.signUp.customer.profile
 	);
 
 	function handleSignUp() {
@@ -50,7 +50,7 @@
 	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
          bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
 >
-	<Header backUrl="/choose-role" />
+	<Header backUrl={ROUTES.chooseRole} />
 
 	<div class="shrink-0 px-8 pt-1.5 pb-3">
 		<Title size="medium">Sign Up</Title>
@@ -117,9 +117,5 @@
 
 	<div class="shrink-0 px-8 pt-4">
 		<PrimaryButton text="Create Account" onclick={handleSignUp} />
-	</div>
-
-	<div class="flex flex-1 items-end">
-		<ChatButton />
 	</div>
 </div>

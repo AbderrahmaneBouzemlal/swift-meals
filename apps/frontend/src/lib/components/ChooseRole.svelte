@@ -2,22 +2,22 @@
 	import Header from './Header.svelte';
 	import { goto } from '$app/navigation';
 	import { createEventDispatcher } from 'svelte';
-	import ChatButton from './ui/ChatButton.svelte';
 	import Icon from './ui/Icon.svelte';
 	import { setRole } from '$lib/stores/registration.svelte.js';
+	import { ROUTES } from '$lib/utils/routes.js';
 
 	let selected = null;
 
 	function choose(role) {
 		setRole(role);
-		goto('/sign-up');
+		goto(ROUTES.signUp.account);
 	}
 </script>
 
 <div
 	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
 >
-	<Header backUrl="/login" />
+	<Header backUrl="ROUTES.login" />
 
 	<div class="flex flex-1 flex-col gap-6 overflow-y-auto px-8 pt-4">
 		<div class="text-center">
@@ -288,9 +288,5 @@
 				<span>Switch roles any time</span>
 			</div>
 		</div>
-	</div>
-
-	<div class="mt-auto">
-		<ChatButton />
 	</div>
 </div>

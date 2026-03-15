@@ -1,15 +1,16 @@
 <script>
 	import Header from '$lib/components/Header.svelte';
 	import { page } from '$app/stores';
+	import { ROUTES } from '$lib/utils/routes.js';
 
 	const backMap = {
-		'/sign-up': '/choose-role',
-		'/sign-up/customer/profile': '/sign-up',
-		'/sign-up/business/details': '/sign-up',
-		'/sign-up/business/setup': '/sign-up/business/details'
+		[ROUTES.signUp.account]: ROUTES.chooseRole,
+		[ROUTES.signUp.customer.profile]: ROUTES.signUp.account,
+		[ROUTES.signUp.business.details]: ROUTES.signUp.account,
+		[ROUTES.signUp.business.setup]: ROUTES.signUp.business.details
 	};
 
-	let backUrl = backMap[$page.url.pathname] ?? '/choose-role';
+	let backUrl = backMap[$page.url.pathname] ?? ROUTES.chooseRole;
 </script>
 
 <slot />

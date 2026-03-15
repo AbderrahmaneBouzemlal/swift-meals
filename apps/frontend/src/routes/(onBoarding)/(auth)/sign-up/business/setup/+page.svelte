@@ -1,6 +1,5 @@
 <script>
 	import Header from '$lib/components/Header.svelte';
-	import ChatButton from '$lib/components/ui/ChatButton.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
 	import { goto } from '$app/navigation';
@@ -12,6 +11,7 @@
 	import { useFormValidation } from '$lib/utils/useFormValidation.svelte';
 	import LogoPreview from '$lib/components/LogoPreview.svelte';
 	import DropZone from '$lib/components/DropZone.svelte';
+	import { ROUTES } from '$lib/utils/routes.js';
 
 	let errors = $state({});
 
@@ -88,7 +88,7 @@
 		if (!form.submitValidate(['Description', 'Pickup locations', 'Logo']))
 			return;
 
-		goto('/sign-up/review');
+		goto(ROUTES.signUp.review);
 	}
 </script>
 
@@ -96,7 +96,7 @@
 	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
          bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
 >
-	<Header backUrl="/sign-up/business/details" />
+	<Header backUrl={ROUTES.signUp.business.details} />
 
 	<!-- Title -->
 	<div class="shrink-0 px-8 pt-1.5 pb-3">
@@ -232,13 +232,9 @@
 	<div class="shrink-0 px-8 pt-2 text-center">
 		<button
 			class="text-sm text-brand-gray italic underline-offset-2 hover:underline"
-			onclick={() => goto('/sign-up/review')}
+			onclick={() => goto(ROUTES.signUp.review)}
 		>
 			Skip for now
 		</button>
-	</div>
-
-	<div class="flex flex-1 items-end">
-		<ChatButton />
 	</div>
 </div>

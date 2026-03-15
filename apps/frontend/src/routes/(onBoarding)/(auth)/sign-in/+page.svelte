@@ -1,7 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
 	import Header from './Header.svelte';
-	import ChatButton from './ui/ChatButton.svelte';
 	import SocialLoginButton from './ui/SocialLoginButton.svelte';
 	import InputField from './ui/InputField.svelte';
 	import PasswordInput from './ui/PasswordInput.svelte';
@@ -9,10 +8,12 @@
 	import Title from './ui/Title.svelte';
 	import { signInSchema } from '$lib/utils/schemas';
 	import { useFormValidation } from '$lib/utils/useFormValidation.svelte';
+	import { ROUTES } from '$lib/utils/routes.js';
 
 	let errors = $state({});
 	let email = $state('');
 	let password = $state('');
+	let isSigningIn = $state(false);
 
 	const form = useFormValidation(signInSchema, () => ({
 		email,
@@ -21,14 +22,15 @@
 
 	function handleSignIn() {
 		if (!form.submitValidate(['email', 'password'])) return;
-		goto('/account');
+		isSigningIn = true;
+		goto(ROUTES.account);
 	}
 </script>
 
 <div
 	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
 >
-	<Header backUrl="/login" />
+	<Header backUrl={ROUTES.login} />
 
 	<div class="shrink-0 px-8 pt-2 pb-4">
 		<Title size="medium">Sign In</Title>
@@ -61,7 +63,12 @@
 
 	<!-- Sign In Button -->
 	<div class="flex shrink-0 justify-center px-8 py-5">
-		<PrimaryButton text="Sign In" onclick={handleSignIn} />
+		<PrimaryButton
+			text="Sign In"
+			onclick={handleSignIn}
+			loading={isSigningIn}
+			disabled={isSigningIn}
+		/>
 	</div>
 
 	<!-- OR divider + social -->
@@ -84,12 +91,7 @@
 		<span class="text-lg text-brand-gray-dark italic">Need An Account?</span>
 		<button
 			class="cursor-pointer border-none bg-transparent p-0 font-abeezee text-lg font-semibold text-brand-yellow italic transition-opacity duration-200 hover:opacity-80"
-			onclick={() => goto('/sign-up')}>Sign Up</button
+			onclick={() => goto(ROUTES.signUp.account)}>Sign Up</button
 		>
-	</div>
-
-	<!-- Chat button -->
-	<div class="flex flex-1 items-end">
-		<ChatButton />
 	</div>
 </div>

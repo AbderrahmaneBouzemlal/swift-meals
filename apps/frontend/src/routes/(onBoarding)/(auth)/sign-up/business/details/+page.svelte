@@ -1,6 +1,5 @@
 <script>
 	import Header from '$lib/components/Header.svelte';
-	import ChatButton from '$lib/components/ui/ChatButton.svelte';
 	import InputField from '$lib/components/ui/InputField.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
@@ -11,6 +10,7 @@
 	import { validate } from '$lib/utils/validate';
 	import { businessDetailsSchema } from '$lib/utils/schemas';
 	import { useFormValidation } from '$lib/utils/useFormValidation.svelte';
+	import { ROUTES } from '$lib/utils/routes.js';
 
 	let errors = $state({});
 
@@ -79,7 +79,7 @@
 		)
 			return;
 
-		goto('/sign-up/business/setup');
+		goto(ROUTES.signUp.business.setup);
 	}
 </script>
 
@@ -87,7 +87,7 @@
 	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
          bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
 >
-	<Header backUrl="/sign-up" />
+	<Header backUrl={ROUTES.signUp.account} />
 
 	<!-- Title -->
 	<div class="shrink-0 px-8 pt-1.5 pb-3">
@@ -213,9 +213,5 @@
 	<!-- CTA -->
 	<div class="shrink-0 px-8 pt-6">
 		<PrimaryButton text="Continue" onclick={handleSubmit} />
-	</div>
-
-	<div class="flex flex-1 items-end">
-		<ChatButton />
 	</div>
 </div>

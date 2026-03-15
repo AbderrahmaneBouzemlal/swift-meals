@@ -1,6 +1,5 @@
 <script>
 	import Header from './Header.svelte';
-	import ChatButton from './ui/ChatButton.svelte';
 	import Icon from './ui/Icon.svelte';
 
 	const quickActions = [
@@ -81,9 +80,5 @@
 				<Icon name="forward-arrow" width="7" height="11" color="#BDBDBD" />
 			</button>
 		{/each}
-	</div>
-
-	<div class="mt-auto">
-		<ChatButton />
 	</div>
 </div>

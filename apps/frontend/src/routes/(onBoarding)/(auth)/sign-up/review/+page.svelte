@@ -1,128 +1,42 @@
 <script>
-	import LogoPreview from '$lib/components/LogoPreview.svelte';
-	import Header from '$lib/components/Header.svelte';
-	import ChatButton from '$lib/components/ui/ChatButton.svelte';
-	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
-	import Title from '$lib/components/ui/Title.svelte';
+	import LogoPreview from './../../../../../lib/components/LogoPreview.svelte';
 	import { goto } from '$app/navigation';
 	import { registration, reset } from '$lib/stores/registration.svelte.js';
 	import {
-		BUSINESS_SIGNUP_STEPS,
-		CUSTOMER_SIGNUP_STEPS
-	} from '$lib/utils/constants';
-	import StepTracker from '$lib/components/StepTracker.svelte';
+		registerCustomer,
+		registerBusiness
+	} from '$lib/utils/registration.js';
+	import { ApiError } from '$lib/utils/api.js';
+	import { toastStore } from '$lib/stores/toasts.svelte.js';
+	import { ROUTES, reviewBackRoute } from '$lib/utils/routes.js';
 
 	const isBusiness = $derived(registration.role === 'business');
-
-	const backUrl = $derived(
-		isBusiness ? '/sign-up/business/setup' : '/sign-up/customer/profile'
-	);
-
-	const steps = $derived(
-		isBusiness ? BUSINESS_SIGNUP_STEPS : CUSTOMER_SIGNUP_STEPS
-	);
-
-	const logoPreview = $derived(
-		registration.logo ? URL.createObjectURL(registration.logo) : null
-	);
+	const backUrl = $derived(reviewBackRoute(registration.role));
 
 	let isSubmitting = $state(false);
-	let serverError = $state('');
-
-	const accountFields = $derived([
-		{ label: 'Name', value: registration.name },
-		{ label: 'Email', value: registration.email },
-		{ label: 'Password', value: '••••••••' }
-	]);
-
-	const customerFields = $derived([
-		{ label: 'Student ID', value: registration.student_id || '—' },
-		{ label: 'Phone', value: registration.phone_number || '—' },
-		{ label: 'Gender', value: registration.gender || '—' },
-		{
-			label: 'Pickup location',
-			value: registration.default_pickup_location || '—'
-		}
-	]);
-
-	const businessFields = $derived([
-		{ label: 'Restaurant', value: registration.restaurant_name || '—' },
-		{ label: 'Location', value: registration.location || '—' },
-		{ label: 'Phone', value: registration.phone_number || '—' },
-		{ label: 'Cuisine', value: registration.cuisine_type || '—' },
-		{ label: 'SSM number', value: registration.ssm_registration || '—' },
-		{ label: 'Description', value: registration.description || '—' },
-		{ label: 'Pickup points', value: registration.pickup_locations || '—' }
-	]);
-
-	async function registerUser() {
-		const res = await fetch('/api/auth/register', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				email: registration.email,
-				name: registration.name,
-				password: registration.password,
-				role: isBusiness ? 'RESTAURANT' : 'STUDENT'
-			})
-		});
-		if (!res.ok) {
-			const data = await res.json();
-			throw new Error(data?.detail ?? 'Registration failed');
-		}
-		return res.json();
-	}
-
-	async function registerCustomerProfile(token) {
-		const res = await fetch('/api/student/profile', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token}`
-			},
-			body: JSON.stringify({
-				student_id: registration.student_id,
-				phone_number: registration.phone_number,
-				gender: registration.gender,
-				default_pickup_location: registration.default_pickup_location
-			})
-		});
-		if (!res.ok) throw new Error('Failed to save student profile');
-	}
-
-	async function registerBusinessProfile(token) {
-		const form = new FormData();
-		form.append('restaurant_name', registration.restaurant_name);
-		form.append('location', registration.location);
-		form.append('phone_number', registration.phone_number);
-		form.append('cuisine_type', registration.cuisine_type);
-		form.append('ssm_registration', registration.ssm_registration);
-		form.append('description', registration.description);
-		form.append('pickup_locations', registration.pickup_locations);
-		if (registration.logo) form.append('logo', registration.logo);
-
-		const res = await fetch('/api/restaurant/profile', {
-			method: 'POST',
-			headers: { Authorization: `Bearer ${token}` },
-			body: form
-		});
-		if (!res.ok) throw new Error('Failed to save restaurant profile');
-	}
+	let fieldErrors = $state({});
 
 	async function handleSubmit() {
 		isSubmitting = true;
-		serverError = '';
+		fieldErrors = {};
+
 		try {
-			const { token } = await registerUser();
-			if (isBusiness) {
-				await registerBusinessProfile(token);
-			} else {
-				await registerCustomerProfile(token);
-			}
+			const register = isBusiness ? registerBusiness : registerCustomer;
+			await register(registration);
+
+			toastStore.success('Account created! Welcome to Swift Meals 🎉');
 			reset();
-			goto('/account');
+			goto(ROUTES.account);
 		} catch (err) {
-			serverError = err.message;
+			if (err instanceof ApiError) {
+				if (err.type === 'validation') {
+					fieldErrors = err.fieldErrors;
+				} else {
+					toastStore.error(err.message);
+				}
+			} else {
+				toastStore.error('Something unexpected happened.');
+			}
 		} finally {
 			isSubmitting = false;
 		}
@@ -214,7 +128,7 @@
 			<button
 				class="text-left text-sm text-brand-yellow italic underline-offset-2
                hover:underline"
-				onclick={() => goto('/sign-up')}
+				onclick={() => goto(ROUTES.signUp.account)}
 			>
 				Edit account details
 			</button>
@@ -222,14 +136,14 @@
 				<button
 					class="text-left text-sm text-brand-yellow italic underline-offset-2
                  hover:underline"
-					onclick={() => goto('/sign-up/business/details')}
+					onclick={() => goto(ROUTES.signUp.business.details)}
 				>
 					Edit business details
 				</button>
 				<button
 					class="text-left text-sm text-brand-yellow italic underline-offset-2
                  hover:underline"
-					onclick={() => goto('/sign-up/business/setup')}
+					onclick={() => goto(ROUTES.signUp.business.setup)}
 				>
 					Edit restaurant setup
 				</button>
@@ -237,7 +151,7 @@
 				<button
 					class="text-left text-sm text-brand-yellow italic underline-offset-2
                  hover:underline"
-					onclick={() => goto('/sign-up/customer/profile')}
+					onclick={() => goto('ROUTES.signUp.customer.profile')}
 				>
 					Edit student profile
 				</button>
@@ -258,10 +172,7 @@
 			text={isSubmitting ? 'Creating account...' : 'Confirm & Create Account'}
 			onclick={handleSubmit}
 			disabled={isSubmitting}
+			loading={isSubmitting}
 		/>
-	</div>
-
-	<div class="flex shrink-0 items-end">
-		<ChatButton />
 	</div>
 </div>

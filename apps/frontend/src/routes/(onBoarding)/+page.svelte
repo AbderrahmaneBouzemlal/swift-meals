@@ -14,6 +14,10 @@
 		pb-18 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]"
 	>
 		<Subtitle size="xl" color="brand-gray-dark">Let's get started</Subtitle>
-		<Button />
+		<PrimaryButton
+			text="Continue"
+			icon="arrow-right"
+			onclick={() => goto(ROUTES.login)}
+		/>
 	</div>
 </div>
