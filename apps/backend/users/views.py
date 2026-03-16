@@ -30,16 +30,19 @@ class UserRegistrationView(APIView):
 
         if valid:
             serializer.save()
-            status_code = status.HTTP_201_CREATED
 
             response = {
                 "success": True,
-                "statusCode": status_code,
+                "statusCode": status.HTTP_201_CREATED,
                 "message": "User successfully registered!",
-                "user": serializer.data,
+                "access": serializer.data["access"],
+                "refresh": serializer.data["refresh"],
+                "user": {
+                    "email": serializer.data["email"],
+                },
             }
 
-            return Response(response, status=status_code)
+            return Response(response)
 
 
 class UserLoginView(APIView):
@@ -77,7 +80,7 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
     permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=["get"])
+    @action(detail=False, methods=["GET"])
     def me(self, request):
         serializer = UserDetailSerializer(request.user)
         return Response(serializer.data)

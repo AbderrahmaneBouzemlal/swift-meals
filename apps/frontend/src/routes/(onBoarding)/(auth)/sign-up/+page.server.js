@@ -1,33 +1,43 @@
-// src/routes/(auth)/sign-up/account/+page.server.js
 import { fail, redirect } from '@sveltejs/kit';
-import { api } from '$lib/utils/api.js';
 import { ApiError } from '$lib/utils/apiError.js';
-import { ENDPOINTS } from '$lib/utils/endpoints.js';
 import { ROUTES } from '$lib/utils/routes.js';
-import { registerCustomer } from '$lib/utils/registrationApi';
-import { registration } from '$lib/stores/registration.svelte.js';
+import {
+	registerCustomer,
+	registerBusiness
+} from '$lib/utils/registrationApi.js';
+import { getSessionCookieOptions } from '$lib/utils/authSession.server.js';
 
 export const actions = {
-	default: async ({ request, cookies }) => {
+	default: async ({ request, cookies, url }) => {
 		const form = await request.formData();
 
 		const data = {
-			name: form.get('name'),
-			email: form.get('email'),
-			password: form.get('password'),
-			role: form.get('role')
+			name: String(form.get('name') || '').trim(),
+			email: String(form.get('email') || '').trim(),
+			password: String(form.get('password') || ''),
+			role: String(form.get('role') || '')
+				.trim()
+				.toLowerCase()
 		};
 
-		try {
-			const token = await registerCustomer(data);
-
-			cookies.set('session', token, {
-				path: '/',
-				httpOnly: true,
-				sameSite: 'lax',
-				secure: process.env.NODE_ENV === 'production',
-				maxAge: 60 * 60 * 24 * 7
+		if (!['customer', 'business'].includes(data.role)) {
+			return fail(400, {
+				errors: { role: 'Please choose a valid account type.' }
 			});
+		}
+
+		try {
+			const token =
+				data.role === 'business'
+					? await registerBusiness(data)
+					: await registerCustomer(data);
+
+			if (!token) {
+				return fail(500, {
+					errors: { server: 'Failed to obtain authentication token.' }
+				});
+			}
+			cookies.set('session', token, getSessionCookieOptions(url));
 		} catch (err) {
 			if (err instanceof ApiError) {
 				if (err.type === 'conflict') {
@@ -50,6 +60,6 @@ export const actions = {
 				? ROUTES.signUp.business.details
 				: ROUTES.signUp.customer.profile;
 
-		redirect(303, next);
+		throw redirect(303, next);
 	}
 };

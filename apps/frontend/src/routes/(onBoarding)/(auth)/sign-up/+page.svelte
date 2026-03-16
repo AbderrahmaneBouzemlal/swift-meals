@@ -1,5 +1,5 @@
 <script>
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import Header from '$lib/components/Header.svelte';
 	import SocialLoginButton from '$lib/components/ui/SocialLoginButton.svelte';
 	import InputField from '$lib/components/ui/InputField.svelte';
@@ -14,18 +14,23 @@
 		CUSTOMER_SIGNUP_STEPS
 	} from '$lib/utils/constants';
 	import StepTracker from '$lib/components/StepTracker.svelte';
-	import { validate } from '$lib/utils/validate';
 	import { accountSchema } from '$lib/utils/schemas';
 	import { ROUTES } from '$lib/utils/routes.js';
-	import { toastStore } from '$lib/stores/toasts.svelte';
+	import { toastStore } from '$lib/stores/toasts.svelte.js';
+	import { onMount } from 'svelte';
 
 	let { form } = $props();
 
 	let password = $state('');
 	let confirmPassword = $state('');
-	let clientErrors = $state({});
 	let isSubmitting = $state(false);
 
+	onMount(() => {
+		if (!registration.role) {
+			toastStore.error('Something went wrong. Please start again.');
+			goto(ROUTES.chooseRole);
+		}
+	});
 	const schemaForm = useFormValidation(accountSchema, () => ({
 		name: registration.name,
 		email: registration.email,
@@ -33,19 +38,12 @@
 		confirmPassword
 	}));
 
-	const errors = $derived({
-		...schemaForm.errors,
-		...clientErrors
-	});
+	const errors = $derived({ ...schemaForm.errors, ...form?.errors });
 
 	const isBusiness = $derived(registration.role === 'business');
 
 	const steps = $derived(
 		isBusiness ? BUSINESS_SIGNUP_STEPS : CUSTOMER_SIGNUP_STEPS
-	);
-
-	const nextRoute = $derived(
-		isBusiness ? ROUTES.signUp.business.details : ROUTES.signUp.customer.profile
 	);
 
 	function handleSignUp(event) {
@@ -60,19 +58,22 @@
 			event.cancel();
 			return;
 		}
-		registration.password = password;
-		if (form?.errors) {
-			toastStore.error(form?.errors || 'An error occurred. Please try again.');
-			event.cancel();
-			return;
-		}
 
-		clientErrors = {};
 		isSubmitting = true;
 
-		return ({ update }) => {
+		return async ({ update, result }) => {
 			isSubmitting = false;
-			update();
+			if (result.type === 'failure') {
+				toastStore.error(
+					result.data?.errors?.server || 'An error occurred. Please try again.'
+				);
+				console.error('Signup error:', result.data);
+			}
+			if (result.type === 'redirect') {
+				await applyAction(result);
+				return;
+			}
+			await update();
 		};
 	}
 </script>

@@ -1,40 +1,26 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { api } from '$lib/utils/api.js';
 import { ApiError } from '$lib/utils/apiError.js';
-import { ENDPOINTS } from '$lib/config/endpoints.js';
-import { ROUTES } from '$lib/config/routes.js';
+import { ROUTES } from '$lib/utils/routes.js';
+import { setUpProfile, setUpBusiness } from '$lib/utils/registrationApi.js';
 
 export const actions = {
 	default: async ({ request, cookies }) => {
 		const token = cookies.get('session');
 
 		if (!token) {
-			redirect(303, ROUTES.signUp.account);
+			throw redirect(303, ROUTES.signUp.account);
 		}
 
 		const form = await request.formData();
 		const role = form.get('role');
-		const isMultipart = form.get('logo') instanceof File;
 
 		try {
+			const data = Object.fromEntries(form.entries());
+
 			if (role === 'business') {
-				const profileData = new FormData();
-				for (const [key, val] of form.entries()) {
-					if (key !== 'role' && val !== '' && val !== null) {
-						profileData.append(key, val);
-					}
-				}
-				await api.patch(ENDPOINTS.business.profile, profileData, { token });
+				await setUpBusiness(data, token);
 			} else {
-				await api.patch(
-					ENDPOINTS.customer.profile,
-					{
-						phone_number: form.get('phone_number'),
-						gender: form.get('gender'),
-						default_pickup_location: form.get('default_pickup_location')
-					},
-					{ token }
-				);
+				await setUpProfile(data, token);
 			}
 		} catch (err) {
 			if (err instanceof ApiError) {
@@ -44,10 +30,10 @@ export const actions = {
 				return fail(500, { errors: { server: err.message } });
 			}
 			return fail(500, {
-				errors: { server: 'Something unexpected happened.' }
+				errors: { server: 'Something unexpected happened.', err }
 			});
 		}
 
-		redirect(303, ROUTES.account);
+		throw redirect(303, ROUTES.account);
 	}
 };

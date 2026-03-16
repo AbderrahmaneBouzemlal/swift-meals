@@ -10,14 +10,14 @@ from .managers import CustomUserManager
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    ADMIN = 1
-    BUSINESS = 2
-    CUSTOMER = 3
+    ADMIN = "ADMIN"
+    BUSINESS = "BUSINESS"
+    CUSTOMER = "CUSTOMER"
 
     ROLE_CHOICES = (
         (ADMIN, "Admin"),
         (BUSINESS, "Business"),
-        (CUSTOMER, "customer"),
+        (CUSTOMER, "Customer"),
     )
 
     uid = models.UUIDField(

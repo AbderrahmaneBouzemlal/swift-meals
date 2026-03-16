@@ -1,11 +1,11 @@
 <script>
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
 	import { fly } from 'svelte/transition';
-
+	import Icon from '$lib/components/ui/Icon.svelte';
 	const icons = {
-		success: '../../icons/assets/check.svg',
-		error: '../../icons/assets/fail.svg',
-		warning: '../../icons/assets/warning.svg'
+		success: 'success',
+		error: 'fail',
+		warning: 'warning'
 	};
 
 	const colors = {
@@ -26,7 +26,7 @@
              {colors[toast.type]} px-4 py-3 shadow-lg"
 		>
 			<span class="text-sm font-bold text-white"
-				><img src={icons[toast.type]} alt={toast.type} /></span
+				><Icon name={icons[toast.type]} width="24" height="24" /></span
 			>
 			<p class="flex-1 text-sm text-white italic">{toast.message}</p>
 			<button

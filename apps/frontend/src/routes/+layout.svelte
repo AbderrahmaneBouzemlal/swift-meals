@@ -1,6 +1,7 @@
 <script>
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import Toasts from '$lib/components/ui/Toasts.svelte';
 
 	let { children } = $props();
 </script>
@@ -15,5 +16,6 @@
 	/>
 </svelte:head>
 <div class="min-w-dvw">
+	<Toasts />
 	{@render children()}
 </div>

@@ -9,6 +9,7 @@ export const ENDPOINTS = {
 		obtain: `${BASE}/auth/token/obtain`
 	},
 	profile: {
+		me: `${BASE}/profile/me/`,
 		customer: `${BASE}/profile/customer/update/`,
 		business: `${BASE}/profile/business/update/`,
 		picture: `${BASE}/profile/picture/`

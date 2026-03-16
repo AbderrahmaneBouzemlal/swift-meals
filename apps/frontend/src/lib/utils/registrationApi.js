@@ -2,14 +2,20 @@ import { api } from '$lib/utils/api.js';
 import { ENDPOINTS } from '$lib/utils/endpoints.js';
 
 export async function registerCustomer(data) {
-	const { token } = await api.post(ENDPOINTS.auth.register, {
+	const response = await api.post(ENDPOINTS.auth.register, {
 		email: data.email,
 		name: data.name,
 		password: data.password,
-		role: 'CUSTOMER'
+		role_str: data.role || 'customer'
 	});
-	return token;
+	return response.access;
 }
+
+export async function login(email, password) {
+	const response = await api.post(ENDPOINTS.auth.login, { email, password });
+	return response.access;
+}
+
 export async function setUpProfile(data, token) {
 	await api.patch(
 		ENDPOINTS.profile.customer,
@@ -23,20 +29,21 @@ export async function setUpProfile(data, token) {
 
 	if (data.profilePicture instanceof File) {
 		const form = new FormData();
-		form.append(data.role === 'logo', data.profilePicture);
+		form.append('profilePicture', data.profilePicture);
 		await api.patch(ENDPOINTS.profile.picture, form, { token });
 	}
 }
 
 export async function registerBusiness(data) {
-	const { token } = await api.post(ENDPOINTS.auth.register, {
+	const response = await api.post(ENDPOINTS.auth.register, {
 		email: data.email,
 		name: data.name,
 		password: data.password,
-		role: 'BUSINESS'
+		role_str: 'business'
 	});
-	return token;
+	return response?.access;
 }
+
 export async function setUpBusiness(data, token) {
 	await api.patch(
 		ENDPOINTS.profile.business,
@@ -55,7 +62,7 @@ export async function setUpBusiness(data, token) {
 
 	if (data.logo instanceof File) {
 		const form = new FormData();
-		form.append(data.role === 'logo', data.logo);
+		form.append('logo', data.logo);
 		await api.patch(ENDPOINTS.profile.picture, form, { token });
 	}
 }

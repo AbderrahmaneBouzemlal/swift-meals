@@ -10,7 +10,7 @@
 <div
 	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
 >
-	<Header backUrl={ROUTES.login} />
+	<Header backUrl={ROUTES.home} />
 	<div class="flex flex-1 flex-col items-center gap-20 px-8 pt-5">
 		<div class="flex flex-col items-center gap-2 text-center">
 			<Title size="large" align="center" class="mt-8">Hello!</Title>

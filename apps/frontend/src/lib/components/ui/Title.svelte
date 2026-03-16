@@ -33,7 +33,8 @@
 <h1
 	class="m-0 font-abeezee italic {sizeClasses[size] || ''} {alignClasses[
 		align
-	] || ''} {weightClasses[weight] || ''} {colorClasses[color] || ''} {className}"
+	] || ''} {weightClasses[weight] || ''} {colorClasses[color] ||
+		''} {className}"
 >
 	{@render children?.()}
 </h1>

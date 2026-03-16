@@ -7,12 +7,18 @@
 	import { registration } from '$lib/stores/registration.svelte.js';
 	import { CUSTOMER_SIGNUP_STEPS, GENDER_OPTIONS } from '$lib/utils/constants';
 	import StepTracker from '$lib/components/StepTracker.svelte';
-	import { validate } from '$lib/utils/validate';
 	import { customerProfileSchema } from '$lib/utils/schemas';
 	import { useFormValidation } from '$lib/utils/useFormValidation.svelte.js';
 	import { ROUTES } from '$lib/utils/routes.js';
+	import { toastStore } from '$lib/stores/toasts.svelte.js';
+	import { onMount } from 'svelte';
 
-	let errors = $state({});
+	onMount(() => {
+		if (registration.role !== 'customer') {
+			toastStore.error('Please start sign-up and choose your role first.');
+			goto(ROUTES.chooseRole);
+		}
+	});
 
 	const form = useFormValidation(customerProfileSchema, () => ({
 		phone_number: registration.phone_number,

@@ -2,16 +2,12 @@
 	import LogoPreview from '$lib/components/LogoPreview.svelte';
 	import { goto } from '$app/navigation';
 	import { registration, reset } from '$lib/stores/registration.svelte.js';
+	import { applyAction, enhance } from '$app/forms';
 	import {
 		BUSINESS_SIGNUP_STEPS,
 		CUSTOMER_SIGNUP_STEPS
 	} from '$lib/utils/constants.js';
-	import {
-		registerCustomer,
-		registerBusiness
-	} from '$lib/utils/registrationApi.js';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
-	import { ApiError } from '$lib/utils/apiError.js';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
 	import { ROUTES, reviewBackRoute } from '$lib/utils/routes.js';
 	import Header from '$lib/components/Header.svelte';
@@ -23,7 +19,7 @@
 	const backUrl = reviewBackRoute(registration.role);
 
 	let isSubmitting = $state(false);
-	let fieldErrors = $state({});
+	let { form } = $props();
 
 	onMount(() => {
 		if (!registration.role) {
@@ -38,8 +34,6 @@
 		registration.role === 'business'
 			? BUSINESS_SIGNUP_STEPS
 			: CUSTOMER_SIGNUP_STEPS;
-
-	let serverError = $state(null);
 
 	const accountFields = $derived([
 		{ label: 'Name', value: registration.name || '—' },
@@ -65,34 +59,6 @@
 		{ label: 'Description', value: registration.description || '—' },
 		{ label: 'Pickup points', value: registration.pickup_locations || '—' }
 	]);
-	async function handleSubmit() {
-		isSubmitting = true;
-		fieldErrors = {};
-		serverError = null;
-
-		try {
-			const register = isBusiness ? registerBusiness : registerCustomer;
-			await register(registration);
-
-			toastStore.success('Account created! Welcome to Swift Meals 🎉');
-			reset();
-			goto(ROUTES.account);
-		} catch (err) {
-			if (err instanceof ApiError) {
-				if (err.type === 'validation') {
-					toastStore.error('Please fix the errors in the form.');
-					fieldErrors = err.fieldErrors || {};
-				} else {
-					toastStore.error(err.message);
-					serverError = err.message;
-				}
-			} else {
-				toastStore.error(err, 'Something unexpected happened.');
-			}
-		} finally {
-			isSubmitting = false;
-		}
-	}
 </script>
 
 {#snippet sectionHeader(title)}
@@ -114,15 +80,12 @@
 	</div>
 {/snippet}
 
-<!-- ── markup ─────────────────────────────────────────────────── -->
-
 <div
 	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
          bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
 >
 	<Header {backUrl} />
 
-	<!-- Title -->
 	<div class="shrink-0 px-8 pt-1.5 pb-3">
 		<Title size="medium">Review</Title>
 		<span
@@ -135,9 +98,7 @@
 
 	<StepTracker {steps} currentStep={steps.length - 1} />
 
-	<!-- Summary cards -->
 	<div class="flex flex-1 flex-col gap-4 overflow-y-auto px-8 pb-4">
-		<!-- Account — same for both roles -->
 		<div class="overflow-hidden rounded-lg border border-[#E8E8E8]">
 			{@render sectionHeader('Account')}
 			<div class="divide-y divide-[#F6F6F6]">
@@ -152,7 +113,6 @@
 				<LogoPreview previewUrl={logoPreview} Deleteable={false} />
 			{/if}
 
-			<!-- Business details -->
 			<div class="overflow-hidden rounded-lg border border-[#E8E8E8]">
 				{@render sectionHeader('Business Details')}
 				<div class="divide-y divide-[#F6F6F6]">
@@ -172,7 +132,6 @@
 			</div>
 		{/if}
 
-		<!-- Edit links -->
 		<div class="flex flex-col gap-1 rounded-lg bg-[#F6F6F6] px-4 py-3">
 			<p class="mb-1 text-xs text-brand-gray italic">
 				Need to change something?
@@ -208,12 +167,12 @@
 					Edit customer profile
 				</button>
 			{/if}
-			{#if Object.keys(fieldErrors).length}
+			{#if form?.errors && Object.keys(form.errors).length > 0 && !form.errors.server}
 				<div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
 					<p class="mb-2 text-xs font-semibold text-red-500 italic">
 						Please fix the following:
 					</p>
-					{#each Object.entries(fieldErrors) as [field, message]}
+					{#each Object.entries(form.errors) as [field, message]}
 						<p class="text-xs text-red-400 italic">
 							<span class="capitalize">{field.replace(/_/g, ' ')}</span>: {message}
 						</p>
@@ -221,21 +180,85 @@
 				</div>
 			{/if}
 		</div>
+	</div>
+	{#if form?.errors?.server}
+		<div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+			<p class="text-sm text-red-500 italic">{form.errors.server}</p>
+		</div>
+	{/if}
 
-		{#if serverError}
-			<div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-				<p class="text-sm text-red-500 italic">{serverError}</p>
-			</div>
+	<form
+		method="POST"
+		enctype="multipart/form-data"
+		use:enhance={({ formData }) => {
+			if (registration.logo) {
+				formData.set('logo', registration.logo);
+			}
+			isSubmitting = true;
+			return async ({ result, update }) => {
+				isSubmitting = false;
+				if (result.type === 'redirect') {
+					toastStore.success('Account created! Welcome to Swift Meals 🎉');
+					reset();
+					await applyAction(result);
+					return;
+				}
+				await update();
+			};
+		}}
+		class="shrink-0 px-8 pt-2 pb-2"
+	>
+		<input type="hidden" name="role" value={registration.role} />
+
+		{#if !isBusiness}
+			<input
+				type="hidden"
+				name="phone_number"
+				value={registration.phone_number}
+			/>
+			<input type="hidden" name="gender" value={registration.gender} />
+			<input
+				type="hidden"
+				name="default_pickup_location"
+				value={registration.default_pickup_location}
+			/>
+		{:else}
+			<input
+				type="hidden"
+				name="restaurant_name"
+				value={registration.restaurant_name}
+			/>
+			<input type="hidden" name="location" value={registration.location} />
+			<input
+				type="hidden"
+				name="cuisine_type"
+				value={registration.cuisine_type}
+			/>
+			<input
+				type="hidden"
+				name="ssm_registration"
+				value={registration.ssm_registration}
+			/>
+			<input
+				type="hidden"
+				name="description"
+				value={registration.description}
+			/>
+			<input
+				type="hidden"
+				name="pickup_locations"
+				value={registration.pickup_locations}
+			/>
+			<input type="file" name="logo" class="hidden" />
 		{/if}
-	</div>
 
-	<!-- CTA -->
-	<div class="shrink-0 px-8 pt-2 pb-10">
-		<PrimaryButton
-			text={isSubmitting ? 'Creating account...' : 'Confirm & Create Account'}
-			onclick={handleSubmit}
-			disabled={isSubmitting}
-			loading={isSubmitting}
-		/>
-	</div>
+		<div class="shrink-0 px-8 pt-2 pb-10">
+			<PrimaryButton
+				type="submit"
+				text={isSubmitting ? 'Creating profile...' : 'Confirm & Create Account'}
+				disabled={isSubmitting}
+				loading={isSubmitting}
+			/>
+		</div>
+	</form>
 </div>

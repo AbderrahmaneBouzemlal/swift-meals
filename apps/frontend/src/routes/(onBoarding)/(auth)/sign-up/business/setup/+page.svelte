@@ -6,14 +6,20 @@
 	import { registration } from '$lib/stores/registration.svelte.js';
 	import { BUSINESS_SIGNUP_STEPS } from '$lib/utils/constants';
 	import StepTracker from '$lib/components/StepTracker.svelte';
-	import { validate } from '$lib/utils/validate';
 	import { businessSetupSchema } from '$lib/utils/schemas';
 	import { useFormValidation } from '$lib/utils/useFormValidation.svelte';
 	import LogoPreview from '$lib/components/LogoPreview.svelte';
 	import DropZone from '$lib/components/DropZone.svelte';
 	import { ROUTES } from '$lib/utils/routes.js';
+	import { toastStore } from '$lib/stores/toasts.svelte.js';
+	import { onMount } from 'svelte';
 
-	let errors = $state({});
+	onMount(() => {
+		if (registration.role !== 'business') {
+			toastStore.error('Please start sign-up and choose your role first.');
+			goto(ROUTES.chooseRole);
+		}
+	});
 
 	// TODO:
 	// make pickup locations in the backend as an endpoint that returns an array,
@@ -85,7 +91,7 @@
 	}
 
 	function handleSubmit() {
-		if (!form.submitValidate(['Description', 'Pickup locations', 'Logo']))
+		if (!form.submitValidate(['description', 'pickup_locations', 'logo']))
 			return;
 
 		goto(ROUTES.signUp.review);

@@ -1,29 +1,49 @@
 <script>
 	import { goto } from '$app/navigation';
-	import Header from './Header.svelte';
-	import SocialLoginButton from './ui/SocialLoginButton.svelte';
-	import InputField from './ui/InputField.svelte';
-	import PasswordInput from './ui/PasswordInput.svelte';
-	import PrimaryButton from './ui/PrimaryButton.svelte';
-	import Title from './ui/Title.svelte';
+	import Header from '$lib/components/Header.svelte';
+	import SocialLoginButton from '$lib/components/ui/SocialLoginButton.svelte';
+	import InputField from '$lib/components/ui/InputField.svelte';
+	import PasswordInput from '$lib/components/ui/PasswordInput.svelte';
+	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
+	import Title from '$lib/components/ui/Title.svelte';
 	import { signInSchema } from '$lib/utils/schemas';
 	import { useFormValidation } from '$lib/utils/useFormValidation.svelte';
 	import { ROUTES } from '$lib/utils/routes.js';
+	import { applyAction, enhance } from '$app/forms';
+	import { toastStore } from '$lib/stores/toasts.svelte.js';
 
-	let errors = $state({});
+	let { form } = $props();
+
 	let email = $state('');
 	let password = $state('');
 	let isSigningIn = $state(false);
 
-	const form = useFormValidation(signInSchema, () => ({
+	const schemaForm = useFormValidation(signInSchema, () => ({
 		email,
 		password
 	}));
 
-	function handleSignIn() {
-		if (!form.submitValidate(['email', 'password'])) return;
+	let errors = $derived({ ...schemaForm.errors, ...form?.errors });
+
+	function handleSignIn(event) {
+		if (!schemaForm.submitValidate(['email', 'password'])) {
+			event.cancel();
+			return;
+		}
+		
 		isSigningIn = true;
-		goto(ROUTES.account);
+
+		return async ({ update, result }) => {
+			isSigningIn = false;
+			if (result.type === 'failure') {
+				toastStore.error(result.data?.errors?.server || 'Invalid credentials');
+			}
+			if (result.type === 'redirect') {
+				await applyAction(result);
+				return;
+			}
+			await update();
+		};
 	}
 </script>
 
@@ -36,41 +56,47 @@
 		<Title size="medium">Sign In</Title>
 	</div>
 
-	<div class="flex shrink-0 flex-col gap-3 px-8">
+	<form
+		method="POST"
+		use:enhance={handleSignIn}
+		class="flex shrink-0 flex-col gap-3 px-8"
+	>
 		<InputField
+			name="email"
 			type="email"
 			placeholder="Email"
 			bind:value={email}
-			error={form.errors.email}
-			onblur={() => form.touch('email')}
+			error={errors.email}
+			onblur={() => schemaForm.touch('email')}
 			icon="mail"
 		/>
 
 		<!-- Password -->
 		<PasswordInput
+			name="password"
 			placeholder="Password"
 			bind:value={password}
-			error={form.errors.password}
-			onblur={() => form.touch('password')}
+			error={errors.password}
+			onblur={() => schemaForm.touch('password')}
 		/>
 
 		<!-- Forgot password -->
 		<button
+			type="button"
 			class="cursor-pointer border-none bg-transparent p-0 text-left font-abeezee text-[12px] text-brand-gray italic transition-colors duration-200 hover:text-brand-yellow"
 			>Forgot your password?</button
 		>
-	</div>
 
-	<div class="flex shrink-0 justify-center px-8 py-5">
-		<PrimaryButton
-			text="Sign In"
-			onclick={handleSignIn}
-			loading={isSigningIn}
-			disabled={isSigningIn}
-		/>
-	</div>
+		<div class="flex shrink-0 justify-center py-5">
+			<PrimaryButton
+				type="submit"
+				text="Sign In"
+				loading={isSigningIn}
+				disabled={isSigningIn}
+			/>
+		</div>
+	</form>
 
-	<!-- OR divider + social -->
 	<div class="flex shrink-0 flex-col items-center gap-3 px-8">
 		<div class="flex w-full items-center gap-4">
 			<div class="h-px flex-1 bg-brand-gray"></div>

@@ -141,4 +141,195 @@
 			fill-opacity="0.4"
 		/>
 	</svg>
+{:else if name === 'profile'}
+	<svg {width} {height} viewBox="0 0 32 38" fill="none">
+		<path
+			d="M16 19C20.9706 19 25 14.9706 25 10C25 5.02944 20.9706 1 6 1C11.0294 1 16 5.02944 16 10C16 14.9706 20.9706 19 16 19Z"
+			fill={color}
+		/>
+		<path
+			d="M30 33C30 27.4772 25.5228 23 20 23H12C6.47715 23 2 27.4772 2 33V34C2 35.1046 2.89543 36 4 36H28C29.1046 36 30 35.1046 30 34V33Z"
+			fill={color}
+		/>
+	</svg>
+{:else if name === 'forward-arrow'}
+	<svg {width} {height} viewBox="0 0 7 11" fill="none">
+		<path
+			d="M1 1L6 5.5L1 10"
+			stroke={color}
+			stroke-width="1.5"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+	</svg>
+{:else if name === 'fail'}
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 24 24"
+		width="24"
+		height="24"
+		fill="none"
+		stroke="white"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	>
+		<circle cx="12" cy="12" r="10"></circle>
+		<line x1="9" y1="9" x2="15" y2="15"></line>
+		<line x1="15" y1="9" x2="9" y2="15"></line>
+	</svg>
+{:else if name === 'success'}
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 24 24"
+		width="24"
+		height="24"
+		fill="none"
+		stroke="white"
+		stroke-width="3"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	>
+		<circle cx="12" cy="12" r="10"></circle>
+		<path d="M8 12l3 3 5-5"></path>
+	</svg>
+{:else if name === 'warning'}
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 24 24"
+		width="24"
+		height="24"
+		fill="none"
+		stroke="white"
+		stroke-width="2"
+		stroke-linecap="round"
+		stroke-linejoin="round"
+	>
+		<path d="M12 3l10 18H2L12 3z"></path>
+		<line x1="12" y1="9" x2="12" y2="13"></line>
+		<circle cx="12" cy="17" r="1"></circle>
+	</svg>
+{:else if name === 'heart'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<path
+			d="M12 21s-7-4.35-9.5-8C-0.2 9.5 2.2 5 6.5 5C9 5 10.5 6.5 12 8C13.5 6.5 15 5 17.5 5C21.8 5 24.2 9.5 21.5 13C19 16.65 12 21 12 21Z"
+			fill={color}
+		/>
+	</svg>
+{:else if name === 'bell'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<path
+			d="M18 8A6 6 0 006 8v5l-2 2h16l-2-2V8z"
+			stroke={color}
+			stroke-width="2"
+		/>
+		<circle cx="12" cy="19" r="2" fill={color} />
+	</svg>
+{:else if name === 'card'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<rect
+			x="2"
+			y="5"
+			width="20"
+			height="14"
+			rx="2"
+			stroke={color}
+			stroke-width="2"
+		/>
+		<line x1="2" y1="10" x2="22" y2="10" stroke={color} stroke-width="2" />
+	</svg>
+{:else if name === 'settings'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<circle cx="12" cy="12" r="3" stroke={color} stroke-width="2" />
+		<path
+			d="M19.4 15A7.97 7.97 0 0020 12a7.97 7.97 0 00-.6-3l2.1-1.6-2-3.4-2.5 1a8.1 8.1 0 00-2.6-1.5L14 1h-4l-.4 2.5a8.1 8.1 0 00-2.6 1.5l-2.5-1-2 3.4L4.6 9A7.97 7.97 0 004 12c0 1 .2 2 .6 3l-2.1 1.6 2 3.4 2.5-1a8.1 8.1 0 002.6 1.5L10 23h4l.4-2.5a8.1 8.1 0 002.6-1.5l2.5 1 2-3.4L19.4 15z"
+			stroke={color}
+			stroke-width="1.5"
+		/>
+	</svg>
+{:else if name === 'order'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<rect
+			x="3"
+			y="4"
+			width="18"
+			height="16"
+			rx="2"
+			stroke={color}
+			stroke-width="2"
+		/>
+		<line x1="7" y1="8" x2="17" y2="8" stroke={color} stroke-width="2" />
+		<line x1="7" y1="12" x2="17" y2="12" stroke={color} stroke-width="2" />
+	</svg>
+{:else if name === 'booking'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<rect
+			x="3"
+			y="5"
+			width="18"
+			height="16"
+			rx="2"
+			stroke={color}
+			stroke-width="2"
+		/>
+		<line x1="3" y1="10" x2="21" y2="10" stroke={color} stroke-width="2" />
+	</svg>
+{:else if name === 'help-table'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<circle cx="12" cy="12" r="10" stroke={color} stroke-width="2" />
+		<path
+			d="M9.5 9a2.5 2.5 0 115 0c0 2-2.5 2-2.5 4"
+			stroke={color}
+			stroke-width="2"
+		/>
+		<circle cx="12" cy="17" r="1" fill={color} />
+	</svg>
+{:else if name === 'history'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<path d="M3 12a9 9 0 109-9" stroke={color} stroke-width="2" />
+		<polyline points="3 3 3 9 9 9" stroke={color} stroke-width="2" />
+	</svg>
+{:else if name === 'about'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<circle cx="12" cy="12" r="10" stroke={color} stroke-width="2" />
+		<line x1="12" y1="10" x2="12" y2="16" stroke={color} stroke-width="2" />
+		<circle cx="12" cy="7" r="1" fill={color} />
+	</svg>
+{:else if name === 'feedback'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<path
+			d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4z"
+			stroke={color}
+			stroke-width="2"
+		/>
+	</svg>
+{:else if name === 'faq'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<circle cx="12" cy="12" r="10" stroke={color} stroke-width="2" />
+		<path
+			d="M9.5 9a2.5 2.5 0 115 0c0 2-2.5 2-2.5 3"
+			stroke={color}
+			stroke-width="2"
+		/>
+		<circle cx="12" cy="17" r="1" fill={color} />
+	</svg>
+{:else if name === 'logout'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<path d="M10 17l5-5-5-5" stroke={color} stroke-width="2" />
+		<line x1="15" y1="12" x2="3" y2="12" stroke={color} stroke-width="2" />
+		<path d="M21 3v18" stroke={color} stroke-width="2" />
+	</svg>
+{:else}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<rect
+			x="2"
+			y="5"
+			width="20"
+			height="14"
+			rx="2"
+			stroke={color}
+			stroke-width="2"
+		/>
+		<line x1="2" y1="10" x2="22" y2="10" stroke={color} stroke-width="2" />
+	</svg>
 {/if}

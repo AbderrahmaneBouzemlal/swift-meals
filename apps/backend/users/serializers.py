@@ -8,14 +8,33 @@ from .models import User, CustomerProfile, RestaurantProfile
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
+    role_str = serializers.CharField(write_only=True, required=False, source="role")
+    access = serializers.CharField(read_only=True)
+    refresh = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
-        fields = ("email", "password")
+        fields = ("email", "password", "name", "role_str", "access", "refresh")
 
     def create(self, validated_data):
+        role_map = {
+            "business": User.BUSINESS,
+            "customer": User.CUSTOMER,
+        }
+        role_input = validated_data.pop("role", "customer").lower()
+        validated_data["role"] = role_map.get(role_input, User.CUSTOMER)
+
         user = User.objects.create_user(**validated_data)
-        return user
+        refresh = RefreshToken.for_user(user)
+        refresh_token = str(refresh)
+        access_token = str(refresh.access_token)
+
+        update_last_login(None, user)
+        return {
+            "access": access_token,
+            "refresh": refresh_token,
+            "email": user.email,
+        }
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -110,7 +129,6 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
             "email",
             "name",
             "gender",
-            "university",
             "default_pickup_location",
             "phone_number",
         ]
