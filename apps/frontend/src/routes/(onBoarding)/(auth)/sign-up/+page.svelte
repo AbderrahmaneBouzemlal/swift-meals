@@ -1,4 +1,5 @@
 <script>
+	import { enhance } from '$app/forms';
 	import Header from '$lib/components/Header.svelte';
 	import SocialLoginButton from '$lib/components/ui/SocialLoginButton.svelte';
 	import InputField from '$lib/components/ui/InputField.svelte';
@@ -16,17 +17,26 @@
 	import { validate } from '$lib/utils/validate';
 	import { accountSchema } from '$lib/utils/schemas';
 	import { ROUTES } from '$lib/utils/routes.js';
+	import { toastStore } from '$lib/stores/toasts.svelte';
+
+	let { form } = $props();
 
 	let password = $state('');
 	let confirmPassword = $state('');
-	let errors = $state({});
+	let clientErrors = $state({});
+	let isSubmitting = $state(false);
 
-	const form = useFormValidation(accountSchema, () => ({
+	const schemaForm = useFormValidation(accountSchema, () => ({
 		name: registration.name,
 		email: registration.email,
 		password,
 		confirmPassword
 	}));
+
+	const errors = $derived({
+		...schemaForm.errors,
+		...clientErrors
+	});
 
 	const isBusiness = $derived(registration.role === 'business');
 
@@ -38,11 +48,32 @@
 		isBusiness ? ROUTES.signUp.business.details : ROUTES.signUp.customer.profile
 	);
 
-	function handleSignUp() {
-		if (!form.submitValidate(['name', 'email', 'password', 'confirmPassword']))
+	function handleSignUp(event) {
+		if (
+			!schemaForm.submitValidate([
+				'name',
+				'email',
+				'password',
+				'confirmPassword'
+			])
+		) {
+			event.cancel();
 			return;
+		}
 		registration.password = password;
-		goto(nextRoute);
+		if (form?.errors) {
+			toastStore.error(form?.errors || 'An error occurred. Please try again.');
+			event.cancel();
+			return;
+		}
+
+		clientErrors = {};
+		isSubmitting = true;
+
+		return ({ update }) => {
+			isSubmitting = false;
+			update();
+		};
 	}
 </script>
 
@@ -64,34 +95,44 @@
 
 	<StepTracker {steps} currentStep={0} />
 
-	<div class="flex shrink-0 flex-col gap-2.5 px-8">
+	<form
+		method="POST"
+		use:enhance={handleSignUp}
+		class="flex shrink-0 flex-col gap-2.5 px-8"
+	>
+		<input type="hidden" name="role" value={registration.role} />
+
 		<InputField
+			name="name"
 			placeholder={isBusiness ? "Owner's full name" : 'Full name'}
 			bind:value={registration.name}
-			error={form.errors.name}
-			onblur={() => form.touch('name')}
+			error={errors.name}
+			onblur={() => schemaForm.touch('name')}
 		/>
 
 		<InputField
+			name="email"
 			type="email"
 			placeholder="Email address"
 			bind:value={registration.email}
-			error={form.errors.email}
-			onblur={() => form.touch('email')}
+			error={errors.email}
+			onblur={() => schemaForm.touch('email')}
 		/>
 
 		<PasswordInput
+			name="password"
 			placeholder="Password"
 			bind:value={password}
-			error={form.errors.password}
-			onblur={() => form.touch('password')}
+			error={errors.password}
+			onblur={() => schemaForm.touch('password')}
 		/>
 
 		<PasswordInput
+			name="confirmPassword"
 			placeholder="Confirm Password"
 			bind:value={confirmPassword}
-			error={form.errors.confirmPassword}
-			onblur={() => form.touch('confirmPassword')}
+			error={errors.confirmPassword}
+			onblur={() => schemaForm.touch('confirmPassword')}
 		/>
 
 		{#if isBusiness}
@@ -99,23 +140,27 @@
 				You'll add your restaurant details in the next step.
 			</p>
 		{/if}
-	</div>
 
-	<div class="flex shrink-0 flex-col items-center gap-2.5 px-8 pt-3">
-		<div class="flex w-full items-center gap-4">
-			<div class="h-px flex-1 bg-brand-gray"></div>
-			<span class="text-base text-brand-gray-dark italic">OR</span>
-			<div class="h-px flex-1 bg-brand-gray"></div>
+		<div class="flex shrink-0 flex-col items-center gap-2.5 px-8 pt-3">
+			<div class="flex w-full items-center gap-4">
+				<div class="h-px flex-1 bg-brand-gray"></div>
+				<span class="text-base text-brand-gray-dark italic">OR</span>
+				<div class="h-px flex-1 bg-brand-gray"></div>
+			</div>
+
+			<p class="m-0 text-lg text-brand-gray-dark italic">Continue with</p>
+
+			<div class="flex items-center gap-3.5">
+				<SocialLoginButton provider="google" />
+			</div>
 		</div>
 
-		<p class="m-0 text-lg text-brand-gray-dark italic">Continue with</p>
-
-		<div class="flex items-center gap-3.5">
-			<SocialLoginButton provider="google" />
+		<div class="shrink-0 px-8 pt-4">
+			<PrimaryButton
+				type="submit"
+				text={isSubmitting ? 'Creating account...' : 'Create Account'}
+				loading={isSubmitting}
+			/>
 		</div>
-	</div>
-
-	<div class="shrink-0 px-8 pt-4">
-		<PrimaryButton text="Create Account" onclick={handleSignUp} />
-	</div>
+	</form>
 </div>

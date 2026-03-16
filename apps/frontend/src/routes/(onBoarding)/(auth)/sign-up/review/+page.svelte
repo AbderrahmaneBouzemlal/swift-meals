@@ -87,7 +87,7 @@
 					serverError = err.message;
 				}
 			} else {
-				toastStore.error('Something unexpected happened.');
+				toastStore.error(err, 'Something unexpected happened.');
 			}
 		} finally {
 			isSubmitting = false;
@@ -230,7 +230,7 @@
 	</div>
 
 	<!-- CTA -->
-	<div class="shrink-0 px-8 pt-2 pb-2">
+	<div class="shrink-0 px-8 pt-2 pb-10">
 		<PrimaryButton
 			text={isSubmitting ? 'Creating account...' : 'Confirm & Create Account'}
 			onclick={handleSubmit}

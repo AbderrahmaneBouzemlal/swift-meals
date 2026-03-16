@@ -1,8 +1,9 @@
 <script>
 	import { goto } from '$app/navigation';
 	import HeroImage from '$lib/components/HeroImage.svelte';
-	import Button from '$lib/components/Button.svelte';
+	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Subtitle from '$lib/components/ui/Subtitle.svelte';
+	import { ROUTES } from '$lib/utils/routes.js';
 </script>
 
 <div

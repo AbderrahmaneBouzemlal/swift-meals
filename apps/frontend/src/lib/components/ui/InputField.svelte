@@ -2,8 +2,9 @@
 	import Icon from './Icon.svelte';
 
 	let {
+		name = null,
 		value = $bindable(),
-		error = $bindable(),
+		error = null,
 		type = 'text',
 		placeholder = '',
 		icon = null,
@@ -13,6 +14,7 @@
 
 <div class="relative w-full">
 	<input
+		{name}
 		{type}
 		{placeholder}
 		{onblur}
@@ -23,9 +25,9 @@
 			placeholder:text-brand-gray focus:border-brand-yellow focus:bg-white
 			{icon ? 'pl-4' : ''}"
 	/>
-	<div class="mt-1 text-xs text-red-500">
-		{error}
-	</div>
+	{#if error}
+		<p class="mt-1 text-xs text-red-500 italic">{error}</p>
+	{/if}
 	{#if icon}
 		<div
 			class="pointer-events-none absolute top-1/2 right-3.5 flex -translate-y-1/2 items-center"

@@ -3,7 +3,8 @@
 
 	let {
 		value = $bindable(),
-		error = $bindable(),
+		error = null,
+		name = null,
 		type = 'text',
 		placeholder = '',
 		icon = null,
@@ -18,6 +19,7 @@
 		type={showPassword ? 'text' : 'password'}
 		{placeholder}
 		bind:value
+		{name}
 		{onblur}
 		class="box-border h-13 w-full rounded-lg border border-brand-gray-light
 		{error ? 'ring-2 ring-red-400' : 'border border-transparent'}

@@ -8,7 +8,9 @@ export async function registerCustomer(data) {
 		password: data.password,
 		role: 'CUSTOMER'
 	});
-
+	return token;
+}
+export async function setUpProfile(data, token) {
 	await api.patch(
 		ENDPOINTS.profile.customer,
 		{
@@ -24,8 +26,6 @@ export async function registerCustomer(data) {
 		form.append(data.role === 'logo', data.profilePicture);
 		await api.patch(ENDPOINTS.profile.picture, form, { token });
 	}
-
-	return token;
 }
 
 export async function registerBusiness(data) {
@@ -35,7 +35,9 @@ export async function registerBusiness(data) {
 		password: data.password,
 		role: 'BUSINESS'
 	});
-
+	return token;
+}
+export async function setUpBusiness(data, token) {
 	await api.patch(
 		ENDPOINTS.profile.business,
 		{
@@ -56,6 +58,4 @@ export async function registerBusiness(data) {
 		form.append(data.role === 'logo', data.logo);
 		await api.patch(ENDPOINTS.profile.picture, form, { token });
 	}
-
-	return token;
 }

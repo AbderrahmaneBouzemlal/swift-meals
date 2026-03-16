@@ -61,7 +61,6 @@
 		>
 	</div>
 
-	<!-- Sign In Button -->
 	<div class="flex shrink-0 justify-center px-8 py-5">
 		<PrimaryButton
 			text="Sign In"

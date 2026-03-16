@@ -1,4 +1,4 @@
-const BASE = '/api';
+const BASE = import.meta.env.VITE_API_URL ?? '';
 
 export const ENDPOINTS = {
 	auth: {
@@ -9,12 +9,12 @@ export const ENDPOINTS = {
 		obtain: `${BASE}/auth/token/obtain`
 	},
 	profile: {
-		customer: `${BASE}/profile/customer/update`,
-		business: `${BASE}/profile/business/update`,
-		picture: `${BASE}/profile/picture`
+		customer: `${BASE}/profile/customer/update/`,
+		business: `${BASE}/profile/business/update/`,
+		picture: `${BASE}/profile/picture/`
 	},
 	business: {
-		list: `${BASE}/restaurants`,
+		list: `${BASE}/restaurants/`,
 		byId: (id) => `${BASE}/business/${id}`
 	},
 	orders: {
