@@ -8,8 +8,8 @@
 	const role = $derived((user?.role || '').toLowerCase());
 	const isBusiness = $derived(role === 'business');
 
-	const customerProfile = $derived(user?.student_profile || {});
-	const restaurantProfile = $derived(user?.restaurant_profile || {});
+	const customerProfile = $derived(user?.customer_profile || {});
+	const restaurantProfile = $derived(user?.business_profile || {});
 
 	const quickActions = $derived(
 		isBusiness
@@ -106,7 +106,7 @@
 						? 'bg-brand-dark'
 						: 'bg-brand-yellow'}"
 				>
-					{isBusiness ? 'Restaurant Account' : 'Customer Account'}
+					{isBusiness ? 'Business Account' : 'Customer Account'}
 				</span>
 			</div>
 			<div class="relative h-12.25 w-12.25">
@@ -160,19 +160,44 @@
 		<div class="my-1 flex-1 overflow-y-auto px-8 pb-4">
 			<p class="pb-1 text-[11px] text-brand-gray italic">Account & support</p>
 			{#each accountMenuItems as item}
-				<button
-					type="button"
-					class="flex w-full cursor-pointer items-center gap-4 border-b border-none border-gray-100 bg-transparent py-3.5 transition-all duration-150 hover:-mx-1 hover:rounded-md hover:bg-gray-200 hover:px-1"
-				>
-					<div class="flex w-6 shrink-0 items-center justify-center">
-						<Icon name={item.icon} width="20" height="20" color="#BDBDBD" />
-					</div>
-					<span
-						class="flex-1 text-left text-[15px] font-normal text-brand-dark italic"
-						>{item.label}</span
+				{#if item.label === 'Logout'}
+					<form method="POST" action="?/logout">
+						<button
+							type="submit"
+							class="flex w-full cursor-pointer items-center gap-4 border-b border-none border-gray-100
+							 bg-transparent py-3.5 transition-all duration-150 hover:-mx-1 hover:rounded-md hover:bg-gray-200 hover:px-1"
+						>
+							<div class="flex w-6 shrink-0 items-center justify-center">
+								<Icon name={item.icon} width="20" height="20" color="#BDBDBD" />
+							</div>
+							<span
+								class="flex-1 text-left text-[15px] font-normal text-brand-dark italic"
+								>{item.label}</span
+							>
+							<Icon
+								name="forward-arrow"
+								width="7"
+								height="11"
+								color="#BDBDBD"
+							/>
+						</button>
+					</form>
+				{:else}
+					<button
+						type="button"
+						class="flex w-full cursor-pointer items-center gap-4 border-b border-none border-gray-100
+						 bg-transparent py-3.5 transition-all duration-150 hover:-mx-1 hover:rounded-md hover:bg-gray-200 hover:px-1"
 					>
-					<Icon name="forward-arrow" width="7" height="11" color="#BDBDBD" />
-				</button>
+						<div class="flex w-6 shrink-0 items-center justify-center">
+							<Icon name={item.icon} width="20" height="20" color="#BDBDBD" />
+						</div>
+						<span
+							class="flex-1 text-left text-[15px] font-normal text-brand-dark italic"
+							>{item.label}</span
+						>
+						<Icon name="forward-arrow" width="7" height="11" color="#BDBDBD" />
+					</button>
+				{/if}
 			{/each}
 		</div>
 	{:else}

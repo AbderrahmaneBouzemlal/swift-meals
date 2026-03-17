@@ -24,7 +24,7 @@
 	onMount(() => {
 		if (!registration.role) {
 			toastStore.error('Something went wrong. Please start again.');
-			goto(ROUTES.chooseRole);
+			goto(ROUTES.signUp.chooseRole);
 		}
 	});
 	const logoPreview = $derived(
@@ -209,13 +209,12 @@
 		class="shrink-0 px-8 pt-2 pb-2"
 	>
 		<input type="hidden" name="role" value={registration.role} />
-
+		<input
+			type="hidden"
+			name="phone_number"
+			value={registration.phone_number}
+		/>
 		{#if !isBusiness}
-			<input
-				type="hidden"
-				name="phone_number"
-				value={registration.phone_number}
-			/>
 			<input type="hidden" name="gender" value={registration.gender} />
 			<input
 				type="hidden"

@@ -8,23 +8,42 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0003_alter_user_options_rename_is_deleted_user_is_staff_and_more'),
+        ("users", "0003_alter_user_options_rename_is_deleted_user_is_staff_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='customerprofile',
-            name='user',
-            field=models.OneToOneField(limit_choices_to={'role': 'CUSTOMER'}, on_delete=django.db.models.deletion.CASCADE, related_name='student_profile', to=settings.AUTH_USER_MODEL),
+            model_name="customerprofile",
+            name="user",
+            field=models.OneToOneField(
+                limit_choices_to={"role": "CUSTOMER"},
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="customer_profile",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='restaurantprofile',
-            name='user',
-            field=models.OneToOneField(limit_choices_to={'role': 'BUSINESS'}, on_delete=django.db.models.deletion.CASCADE, related_name='restaurant_profile', to=settings.AUTH_USER_MODEL),
+            model_name="restaurantprofile",
+            name="user",
+            field=models.OneToOneField(
+                limit_choices_to={"role": "BUSINESS"},
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="business_profile",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='role',
-            field=models.CharField(choices=[('ADMIN', 'Admin'), ('BUSINESS', 'Business'), ('CUSTOMER', 'Customer')], default='CUSTOMER', help_text='User role determines which profile is active', max_length=20),
+            model_name="user",
+            name="role",
+            field=models.CharField(
+                choices=[
+                    ("ADMIN", "Admin"),
+                    ("BUSINESS", "Business"),
+                    ("CUSTOMER", "Customer"),
+                ],
+                default="CUSTOMER",
+                help_text="User role determines which profile is active",
+                max_length=20,
+            ),
         ),
     ]

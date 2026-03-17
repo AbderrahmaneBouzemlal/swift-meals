@@ -17,7 +17,6 @@ from .serializers import (
     CustomerPictureSerializer,
     RestaurantLogoSerializer,
 )
-from .permissions import isCustomer, isBusinessOwner, IsOwnerOrReadOnly
 
 
 class UserRegistrationView(APIView):
@@ -83,13 +82,14 @@ class ProfileViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=["GET"])
     def me(self, request):
         serializer = UserDetailSerializer(request.user)
+        print(serializer.data)
         return Response(serializer.data)
 
     @action(detail=False, methods=["patch"], url_path="customer/update")
     def update_student(self, request):
-        if not hasattr(request.user, "student_profile"):
+        if not hasattr(request.user, "customer_profile"):
             return Response({"detail": "Not a customer"}, status=403)
-        profile = request.user.student_profile
+        profile = request.user.customer_profile
         serializer = CustomerProfileSerializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -97,9 +97,9 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=["patch"], url_path="business/update")
     def update_restaurant(self, request):
-        if not hasattr(request.user, "restaurant_profile"):
+        if not hasattr(request.user, "business_profile"):
             return Response({"detail": "Not a business owner"}, status=403)
-        profile = request.user.restaurant_profile
+        profile = request.user.business_profile
         serializer = RestaurantProfileSerializer(
             profile, data=request.data, partial=True
         )
@@ -114,13 +114,13 @@ class ProfilePictureView(APIView):
 
     def patch(self, request):
         if request.user.role == "CUSTOMER":
-            profile = request.user.CustomerProfile
+            profile = request.user.customer_profile
             Serializer = CustomerPictureSerializer
         else:
-            profile = request.user.restaurantprofile
+            profile = request.user.business_profile
             Serializer = RestaurantLogoSerializer
 
-        serializer = Serializer(profile, data=request.files, partial=True)
+        serializer = Serializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)

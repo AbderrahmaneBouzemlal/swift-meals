@@ -63,7 +63,7 @@ class CustomerProfile(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name="student_profile",
+        related_name="customer_profile",
         limit_choices_to={"role": User.CUSTOMER},  # Optional: enforce role
     )
     profile_picture = models.ImageField(
@@ -91,7 +91,7 @@ class RestaurantProfile(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
-        related_name="restaurant_profile",
+        related_name="business_profile",
         limit_choices_to={"role": User.BUSINESS},
     )
     restaurant_name = models.CharField(max_length=150)

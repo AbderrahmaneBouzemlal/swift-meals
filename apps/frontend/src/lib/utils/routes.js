@@ -1,12 +1,12 @@
 export const ROUTES = {
 	home: '/',
-	chooseRole: '/choose-role',
 
-	login: '/login',
 	signIn: '/sign-in',
 
 	signUp: {
 		account: '/sign-up',
+		chooseRole: '/sign-up/choose-role',
+
 		customer: {
 			profile: '/sign-up/customer/profile'
 		},

@@ -15,9 +15,10 @@
 </script>
 
 <div
-	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
+	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden bg-white
+	font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
 >
-	<Header backUrl={ROUTES.login} />
+	<Header backUrl={ROUTES.home} />
 
 	<div class="flex flex-1 flex-col gap-6 overflow-y-auto px-8 pt-4">
 		<div class="text-center">

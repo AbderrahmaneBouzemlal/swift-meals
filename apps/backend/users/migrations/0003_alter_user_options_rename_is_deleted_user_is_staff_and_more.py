@@ -9,101 +9,183 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_alter_user_role'),
+        ("users", "0002_alter_user_role"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='user',
-            options={'ordering': ['-date_joined'], 'verbose_name': 'user', 'verbose_name_plural': 'users'},
+            name="user",
+            options={
+                "ordering": ["-date_joined"],
+                "verbose_name": "user",
+                "verbose_name_plural": "users",
+            },
         ),
         migrations.RenameField(
-            model_name='user',
-            old_name='is_deleted',
-            new_name='is_staff',
+            model_name="user",
+            old_name="is_deleted",
+            new_name="is_staff",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='created_by',
+            model_name="user",
+            name="created_by",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='created_date',
+            model_name="user",
+            name="created_date",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='first_name',
+            model_name="user",
+            name="first_name",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='last_name',
+            model_name="user",
+            name="last_name",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='modified_by',
+            model_name="user",
+            name="modified_by",
         ),
         migrations.AddField(
-            model_name='user',
-            name='name',
-            field=models.CharField(blank=True, max_length=150, verbose_name='Full name'),
+            model_name="user",
+            name="name",
+            field=models.CharField(
+                blank=True, max_length=150, verbose_name="Full name"
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='date_joined',
+            model_name="user",
+            name="date_joined",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='email',
+            model_name="user",
+            name="email",
             field=models.EmailField(db_index=True, max_length=254, unique=True),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='is_superuser',
+            model_name="user",
+            name="is_superuser",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='modified_date',
+            model_name="user",
+            name="modified_date",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='role',
-            field=models.CharField(choices=[(1, 'Admin'), (2, 'Business'), (3, 'customer')], default=3, help_text='User role determines which profile is active', max_length=20),
+            model_name="user",
+            name="role",
+            field=models.CharField(
+                choices=[(1, "Admin"), (2, "Business"), (3, "customer")],
+                default=3,
+                help_text="User role determines which profile is active",
+                max_length=20,
+            ),
         ),
         migrations.CreateModel(
-            name='CustomerProfile',
+            name="CustomerProfile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('profile_picture', models.ImageField(blank=True, null=True, upload_to='profile_pictures/')),
-                ('gender', models.CharField(blank=True, choices=[('Male', 'Male'), ('Female', 'Female'), ('Other', 'Other')], max_length=10)),
-                ('default_pickup_location', models.CharField(blank=True, help_text='e.g. Hostel A Lobby, Library Entrance', max_length=150)),
-                ('phone_number', models.CharField(blank=True, max_length=15)),
-                ('user', models.OneToOneField(limit_choices_to={'role': 3}, on_delete=django.db.models.deletion.CASCADE, related_name='student_profile', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "profile_picture",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="profile_pictures/"
+                    ),
+                ),
+                (
+                    "gender",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("Male", "Male"),
+                            ("Female", "Female"),
+                            ("Other", "Other"),
+                        ],
+                        max_length=10,
+                    ),
+                ),
+                (
+                    "default_pickup_location",
+                    models.CharField(
+                        blank=True,
+                        help_text="e.g. Hostel A Lobby, Library Entrance",
+                        max_length=150,
+                    ),
+                ),
+                ("phone_number", models.CharField(blank=True, max_length=15)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        limit_choices_to={"role": 3},
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="customer_profile",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'customer profile',
-                'verbose_name_plural': 'customer profiles',
+                "verbose_name": "customer profile",
+                "verbose_name_plural": "customer profiles",
             },
         ),
         migrations.CreateModel(
-            name='RestaurantProfile',
+            name="RestaurantProfile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('restaurant_name', models.CharField(max_length=150)),
-                ('location', models.CharField(help_text='Campus or nearby address', max_length=200)),
-                ('description', models.TextField(blank=True)),
-                ('cuisine_type', models.CharField(blank=True, max_length=100)),
-                ('phone_number', models.CharField(blank=True, max_length=15)),
-                ('logo', models.ImageField(blank=True, null=True, upload_to='restaurant_logos/')),
-                ('ssm_registration', models.CharField(blank=True, max_length=50)),
-                ('pickup_locations', models.TextField(blank=True, help_text='Comma-separated pickup points, e.g. Hostel Lobby, Library Entrance')),
-                ('user', models.OneToOneField(limit_choices_to={'role': 2}, on_delete=django.db.models.deletion.CASCADE, related_name='restaurant_profile', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("restaurant_name", models.CharField(max_length=150)),
+                (
+                    "location",
+                    models.CharField(
+                        help_text="Campus or nearby address", max_length=200
+                    ),
+                ),
+                ("description", models.TextField(blank=True)),
+                ("cuisine_type", models.CharField(blank=True, max_length=100)),
+                ("phone_number", models.CharField(blank=True, max_length=15)),
+                (
+                    "logo",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="restaurant_logos/"
+                    ),
+                ),
+                ("ssm_registration", models.CharField(blank=True, max_length=50)),
+                (
+                    "pickup_locations",
+                    models.TextField(
+                        blank=True,
+                        help_text="Comma-separated pickup points, e.g. Hostel Lobby, Library Entrance",
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        limit_choices_to={"role": 2},
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="business_profile",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'business profile',
-                'verbose_name_plural': 'business profiles',
+                "verbose_name": "business profile",
+                "verbose_name_plural": "business profiles",
             },
         ),
     ]

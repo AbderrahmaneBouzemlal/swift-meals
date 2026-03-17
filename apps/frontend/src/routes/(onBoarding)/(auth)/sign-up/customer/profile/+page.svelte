@@ -16,7 +16,7 @@
 	onMount(() => {
 		if (registration.role !== 'customer') {
 			toastStore.error('Please start sign-up and choose your role first.');
-			goto(ROUTES.chooseRole);
+			goto(ROUTES.signUp.chooseRole);
 		}
 	});
 
@@ -44,9 +44,7 @@
 	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
          bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
 >
-	<Header backUrl={ROUTES.signUp.account} />
-
-	<div class="shrink-0 px-8 pt-1.5 pb-3">
+	<div class="shrink-0 px-8 pt-6 pb-3">
 		<Title size="medium">Your Profile</Title>
 		<span
 			class="mt-1 inline-block rounded-full bg-brand-yellow px-3 py-0.5 text-xs text-white italic"

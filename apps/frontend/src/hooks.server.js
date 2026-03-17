@@ -7,16 +7,14 @@ function isOnboardingComplete(user) {
 	if (!user) return false;
 
 	const role = String(user.role || '').toLowerCase();
-	const customerProfile = user.student_profile;
-	const businessProfile = user.restaurant_profile;
+	const customerProfile = user.customer_profile;
+	const businessProfile = user.business_profile;
 
 	if (role === 'customer') {
-		// Customer profile fields are optional, so existence is enough.
 		return Boolean(customerProfile);
 	}
 
 	if (role === 'business') {
-		// Business setup is considered complete once required core fields exist.
 		return Boolean(
 			businessProfile?.restaurant_name && businessProfile?.location
 		);
@@ -25,7 +23,15 @@ function isOnboardingComplete(user) {
 	return false;
 }
 
+function getOnboardingRoute(user) {
+	const role = String(user?.role || '').toLowerCase();
+	return role === 'customer'
+		? ROUTES.signUp.customer.profile
+		: ROUTES.signUp.business.details;
+}
+
 export async function handle({ event, resolve }) {
+	const pathname = event.url.pathname;
 	const session = event.cookies.get('session');
 	event.locals.user = null;
 
@@ -38,31 +44,34 @@ export async function handle({ event, resolve }) {
 		}
 	}
 
-	const isAuthRoute =
-		event.url.pathname.startsWith('/sign-in') ||
-		event.url.pathname.startsWith('/sign-up') ||
-		event.url.pathname.startsWith('/login') ||
-		event.url.pathname === '/choose-role';
+	const isSignUpRoute = pathname.startsWith('/sign-up');
+	const isEntryAuthRoute = pathname === ROUTES.signIn;
+	const isAuthRoute = isSignUpRoute || isEntryAuthRoute;
 
-	if (event.locals.user && isAuthRoute) {
+	if (event.locals.user && pathname === ROUTES.signUp.account) {
 		const onboardingComplete = isOnboardingComplete(event.locals.user);
 
 		if (onboardingComplete) {
 			throw redirect(303, ROUTES.account);
 		}
+		throw redirect(303, getOnboardingRoute(event.locals.user));
 	}
 
-	// Protection & Onboarding Enforcement
+	if (event.locals.user && isEntryAuthRoute) {
+		const onboardingComplete = isOnboardingComplete(event.locals.user);
+		if (onboardingComplete) {
+			throw redirect(303, ROUTES.account);
+		}
+		throw redirect(303, getOnboardingRoute(event.locals.user));
+	}
+
 	if (event.locals.user) {
 		const onboardingComplete = isOnboardingComplete(event.locals.user);
 
 		if (!onboardingComplete && !isAuthRoute) {
-			const role = event.locals.user.role.toLowerCase();
-			if (role === 'customer') {
-				throw redirect(303, ROUTES.signUp.customer.profile);
-			} else {
-				throw redirect(303, ROUTES.signUp.business.details);
-			}
+			throw redirect(303, getOnboardingRoute(event.locals.user));
+		} else if (event.url.pathname === '/') {
+			//redirect to the listing page
 		}
 	} else {
 		if (!isAuthRoute && event.url.pathname !== '/') {

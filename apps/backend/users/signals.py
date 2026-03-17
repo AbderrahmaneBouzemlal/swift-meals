@@ -15,7 +15,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     # Save profile changes if user is updated
-    if hasattr(instance, "student_profile"):
-        instance.student_profile.save()
-    elif hasattr(instance, "restaurant_profile"):
-        instance.restaurant_profile.save()
+    if hasattr(instance, "customer_profile"):
+        instance.customer_profile.save()
+    elif hasattr(instance, "business_profile"):
+        instance.business_profile.save()

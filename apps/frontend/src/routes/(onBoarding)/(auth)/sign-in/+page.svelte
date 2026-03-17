@@ -30,7 +30,7 @@
 			event.cancel();
 			return;
 		}
-		
+
 		isSigningIn = true;
 
 		return async ({ update, result }) => {
@@ -50,7 +50,7 @@
 <div
 	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
 >
-	<Header backUrl={ROUTES.login} />
+	<Header backUrl={ROUTES.home} />
 
 	<div class="shrink-0 px-8 pt-2 pb-4">
 		<Title size="medium">Sign In</Title>

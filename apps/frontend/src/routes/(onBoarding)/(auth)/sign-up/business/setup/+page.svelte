@@ -17,7 +17,7 @@
 	onMount(() => {
 		if (registration.role !== 'business') {
 			toastStore.error('Please start sign-up and choose your role first.');
-			goto(ROUTES.chooseRole);
+			goto(ROUTES.signUp.chooseRole);
 		}
 	});
 

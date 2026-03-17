@@ -90,8 +90,8 @@ class UserSerializer(serializers.ModelSerializer):
 class UserDetailSerializer(serializers.ModelSerializer):
     """Used when returning full user info including profile"""
 
-    student_profile = serializers.SerializerMethodField(read_only=True)
-    restaurant_profile = serializers.SerializerMethodField(read_only=True)
+    customer_profile = serializers.SerializerMethodField(read_only=True)
+    business_profile = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -100,21 +100,21 @@ class UserDetailSerializer(serializers.ModelSerializer):
             "email",
             "name",
             "role",
-            "student_profile",
-            "restaurant_profile",
+            "customer_profile",
+            "business_profile",
             "date_joined",
             "is_active",
         ]
         read_only_fields = ["uid", "date_joined", "role"]
 
-    def get_student_profile(self, obj):
-        if hasattr(obj, "student_profile"):
-            return CustomerProfileSerializer(obj.student_profile).data
+    def get_customer_profile(self, obj):
+        if hasattr(obj, "customer_profile"):
+            return CustomerProfileSerializer(obj.customer_profile).data
         return None
 
-    def get_restaurant_profile(self, obj):
-        if hasattr(obj, "restaurant_profile"):
-            return RestaurantProfileSerializer(obj.restaurant_profile).data
+    def get_business_profile(self, obj):
+        if hasattr(obj, "business_profile"):
+            return RestaurantProfileSerializer(obj.business_profile).data
         return None
 
 
