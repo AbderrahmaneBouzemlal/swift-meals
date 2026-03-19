@@ -1,4 +1,5 @@
 <script>
+	import LogoPreview from '$lib/components/LogoPreview.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
 
@@ -113,7 +114,15 @@
 				<div
 					class="absolute top-1.25 left-1.25 flex h-9.75 w-9.75 items-center justify-center overflow-hidden rounded-full bg-gray-100"
 				>
-					<Icon name="profile" width="32" height="38" />
+					<!-- <Icon name="profile" width="32" height="38" /> -->
+					{#if restaurantProfile.logo}
+						<LogoPreview
+							previewUrl={restaurantProfile.logo}
+							deletable={false}
+						/>
+					{:else}
+						<Icon name="profile" width="32" height="38" />
+					{/if}
 				</div>
 				<div
 					class="absolute inset-0 rounded-full border-[0.75px] border-brand-gray-dark"

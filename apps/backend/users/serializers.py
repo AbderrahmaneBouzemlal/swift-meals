@@ -96,6 +96,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
+            "id",
             "uid",
             "email",
             "name",
@@ -109,18 +110,34 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     def get_customer_profile(self, obj):
         if hasattr(obj, "customer_profile"):
-            return CustomerProfileSerializer(obj.customer_profile).data
+            return CustomerProfileSerializer(
+                obj.customer_profile,
+                context=self.context,  # ← forwards request to nested serializer
+            ).data
         return None
 
     def get_business_profile(self, obj):
         if hasattr(obj, "business_profile"):
-            return RestaurantProfileSerializer(obj.business_profile).data
+            return RestaurantProfileSerializer(
+                obj.business_profile, context=self.context  # ← same here
+            ).data
         return None
 
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email", read_only=True)
     name = serializers.CharField(source="user.name", required=False)
+    profile_picture_url = serializers.SerializerMethodField()
+
+    def get_profile_picture_url(self, obj):
+        if not obj.profile_picture:
+            return None
+        request = self.context.get("request")
+        return (
+            request.build_absolute_uri(obj.profile_picture.url)
+            if request
+            else obj.profile_picture.url
+        )
 
     class Meta:
         model = CustomerProfile
@@ -131,6 +148,7 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
             "gender",
             "default_pickup_location",
             "phone_number",
+            "profile_picture_url",
         ]
         read_only_fields = ["id", "email"]
 
@@ -149,6 +167,15 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 class RestaurantProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email", read_only=True)
     owner_name = serializers.CharField(source="user.name", read_only=True)
+    logo_url = serializers.SerializerMethodField()
+
+    def get_logo_url(self, obj):
+        if not obj.logo:
+            return None
+        request = self.context.get("request")
+        if request:
+            return request.build_absolute_uri(obj.logo.url)
+        return obj.logo.url
 
     class Meta:
         model = RestaurantProfile
@@ -162,16 +189,11 @@ class RestaurantProfileSerializer(serializers.ModelSerializer):
             "cuisine_type",
             "phone_number",
             "logo",
+            "logo_url",
             "ssm_registration",
             "pickup_locations",
         ]
         read_only_fields = ["id", "email", "owner_name"]
-
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        if instance.logo:
-            ret["logo"] = instance.logo.url
-        return ret
 
 
 class CustomerPictureSerializer(serializers.ModelSerializer):

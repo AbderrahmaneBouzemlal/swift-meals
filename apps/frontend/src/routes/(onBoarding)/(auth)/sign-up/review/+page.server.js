@@ -25,12 +25,22 @@ export const actions = {
 		} catch (err) {
 			if (err instanceof ApiError) {
 				if (err.type === 'validation') {
-					return fail(400, { errors: err.fieldErrors });
+					return fail(400, {
+						errors: err.fieldErrors // already a plain object { field: 'message' }
+					});
 				}
-				return fail(500, { errors: { server: err.message } });
+
+				return fail(500, {
+					errors: {
+						server: err.message // string only
+					}
+				});
 			}
+
 			return fail(500, {
-				errors: { server: 'Something unexpected happened.', err }
+				errors: {
+					server: err + 'Something unexpected happened. Please try again.'
+				}
 			});
 		}
 

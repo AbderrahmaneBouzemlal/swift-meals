@@ -130,5 +130,4 @@ yarn-error.log*
 *.temp
 .cache/
 
-restaurant_logos/
-profile_pictures/
+media/

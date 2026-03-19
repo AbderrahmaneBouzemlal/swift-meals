@@ -7,7 +7,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import JSONParser, MultiPartParser
 from .serializers import (
     UserRegistrationSerializer,
     UserLoginSerializer,
@@ -75,30 +75,41 @@ class UserLogoutView(APIView):
 
 
 class ProfileViewSet(viewsets.GenericViewSet):
-    """Mixed viewset for /me and profile updates"""
-
     permission_classes = [IsAuthenticated]
+    parser_classes = [JSONParser, MultiPartParser]
+
+    def _picture_url(self, request, picture_field):
+        """Returns absolute URL for a picture field, or None if not set."""
+        if not picture_field:
+            return None
+        return request.build_absolute_uri(picture_field.url)
 
     @action(detail=False, methods=["GET"])
     def me(self, request):
-        serializer = UserDetailSerializer(request.user)
-        print(serializer.data)
+        """
+        Returns the user + profile.
+        Picture URL is included here so the frontend
+        never needs a separate GET /picture request.
+        """
+        serializer = UserDetailSerializer(request.user, context={"request": request})
         return Response(serializer.data)
 
-    @action(detail=False, methods=["patch"], url_path="customer/update")
-    def update_student(self, request):
+    @action(detail=False, methods=["PATCH"], url_path="customer/update")
+    def update_customer(self, request):
         if not hasattr(request.user, "customer_profile"):
-            return Response({"detail": "Not a customer"}, status=403)
+            return Response({"detail": "Not a customer."}, status=403)
+
         profile = request.user.customer_profile
         serializer = CustomerProfileSerializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
 
-    @action(detail=False, methods=["patch"], url_path="business/update")
-    def update_restaurant(self, request):
+    @action(detail=False, methods=["PATCH"], url_path="business/update")
+    def update_business(self, request):
         if not hasattr(request.user, "business_profile"):
-            return Response({"detail": "Not a business owner"}, status=403)
+            return Response({"detail": "Not a business owner."}, status=403)
+
         profile = request.user.business_profile
         serializer = RestaurantProfileSerializer(
             profile, data=request.data, partial=True
@@ -107,20 +118,42 @@ class ProfileViewSet(viewsets.GenericViewSet):
         serializer.save()
         return Response(serializer.data)
 
+    @action(
+        detail=False,
+        methods=["PATCH", "GET"],
+        url_path="picture",
+        parser_classes=[MultiPartParser],
+    )
+    def picture(self, request):
+        """
+        GET  /api/profile/picture/ — returns current picture URL
+        PATCH /api/profile/picture/ — uploads a new picture
+        """
+        is_customer = request.user.role == "CUSTOMER"
 
-class ProfilePictureView(APIView):
-    permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser]
+        profile = (
+            request.user.customer_profile
+            if is_customer
+            else request.user.business_profile
+        )
+        Serializer = (
+            CustomerPictureSerializer if is_customer else RestaurantLogoSerializer
+        )
+        field = profile.profile_picture if is_customer else profile.logo
 
-    def patch(self, request):
-        if request.user.role == "CUSTOMER":
-            profile = request.user.customer_profile
-            Serializer = CustomerPictureSerializer
-        else:
-            profile = request.user.business_profile
-            Serializer = RestaurantLogoSerializer
+        if request.method == "GET":
+            return Response({"url": self._picture_url(request, field)})
 
+        # PATCH
         serializer = Serializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
+
+        # refresh the field after save
+        field = profile.profile_picture if is_customer else profile.logo
+        return Response(
+            {
+                **serializer.data,
+                "url": self._picture_url(request, field),
+            }
+        )

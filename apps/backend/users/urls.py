@@ -6,7 +6,6 @@ from .views import (
     UserLoginView,
     UserLogoutView,
     ProfileViewSet,
-    ProfilePictureView,
 )
 from rest_framework.routers import DefaultRouter
 
@@ -28,6 +27,5 @@ urlpatterns = [
     path("auth/register", UserRegistrationView.as_view(), name="register"),
     path("auth/login", UserLoginView.as_view(), name="login"),
     path("auth/logout", UserLogoutView.as_view(), name="logout"),
-    path("profile/picture/", ProfilePictureView.as_view()),
     path("", include(router.urls)),
 ]
