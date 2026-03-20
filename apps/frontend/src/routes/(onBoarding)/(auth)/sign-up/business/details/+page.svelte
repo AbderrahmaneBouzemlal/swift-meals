@@ -1,4 +1,5 @@
 <script>
+	import { BUSINESS_TYPE } from './../../../../../../lib/utils/constants.js';
 	import Header from '$lib/components/Header.svelte';
 	import InputField from '$lib/components/ui/InputField.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
@@ -12,6 +13,7 @@
 	import { ROUTES } from '$lib/utils/routes.js';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
 	import { onMount } from 'svelte';
+	import SelectField from '$lib/components/ui/SelectField.svelte';
 
 	onMount(() => {
 		if (registration.role !== 'business') {
@@ -36,7 +38,8 @@
 		location: registration.location,
 		phone_number: registration.phone_number,
 		cuisine_type: cuisineTags.join(', '),
-		ssm_registration: registration.ssm_registration
+		ssm_registration: registration.ssm_registration,
+		business_type: registration.business_type
 	}));
 
 	const cuisineSuggestions = [
@@ -80,7 +83,8 @@
 				'restaurant_name',
 				'location',
 				'phone_number',
-				'ssm_registration'
+				'ssm_registration',
+				'business_type'
 			])
 		)
 			return;
@@ -114,6 +118,13 @@
 			bind:value={registration.restaurant_name}
 			error={form.errors.restaurant_name}
 			onblur={() => form.touch('restaurant_name')}
+		/>
+
+		<SelectField
+			bind:value={registration.business_type}
+			options={BUSINESS_TYPE}
+			placeholder="Business type"
+			error={form.errors.business_type}
 		/>
 
 		<!-- Location -->

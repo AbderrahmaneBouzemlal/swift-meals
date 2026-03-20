@@ -13,7 +13,7 @@ from .serializers import (
     UserLoginSerializer,
     UserDetailSerializer,
     CustomerProfileSerializer,
-    RestaurantProfileSerializer,
+    BusinessProfileSerializer,
     CustomerPictureSerializer,
     RestaurantLogoSerializer,
 )
@@ -92,6 +92,7 @@ class ProfileViewSet(viewsets.GenericViewSet):
         never needs a separate GET /picture request.
         """
         serializer = UserDetailSerializer(request.user, context={"request": request})
+        print(serializer.data["business_profile"])
         return Response(serializer.data)
 
     @action(detail=False, methods=["PATCH"], url_path="customer/update")
@@ -111,9 +112,7 @@ class ProfileViewSet(viewsets.GenericViewSet):
             return Response({"detail": "Not a business owner."}, status=403)
 
         profile = request.user.business_profile
-        serializer = RestaurantProfileSerializer(
-            profile, data=request.data, partial=True
-        )
+        serializer = BusinessProfileSerializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)

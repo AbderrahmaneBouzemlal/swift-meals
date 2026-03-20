@@ -51,6 +51,7 @@ export async function setUpBusiness(data, token) {
 			restaurant_name: data.restaurant_name,
 			phone_number: data.phone_number,
 			location: data.location,
+			business_type: data.business_type,
 			cuisine_type: data.cuisine_type,
 			ssm_registration: data.ssm_registration,
 			description: data.description,

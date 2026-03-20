@@ -58,6 +58,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_role_display(self):
         return dict(self.ROLE_CHOICES).get(self.role, self.role)
 
+    def save(self, *args, **kwargs):
+        self.email = self.email.lower().strip()
+        super().save(*args, **kwargs)
+
 
 class CustomerProfile(models.Model):
     user = models.OneToOneField(
@@ -71,7 +75,10 @@ class CustomerProfile(models.Model):
     )
     gender = models.CharField(
         max_length=10,
-        choices=[("Male", "Male"), ("Female", "Female"), ("Other", "Other")],
+        choices=[
+            ("Male", "Male"),
+            ("Female", "Female"),
+        ],
         blank=True,
     )
     default_pickup_location = models.CharField(
@@ -87,7 +94,7 @@ class CustomerProfile(models.Model):
         return f"customer: {self.user.email}"
 
 
-class RestaurantProfile(models.Model):
+class BusinessProfile(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -96,6 +103,13 @@ class RestaurantProfile(models.Model):
     )
     restaurant_name = models.CharField(max_length=150)
     location = models.CharField(max_length=200, help_text="Campus or nearby address")
+    business_type = models.CharField(
+        [
+            ("student seller", "Student Seller"),
+            ("restaurant", "Restaurant"),
+        ],
+        max_length=50,
+    )
     description = models.TextField(blank=True)
     cuisine_type = models.CharField(max_length=100, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)

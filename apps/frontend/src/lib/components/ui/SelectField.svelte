@@ -2,7 +2,7 @@
 	import { clickOutside } from '$lib/utils/clickOutside.js';
 
 	let {
-		value = $bindable(''),
+		value = $bindable(),
 		options = [],
 		placeholder = 'Select...',
 		error = null

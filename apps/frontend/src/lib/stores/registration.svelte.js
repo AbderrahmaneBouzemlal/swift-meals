@@ -4,7 +4,7 @@ export const registration = $state({
 	name: '',
 	password: '',
 
-	profile_picture: '',
+	profile_picture: null,
 	phone_number: '',
 	gender: '',
 	default_pickup_location: '',
@@ -15,7 +15,8 @@ export const registration = $state({
 	ssm_registration: '',
 	description: '',
 	pickup_locations: '',
-	logo: null
+	logo: null,
+	business_type: ''
 });
 
 export function setRole(role) {
@@ -37,7 +38,9 @@ export function reset() {
 		ssm_registration: '',
 		description: '',
 		pickup_locations: '',
-		logo: null
+		logo: null,
+		buisness_type: '',
+		profile_picture: null
 	});
 }
 
@@ -48,7 +51,8 @@ export function studentPayload() {
 		password: registration.password,
 		phone_number: registration.phone_number,
 		gender: registration.gender,
-		default_pickup_location: registration.default_pickup_location
+		default_pickup_location: registration.default_pickup_location,
+		profile_picture: registration.profile_picture
 	};
 }
 
@@ -64,6 +68,7 @@ export function restaurantPayload() {
 		ssm_registration: registration.ssm_registration,
 		description: registration.description,
 		pickup_locations: registration.pickup_locations,
-		logo: registration.logo
+		logo: registration.logo,
+		business_type: registration.buisness_type
 	};
 }

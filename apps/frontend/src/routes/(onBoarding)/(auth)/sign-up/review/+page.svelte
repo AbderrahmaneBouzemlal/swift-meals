@@ -63,6 +63,7 @@
 	const businessFields = $derived([
 		{ label: 'Restaurant', value: registration.restaurant_name || '—' },
 		{ label: 'Location', value: registration.location || '—' },
+		{ label: 'Business type', value: registration.business_type || '—' },
 		{ label: 'Phone', value: registration.phone_number || '—' },
 		{ label: 'Cuisine', value: registration.cuisine_type || '—' },
 		{ label: 'SSM number', value: registration.ssm_registration || '—' },
@@ -238,6 +239,12 @@
 				value={registration.restaurant_name}
 			/>
 			<input type="hidden" name="location" value={registration.location} />
+
+			<input
+				type="hidden"
+				name="business_type"
+				value={registration.business_type}
+			/>
 			<input
 				type="hidden"
 				name="cuisine_type"

@@ -10,7 +10,7 @@
 	const isBusiness = $derived(role === 'business');
 
 	const customerProfile = $derived(user?.customer_profile || {});
-	const restaurantProfile = $derived(user?.business_profile || {});
+	const BusinessProfile = $derived(user?.business_profile || {});
 
 	const quickActions = $derived(
 		isBusiness
@@ -59,20 +59,24 @@
 			? [
 					{
 						label: 'Restaurant',
-						value: valueOrDash(restaurantProfile.restaurant_name)
+						value: valueOrDash(BusinessProfile.restaurant_name)
 					},
 					{
 						label: 'Cuisine',
-						value: valueOrDash(restaurantProfile.cuisine_type)
+						value: valueOrDash(BusinessProfile.cuisine_type)
 					},
 					{
 						label: 'Phone',
-						value: valueOrDash(restaurantProfile.phone_number)
+						value: valueOrDash(BusinessProfile.phone_number)
 					},
-					{ label: 'Location', value: valueOrDash(restaurantProfile.location) },
+					{ label: 'Location', value: valueOrDash(BusinessProfile.location) },
+					{
+						label: 'Business Type',
+						value: valueOrDash(BusinessProfile.business_type)
+					},
 					{
 						label: 'Pickup Point',
-						value: valueOrDash(restaurantProfile.pickup_location)
+						value: valueOrDash(BusinessProfile.pickup_location)
 					}
 				]
 			: [
@@ -115,11 +119,8 @@
 					class="absolute top-1.25 left-1.25 flex h-9.75 w-9.75 items-center justify-center overflow-hidden rounded-full bg-gray-100"
 				>
 					<!-- <Icon name="profile" width="32" height="38" /> -->
-					{#if restaurantProfile.logo}
-						<LogoPreview
-							previewUrl={restaurantProfile.logo}
-							deletable={false}
-						/>
+					{#if BusinessProfile.logo}
+						<LogoPreview previewUrl={BusinessProfile.logo} deletable={false} />
 					{:else}
 						<Icon name="profile" width="32" height="38" />
 					{/if}

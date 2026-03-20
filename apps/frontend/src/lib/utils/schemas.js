@@ -38,7 +38,7 @@ export const customerProfileSchema = z.object({
 		.or(z.literal(''))
 		.optional(),
 
-	gender: z.enum(['Male', 'Female', 'Other', '']).optional(),
+	gender: z.enum(['Male', 'Female', '']).optional(),
 
 	default_pickup_location: z
 		.string()
@@ -71,7 +71,8 @@ export const businessDetailsSchema = z.object({
 	ssm_registration: z
 		.string()
 		.max(50, 'SSM number must be under 50 characters')
-		.optional()
+		.optional(),
+	business_type: z.enum(['Student Seller', 'Restaurant']).optional()
 });
 
 export const businessSetupSchema = z.object({

@@ -3,7 +3,7 @@ from django.contrib.auth.models import update_last_login
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, CustomerProfile, RestaurantProfile
+from .models import User, CustomerProfile, BusinessProfile
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -15,6 +15,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("email", "password", "name", "role_str", "access", "refresh")
+
+    def validate_email(self, value):
+        return value.lower().strip()
 
     def create(self, validated_data):
         role_map = {
@@ -45,7 +48,7 @@ class UserLoginSerializer(serializers.Serializer):
     role = serializers.CharField(read_only=True)
 
     def validate(self, data):
-        email = data["email"]
+        email = data["email"].lower().strip()
         password = data["password"]
         user = authenticate(email=email, password=password)
 
@@ -112,14 +115,14 @@ class UserDetailSerializer(serializers.ModelSerializer):
         if hasattr(obj, "customer_profile"):
             return CustomerProfileSerializer(
                 obj.customer_profile,
-                context=self.context,  # ← forwards request to nested serializer
+                context=self.context,
             ).data
         return None
 
     def get_business_profile(self, obj):
         if hasattr(obj, "business_profile"):
-            return RestaurantProfileSerializer(
-                obj.business_profile, context=self.context  # ← same here
+            return BusinessProfileSerializer(
+                obj.business_profile, context=self.context
             ).data
         return None
 
@@ -164,7 +167,7 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
         return instance
 
 
-class RestaurantProfileSerializer(serializers.ModelSerializer):
+class BusinessProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email", read_only=True)
     owner_name = serializers.CharField(source="user.name", read_only=True)
     logo_url = serializers.SerializerMethodField()
@@ -178,13 +181,14 @@ class RestaurantProfileSerializer(serializers.ModelSerializer):
         return obj.logo.url
 
     class Meta:
-        model = RestaurantProfile
+        model = BusinessProfile
         fields = [
             "id",
             "email",
             "owner_name",
             "restaurant_name",
             "location",
+            "business_type",
             "description",
             "cuisine_type",
             "phone_number",
@@ -204,5 +208,5 @@ class CustomerPictureSerializer(serializers.ModelSerializer):
 
 class RestaurantLogoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RestaurantProfile
+        model = BusinessProfile
         fields = ["logo"]
