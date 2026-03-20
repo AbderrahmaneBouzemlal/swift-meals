@@ -4,12 +4,11 @@ export const registration = $state({
 	name: '',
 	password: '',
 
-	// customer profile
+	profile_picture: '',
 	phone_number: '',
 	gender: '',
 	default_pickup_location: '',
 
-	// Business profile
 	restaurant_name: '',
 	location: '',
 	cuisine_type: '',
@@ -19,7 +18,6 @@ export const registration = $state({
 	logo: null
 });
 
-// actions — colocated with the state
 export function setRole(role) {
 	registration.role = role;
 }

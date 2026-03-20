@@ -1,10 +1,8 @@
 import { ApiError } from './apiError';
 
 async function request(url, { method = 'GET', token, data, params } = {}) {
-	// append query params if provided
 	const fullUrl = params ? `${url}?${new URLSearchParams(params)}` : url;
 
-	// decide how to serialize the body
 	let body;
 	let headers = {};
 

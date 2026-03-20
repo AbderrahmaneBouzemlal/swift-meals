@@ -28,7 +28,11 @@
 		}
 	});
 	const logoPreview = $derived(
-		registration.logo ? URL.createObjectURL(registration.logo) : null
+		registration.logo
+			? URL.createObjectURL(registration.logo)
+			: null || registration.profile_picture
+				? URL.createObjectURL(registration.profile_picture)
+				: null
 	);
 	const steps =
 		registration.role === 'business'
@@ -47,6 +51,12 @@
 		{
 			label: 'Pickup location',
 			value: registration.default_pickup_location || '—'
+		},
+		{
+			label: 'Profile picture',
+			value: registration.profile_picture
+				? registration.profile_picture.name
+				: '—'
 		}
 	]);
 

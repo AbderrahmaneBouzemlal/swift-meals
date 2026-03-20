@@ -11,6 +11,9 @@
 	import { useFormValidation } from '$lib/utils/useFormValidation.svelte.js';
 	import { ROUTES } from '$lib/utils/routes.js';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
+	import LogoPreview from '$lib/components/LogoPreview.svelte';
+	import DropZone from '$lib/components/DropZone.svelte';
+	import SelectField from '$lib/components/ui/SelectField.svelte';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
@@ -25,6 +28,23 @@
 		gender: registration.gender,
 		default_pickup_location: registration.default_pickup_location
 	}));
+
+	let fileInput = $state(null);
+
+	let previewUrl = $derived(
+		registration.profile_picture
+			? URL.createObjectURL(registration.profile_picture)
+			: null
+	);
+
+	function handleFileSelect(file) {
+		if (!file || !file.type.startsWith('image/')) return;
+		registration.profile_picture = file;
+	}
+
+	function handleInputChange(e) {
+		handleFileSelect(e.target.files?.[0]);
+	}
 
 	function handleSubmit() {
 		if (
@@ -56,6 +76,29 @@
 	<StepTracker steps={CUSTOMER_SIGNUP_STEPS} currentStep={1} />
 
 	<div class="flex shrink-0 flex-col gap-2.5 px-8">
+		<!-- Profile picture -->
+		<div>
+			<p class="mb-1.5 text-sm text-brand-dark italic">Profile Picture</p>
+
+			{#if registration.profile_picture}
+				<LogoPreview {previewUrl} {fileInput} />
+			{:else}
+				<DropZone {handleFileSelect} {fileInput} />
+			{/if}
+			{#if form.errors.profile_picture}
+				<p class="mt-1 text-xs text-red-500 italic">
+					{form.errors.profile_picture}
+				</p>
+			{/if}
+
+			<input
+				bind:this={fileInput}
+				type="file"
+				accept="image/*"
+				class="hidden"
+				onchange={handleInputChange}
+			/>
+		</div>
 		<!-- Phone -->
 		<InputField
 			type="tel"
@@ -67,18 +110,12 @@
 
 		<!-- Gender -->
 		<div class="relative w-full">
-			<select
+			<SelectField
 				bind:value={registration.gender}
-				class="w-full appearance-none rounded-lg border border-[#E8E8E8] bg-[#F6F6F6]
-               px-4 py-3.5 font-abeezee text-base italic transition-colors duration-200
-               outline-none focus:border-brand-yellow focus:bg-white
-               {registration.gender ? 'text-brand-dark' : 'text-brand-gray'}"
-			>
-				<option value="" disabled selected hidden>Gender (optional)</option>
-				{#each GENDER_OPTIONS as option}
-					<option value={option}>{option}</option>
-				{/each}
-			</select>
+				options={GENDER_OPTIONS}
+				placeholder="Gender (optional)"
+				error={form.errors.gender}
+			/>
 
 			<div
 				class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2"

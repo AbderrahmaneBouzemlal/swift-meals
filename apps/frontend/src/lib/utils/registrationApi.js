@@ -27,9 +27,9 @@ export async function setUpProfile(data, token) {
 		{ token }
 	);
 
-	if (data.profilePicture instanceof File) {
+	if (data.profile_picture instanceof File) {
 		const form = new FormData();
-		form.append('profilePicture', data.profilePicture);
+		form.append('profile_picture', data.profile_picture);
 		await api.patch(ENDPOINTS.profile.picture, form, { token });
 	}
 }
