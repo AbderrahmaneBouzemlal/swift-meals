@@ -13,6 +13,7 @@
 	import { ROUTES } from '$lib/utils/routes.js';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
 	import { onMount } from 'svelte';
+	import TagInput from '$lib/components/ui/TagInput.svelte';
 
 	onMount(() => {
 		if (registration.role !== 'business') {
@@ -48,33 +49,6 @@
 		'Admin Block'
 	];
 
-	function addPickup(tag) {
-		const clean = tag.trim();
-		if (!clean || pickupTags.includes(clean)) return;
-		pickupTags = [...pickupTags, clean];
-		pickupInput = '';
-		sync();
-	}
-
-	function removePickup(tag) {
-		pickupTags = pickupTags.filter((p) => p !== tag);
-		sync();
-	}
-
-	function handlePickupKeydown(e) {
-		if (e.key === 'Enter' || e.key === ',') {
-			e.preventDefault();
-			addPickup(pickupInput);
-		}
-		if (e.key === 'Backspace' && !pickupInput && pickupTags.length) {
-			removePickup(pickupTags.at(-1));
-		}
-	}
-
-	function sync() {
-		registration.pickup_locations = pickupTags.join(', ');
-	}
-
 	let fileInput = $state(null);
 
 	let previewUrl = $derived(
@@ -104,7 +78,6 @@
 >
 	<Header backUrl={ROUTES.signUp.business.details} />
 
-	<!-- Title -->
 	<div class="shrink-0 px-8 pt-1.5 pb-3">
 		<Title size="medium">Restaurant Setup</Title>
 		<span
@@ -115,12 +88,9 @@
 		</span>
 	</div>
 
-	<!-- Step indicator -->
 	<StepTracker steps={BUSINESS_SIGNUP_STEPS} currentStep={2} />
 
-	<!-- Form -->
 	<div class="flex shrink-0 flex-col gap-4 px-8">
-		<!-- Logo upload -->
 		<div>
 			<p class="mb-1.5 text-sm text-brand-dark italic">Restaurant Logo</p>
 
@@ -142,7 +112,6 @@
 			/>
 		</div>
 
-		<!-- Description -->
 		<div>
 			<p class="mb-1.5 text-sm text-brand-dark italic">Description</p>
 			<div class="relative">
@@ -162,69 +131,17 @@
 			</div>
 		</div>
 
-		<!-- Pickup locations -->
 		<div>
 			<p class="mb-1.5 text-sm text-brand-dark italic">Pickup Locations</p>
 
-			<!-- tag input -->
-			<div
-				class="flex min-h-13 w-full flex-wrap items-center gap-1.5 rounded-lg
-               border border-[#E8E8E8] bg-[#F6F6F6] px-3 py-2 transition-colors
-               duration-200 focus-within:border-brand-yellow focus-within:bg-white"
-			>
-				{#each pickupTags as tag}
-					<span
-						class="flex items-center gap-1 rounded-full bg-brand-dark
-                       px-2.5 py-0.5 text-xs text-white italic"
-					>
-						{tag}
-						<button
-							type="button"
-							class="ml-0.5 opacity-70 hover:opacity-100"
-							onclick={() => removePickup(tag)}
-							aria-label="Remove {tag}"
-						>
-							<svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-								<path
-									d="M1 1L7 7M7 1L1 7"
-									stroke="white"
-									stroke-width="1.5"
-									stroke-linecap="round"
-								/>
-							</svg>
-						</button>
-					</span>
-				{/each}
+			<TagInput
+				name="pickup_locations"
+				tags={pickupTags}
+				bind:tagInput={pickupInput}
+				suggestions={pickupSuggestions}
+			/>
 
-				<input
-					class="min-w-30 flex-1 bg-transparent font-abeezee text-base
-                 text-brand-dark italic outline-none placeholder:text-brand-gray"
-					placeholder={pickupTags.length
-						? 'Add location...'
-						: 'Type and press Enter'}
-					bind:value={pickupInput}
-					onkeydown={handlePickupKeydown}
-				/>
-			</div>
-
-			<!-- suggestions -->
-			{#if pickupSuggestions.filter((s) => !pickupTags.includes(s)).length}
-				<div class="mt-2 flex flex-wrap gap-1.5 px-1">
-					{#each pickupSuggestions.filter((s) => !pickupTags.includes(s)) as suggestion}
-						<button
-							type="button"
-							class="rounded-full border border-brand-gray px-2.5 py-0.5
-                     text-xs text-brand-gray italic transition-colors
-                     hover:border-brand-yellow hover:text-brand-yellow"
-							onclick={() => addPickup(suggestion)}
-						>
-							+ {suggestion}
-						</button>
-					{/each}
-				</div>
-			{/if}
-
-			<p class="mt-1 px-1 text-[11px] text-brand-gray italic">
+			<p class="mt-1 px-1 text-sm text-brand-gray italic">
 				Where customers can collect their orders
 			</p>
 		</div>

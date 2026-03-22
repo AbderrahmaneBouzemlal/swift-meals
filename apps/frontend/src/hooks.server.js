@@ -2,6 +2,10 @@ import { redirect } from '@sveltejs/kit';
 import { api } from '$lib/utils/api.js';
 import { ENDPOINTS } from '$lib/utils/endpoints.js';
 import { ROUTES } from '$lib/utils/routes.js';
+import {
+	getAccessCookieOptions,
+	getRefreshCookieOptions
+} from '$lib/utils/authSession.server.js';
 
 function isOnboardingComplete(user) {
 	if (!user) return false;
@@ -32,15 +36,68 @@ function getOnboardingRoute(user) {
 
 export async function handle({ event, resolve }) {
 	const pathname = event.url.pathname;
-	const session = event.cookies.get('session');
+	const access = event.cookies.get('access');
+	const refresh = event.cookies.get('refresh');
+
 	event.locals.user = null;
 
-	if (session) {
+	if (access) {
 		try {
-			const user = await api.get(ENDPOINTS.profile.me, { token: session });
-			event.locals.user = user;
+			event.locals.user = await api.get(ENDPOINTS.profile.me, { token: access });
 		} catch (err) {
-			event.cookies.delete('session', { path: '/' });
+			// Access token might be invalid/expired, try refreshing if we have a refresh token
+			if (refresh) {
+				try {
+					const tokens = await api.post(ENDPOINTS.auth.refresh, { refresh });
+					if (tokens?.access) {
+						event.cookies.set(
+							'access',
+							tokens.access,
+							getAccessCookieOptions(event.url)
+						);
+						if (tokens.refresh) {
+							event.cookies.set(
+								'refresh',
+								tokens.refresh,
+								getRefreshCookieOptions(event.url)
+							);
+						}
+						event.locals.user = await api.get(ENDPOINTS.profile.me, {
+							token: tokens.access
+						});
+					}
+				} catch (refreshErr) {
+					// Refresh failed, clear both
+					event.cookies.delete('access', { path: '/' });
+					event.cookies.delete('refresh', { path: '/' });
+				}
+			} else {
+				event.cookies.delete('access', { path: '/' });
+			}
+		}
+	} else if (refresh) {
+		// No access token but we have a refresh token, try to get a new access token
+		try {
+			const tokens = await api.post(ENDPOINTS.auth.refresh, { refresh });
+			if (tokens?.access) {
+				event.cookies.set(
+					'access',
+					tokens.access,
+					getAccessCookieOptions(event.url)
+				);
+				if (tokens.refresh) {
+					event.cookies.set(
+						'refresh',
+						tokens.refresh,
+						getRefreshCookieOptions(event.url)
+					);
+				}
+				event.locals.user = await api.get(ENDPOINTS.profile.me, {
+					token: tokens.access
+				});
+			}
+		} catch (refreshErr) {
+			event.cookies.delete('refresh', { path: '/' });
 		}
 	}
 
@@ -70,8 +127,6 @@ export async function handle({ event, resolve }) {
 
 		if (!onboardingComplete && !isAuthRoute) {
 			throw redirect(303, getOnboardingRoute(event.locals.user));
-		} else if (event.url.pathname === '/') {
-			//redirect to the listing page
 		}
 	} else {
 		if (!isAuthRoute && event.url.pathname !== '/') {

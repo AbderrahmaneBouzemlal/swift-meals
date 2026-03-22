@@ -2,7 +2,10 @@ import { fail, redirect } from '@sveltejs/kit';
 import { login } from '$lib/utils/registrationApi.js';
 import { ApiError } from '$lib/utils/apiError.js';
 import { ROUTES } from '$lib/utils/routes.js';
-import { getSessionCookieOptions } from '$lib/utils/authSession.server.js';
+import {
+	getAccessCookieOptions,
+	getRefreshCookieOptions
+} from '$lib/utils/authSession.server.js';
 
 export const actions = {
 	default: async ({ request, cookies, url }) => {
@@ -18,16 +21,19 @@ export const actions = {
 		}
 
 		try {
-			const token = await login(email, password);
+			const tokens = await login(email, password);
 
-			if (!token) {
+			if (!tokens?.access) {
 				return fail(400, {
 					errors: { server: 'Invalid login credentials' },
 					email
 				});
 			}
 
-			cookies.set('session', token, getSessionCookieOptions(url));
+			cookies.set('access', tokens.access, getAccessCookieOptions(url));
+			if (tokens.refresh) {
+				cookies.set('refresh', tokens.refresh, getRefreshCookieOptions(url));
+			}
 		} catch (err) {
 			if (err instanceof ApiError) {
 				return fail(400, {

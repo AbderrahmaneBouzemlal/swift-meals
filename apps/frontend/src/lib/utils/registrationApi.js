@@ -8,12 +8,12 @@ export async function registerCustomer(data) {
 		password: data.password,
 		role_str: data.role || 'customer'
 	});
-	return response.access;
+	return { access: response.access, refresh: response.refresh };
 }
 
 export async function login(email, password) {
 	const response = await api.post(ENDPOINTS.auth.login, { email, password });
-	return response.access;
+	return { access: response.access, refresh: response.refresh };
 }
 
 export async function setUpProfile(data, token) {
@@ -41,7 +41,7 @@ export async function registerBusiness(data) {
 		password: data.password,
 		role_str: 'business'
 	});
-	return response?.access;
+	return { access: response?.access, refresh: response?.refresh };
 }
 
 export async function setUpBusiness(data, token) {
@@ -56,7 +56,7 @@ export async function setUpBusiness(data, token) {
 			ssm_registration: data.ssm_registration,
 			description: data.description,
 			gender: data.gender,
-			pickup_location: data.pickup_location
+			pickup_locations: data.pickup_locations
 		},
 		{ token }
 	);

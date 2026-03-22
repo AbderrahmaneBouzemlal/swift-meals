@@ -1,3 +1,5 @@
+import { ja } from 'zod/locales';
+
 export const ROUTES = {
 	home: '/',
 
@@ -16,9 +18,17 @@ export const ROUTES = {
 		},
 		review: '/sign-up/review'
 	},
-
-	account: '/account',
-	orders: '/orders'
+	dashboard: {
+		today: '/today',
+		history: '/history',
+		orders: '/orders',
+		slots: '/slots'
+	},
+	favorites: '/favorites',
+	payment: '/payment',
+	notifications: '/notifications',
+	settings: '/settings',
+	account: '/account'
 };
 
 export function reviewBackRoute(role) {

@@ -92,7 +92,6 @@ class ProfileViewSet(viewsets.GenericViewSet):
         never needs a separate GET /picture request.
         """
         serializer = UserDetailSerializer(request.user, context={"request": request})
-        print(serializer.data["business_profile"])
         return Response(serializer.data)
 
     @action(detail=False, methods=["PATCH"], url_path="customer/update")
@@ -113,13 +112,14 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
         profile = request.user.business_profile
         serializer = BusinessProfileSerializer(profile, data=request.data, partial=True)
+        print(profile, request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
 
     @action(
         detail=False,
-        methods=["PATCH", "GET"],
+        methods=["PATCH", "GET", "DELETE"],
         url_path="picture",
         parser_classes=[MultiPartParser],
     )
@@ -142,6 +142,10 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
         if request.method == "GET":
             return Response({"url": self._picture_url(request, field)})
+
+        if request.method == "DELETE":
+            field.delete(save=True)
+            return Response(status=204)
 
         # PATCH
         serializer = Serializer(profile, data=request.data, partial=True)

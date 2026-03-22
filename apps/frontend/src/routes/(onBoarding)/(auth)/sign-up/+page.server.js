@@ -5,7 +5,10 @@ import {
 	registerCustomer,
 	registerBusiness
 } from '$lib/utils/registrationApi.js';
-import { getSessionCookieOptions } from '$lib/utils/authSession.server.js';
+import {
+	getAccessCookieOptions,
+	getRefreshCookieOptions
+} from '$lib/utils/authSession.server.js';
 
 export const actions = {
 	default: async ({ request, cookies, url }) => {
@@ -27,17 +30,21 @@ export const actions = {
 		}
 
 		try {
-			const token =
+			const tokens =
 				data.role === 'business'
 					? await registerBusiness(data)
 					: await registerCustomer(data);
 
-			if (!token) {
+			if (!tokens?.access) {
 				return fail(500, {
 					errors: { server: 'Failed to obtain authentication token.' }
 				});
 			}
-			cookies.set('session', token, getSessionCookieOptions(url));
+
+			cookies.set('access', tokens.access, getAccessCookieOptions(url));
+			if (tokens.refresh) {
+				cookies.set('refresh', tokens.refresh, getRefreshCookieOptions(url));
+			}
 		} catch (err) {
 			if (err instanceof ApiError) {
 				if (err.type === 'conflict') {

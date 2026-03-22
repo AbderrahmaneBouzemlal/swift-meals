@@ -14,6 +14,7 @@
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
 	import { onMount } from 'svelte';
 	import SelectField from '$lib/components/ui/SelectField.svelte';
+	import TagInput from '$lib/components/ui/TagInput.svelte';
 
 	onMount(() => {
 		if (registration.role !== 'business') {
@@ -53,29 +54,6 @@
 		'Vegetarian',
 		'Fast Food'
 	];
-
-	function addCuisine(tag) {
-		const clean = tag.trim();
-		if (!clean || cuisineTags.includes(clean)) return;
-		cuisineTags = [...cuisineTags, clean];
-		cuisineInput = '';
-		registration.cuisine_type = cuisineTags.join(', ');
-	}
-
-	function removeCuisine(tag) {
-		cuisineTags = cuisineTags.filter((c) => c !== tag);
-		registration.cuisine_type = cuisineTags.join(', ');
-	}
-
-	function handleCuisineKeydown(e) {
-		if (e.key === 'Enter' || e.key === ',') {
-			e.preventDefault();
-			addCuisine(cuisineInput);
-		}
-		if (e.key === 'Backspace' && !cuisineInput && cuisineTags.length) {
-			removeCuisine(cuisineTags.at(-1));
-		}
-	}
 
 	function handleSubmit() {
 		if (
@@ -150,67 +128,12 @@
 		/>
 
 		<!-- Cuisine type — tag input -->
-		<div>
-			<div
-				class="flex min-h-13 w-full flex-wrap items-center gap-1.5 rounded-lg
-               border border-[#E8E8E8] bg-[#F6F6F6] px-3 py-2 transition-colors
-               duration-200 focus-within:border-brand-yellow focus-within:bg-white"
-			>
-				<!-- existing tags -->
-				{#each cuisineTags as tag}
-					<span
-						class="flex items-center gap-1 rounded-full bg-brand-yellow px-2.5
-                   py-0.5 text-xs text-white italic"
-					>
-						{tag}
-						<button
-							type="button"
-							class="ml-0.5 opacity-70 hover:opacity-100"
-							onclick={() => removeCuisine(tag)}
-							aria-label="Remove {tag}"
-						>
-							<svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-								<path
-									d="M1 1L7 7M7 1L1 7"
-									stroke="white"
-									stroke-width="1.5"
-									stroke-linecap="round"
-								/>
-							</svg>
-						</button>
-					</span>
-				{/each}
-
-				<!-- input -->
-				<input
-					class="min-w-25 flex-1 bg-transparent font-abeezee text-base
-                 text-brand-dark italic outline-none placeholder:text-brand-gray"
-					placeholder={cuisineTags.length
-						? 'Add more...'
-						: 'Cuisine type (optional)'}
-					bind:value={cuisineInput}
-					onkeydown={handleCuisineKeydown}
-				/>
-			</div>
-
-			<!-- suggestions -->
-			{#if cuisineSuggestions.filter((s) => !cuisineTags.includes(s)).length}
-				<div class="mt-1.5 flex flex-wrap gap-1.5 px-1">
-					{#each cuisineSuggestions.filter((s) => !cuisineTags.includes(s)) as suggestion}
-						<button
-							type="button"
-							class="rounded-full border border-brand-gray px-2.5 py-0.5
-                     text-xs text-brand-gray italic transition-colors
-                     hover:border-brand-yellow hover:text-brand-yellow"
-							onclick={() => addCuisine(suggestion)}
-						>
-							+ {suggestion}
-						</button>
-					{/each}
-				</div>
-			{/if}
-		</div>
-
+		<TagInput
+			name="cuisine_type"
+			bind:tags={cuisineTags}
+			bind:tagInput={cuisineInput}
+			suggestions={cuisineSuggestions}
+		/>
 		<!-- SSM registration -->
 		<div>
 			<InputField

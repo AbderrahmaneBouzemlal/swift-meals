@@ -319,6 +319,15 @@
 		<line x1="15" y1="12" x2="3" y2="12" stroke={color} stroke-width="2" />
 		<path d="M21 3v18" stroke={color} stroke-width="2" />
 	</svg>
+{:else if name === 'camera'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<path
+			d="M20 5h-3.2l-1.6-2H8.8L7.2 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zM12 17c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"
+			stroke={color}
+			stroke-width="2"
+		/>
+		<circle cx="12" cy="11" r="3" stroke={color} stroke-width="2" />
+	</svg>
 {:else}
 	<svg {width} {height} viewBox="0 0 24 24" fill="none">
 		<rect

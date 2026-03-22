@@ -108,8 +108,9 @@ class BusinessProfile(models.Model):
             ("student seller", "Student Seller"),
             ("restaurant", "Restaurant"),
         ],
-        max_length=50,
+        default="restaurant",
     )
+    is_live = models.BooleanField(default=False)
     description = models.TextField(blank=True)
     cuisine_type = models.CharField(max_length=100, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)

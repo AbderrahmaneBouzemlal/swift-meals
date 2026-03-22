@@ -5,7 +5,7 @@ import { setUpProfile, setUpBusiness } from '$lib/utils/registrationApi.js';
 
 export const actions = {
 	default: async ({ request, cookies }) => {
-		const token = cookies.get('session');
+		const token = cookies.get('access');
 
 		if (!token) {
 			throw redirect(303, ROUTES.signUp.account);
