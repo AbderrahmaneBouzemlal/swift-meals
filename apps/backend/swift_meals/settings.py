@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # Apps
     "users",
+    "orders",
 ]
 
 ROOT_URLCONF = "django_rest_role_jwt.urls"
