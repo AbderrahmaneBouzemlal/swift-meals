@@ -59,10 +59,7 @@
 	}
 </script>
 
-<div
-	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
-         bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
->
+<div class="flex h-full flex-col bg-white">
 	<Header backUrl={ROUTES.account} />
 
 	<div class="shrink-0 px-8 pt-1.5 pb-4">

@@ -10,7 +10,6 @@
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
 	import { ROUTES, reviewBackRoute } from '$lib/utils/routes.js';
-	import Header from '$lib/components/Header.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
 	import StepTracker from '$lib/components/StepTracker.svelte';
 	import { onMount } from 'svelte';
@@ -33,6 +32,11 @@
 			: null || registration.profile_picture
 				? URL.createObjectURL(registration.profile_picture)
 				: null
+	);
+	let profilePicturePreview = $derived(
+		registration.profile_picture
+			? URL.createObjectURL(registration.profile_picture)
+			: null
 	);
 	const steps =
 		registration.role === 'business'
@@ -91,11 +95,7 @@
 	</div>
 {/snippet}
 
-<div
-	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
-         bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
->
-	<Header {backUrl} />
+<div class="flex h-full flex-col bg-white">
 
 	<div class="shrink-0 px-8 pt-1.5 pb-3">
 		<Title size="medium">Review</Title>
@@ -133,6 +133,9 @@
 				</div>
 			</div>
 		{:else}
+        {#if profilePicturePreview}
+            <LogoPreview previewUrl={profilePicturePreview} Deleteable={false} />
+        {/if}
 			<div class="overflow-hidden rounded-lg border border-[#E8E8E8]">
 				{@render sectionHeader('customer Profile')}
 				<div class="divide-y divide-[#F6F6F6]">
@@ -202,9 +205,8 @@
 		method="POST"
 		enctype="multipart/form-data"
 		use:enhance={({ formData }) => {
-			if (registration.logo) {
-				formData.set('logo', registration.logo);
-			}
+			if (registration.logo) formData.set('logo', registration.logo);
+			if (registration.profile_picture) formData.set('profile_picture', registration.profile_picture);
 			isSubmitting = true;
 			return async ({ result, update }) => {
 				isSubmitting = false;
@@ -232,6 +234,7 @@
 				name="default_pickup_location"
 				value={registration.default_pickup_location}
 			/>
+			<input type="file" name="profile_picture" class="hidden" />
 		{:else}
 			<input
 				type="hidden"

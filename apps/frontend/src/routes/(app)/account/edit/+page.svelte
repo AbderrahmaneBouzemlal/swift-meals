@@ -1,4 +1,3 @@
-<!-- +page.svelte -->
 <script>
 	import { registration } from '$lib/stores/registration.svelte.js';
 	import { enhance } from '$app/forms';
@@ -57,10 +56,7 @@
 	];
 </script>
 
-<div
-	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
-         bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
->
+<div class="flex h-full flex-col bg-white">
 	<Header backUrl={ROUTES.account} />
 
 	<div class="shrink-0 px-8 pt-1.5 pb-4">
@@ -86,7 +82,7 @@
 	>
 		{#if isBusiness}
 			<div class="flex flex-col gap-2.5">
-				<p class="text-sm text-brand-gray italic">Restaurant name *</p>
+				<p class="text-brand-gray text-sm italic">Restaurant name *</p>
 				<InputField
 					name="restaurant_name"
 					placeholder="Restaurant name"
@@ -94,7 +90,7 @@
 					error={errors.restaurant_name}
 				/>
 
-				<p class="text-sm text-brand-gray italic">Location *</p>
+				<p class="text-brand-gray text-sm italic">Location *</p>
 				<InputField
 					name="location"
 					placeholder="e.g. Block C, Ground Floor"
@@ -102,7 +98,7 @@
 					error={errors.location}
 				/>
 
-				<p class="text-sm text-brand-gray italic">Phone number</p>
+				<p class="text-brand-gray text-sm italic">Phone number</p>
 				<InputField
 					name="phone_number"
 					type="tel"
@@ -111,7 +107,7 @@
 					error={errors.phone_number}
 				/>
 
-				<p class="text-sm text-brand-gray italic">Cuisine type</p>
+				<p class="text-brand-gray text-sm italic">Cuisine type</p>
 				<TagInput
 					name="cuisine_type"
 					bind:tags={cuisineTags}
@@ -124,7 +120,7 @@
 					value={registration.cuisine_type}
 				/>
 
-				<p class="text-sm text-brand-gray italic">SSM registration</p>
+				<p class="text-brand-gray text-sm italic">SSM registration</p>
 				<InputField
 					name="ssm_registration"
 					placeholder="SSM number (optional)"
@@ -132,27 +128,27 @@
 					error={errors.ssm_registration}
 				/>
 
-				<p class="text-sm text-brand-gray italic">Description</p>
+				<p class="text-brand-gray text-sm italic">Description</p>
 				<div class="relative">
 					<textarea
 						name="description"
 						placeholder="Tell customers about your restaurant..."
 						maxlength="500"
 						bind:value={registration.description}
-						class="box-border h-24 w-full resize-none rounded-lg border
-                   border-brand-gray-light bg-gray-50 px-4 py-3 font-abeezee
-                   text-[16px] text-brand-dark italic outline-none
-                   placeholder:text-brand-gray focus:border-brand-yellow
+						class="border-brand-gray-light placeholder:text-brand-gray focus:border-brand-yellow box-border h-24 w-full
+                   resize-none rounded-lg border bg-gray-50 px-4
+                   py-3 font-abeezee text-[16px] text-brand-dark
+                   italic outline-none
                    focus:bg-white"
 					></textarea>
 					<span
-						class="absolute right-3 bottom-2 text-[10px] text-brand-gray italic"
+						class="text-brand-gray absolute right-3 bottom-2 text-[10px] italic"
 					>
 						{registration.description.length}/500
 					</span>
 				</div>
 
-				<p class="text-sm text-brand-gray italic">Pickup locations</p>
+				<p class="text-brand-gray text-sm italic">Pickup locations</p>
 				<TagInput
 					name="pickup_locations"
 					tags={pickupTags}
@@ -167,15 +163,7 @@
 			</div>
 		{:else}
 			<div class="flex flex-col gap-2.5">
-				<p class="text-sm text-brand-gray italic">Student ID *</p>
-				<InputField
-					name="student_id"
-					placeholder="Student ID"
-					bind:value={registration.student_id}
-					error={errors.student_id}
-				/>
-
-				<p class="text-sm text-brand-gray italic">Phone number</p>
+				<p class="text-brand-gray text-sm italic">Phone number</p>
 				<InputField
 					name="phone_number"
 					type="tel"
@@ -184,15 +172,15 @@
 					error={errors.phone_number}
 				/>
 
-				<p class="text-sm text-brand-gray italic">Gender</p>
+				<p class="text-brand-gray text-sm italic">Gender</p>
 				<div class="relative">
 					<select
 						name="gender"
 						bind:value={registration.gender}
-						class="box-border h-13 w-full appearance-none rounded-lg border
-                   border-brand-gray-light bg-gray-50 px-4 font-abeezee
-                   text-[16px] text-brand-dark italic outline-none
-                   focus:border-brand-yellow focus:bg-white"
+						class="border-brand-gray-light focus:border-brand-yellow box-border h-13 w-full appearance-none
+                   rounded-lg border bg-gray-50 px-4
+                   font-abeezee text-[16px] text-brand-dark italic
+                   outline-none focus:bg-white"
 					>
 						<option value="">Select gender</option>
 						{#each genderOptions as option}
@@ -215,7 +203,7 @@
 					</div>
 				</div>
 
-				<p class="text-sm text-brand-gray italic">Default pickup location</p>
+				<p class="text-brand-gray text-sm italic">Default pickup location</p>
 				<InputField
 					name="default_pickup_location"
 					placeholder="e.g. Hostel A lobby"

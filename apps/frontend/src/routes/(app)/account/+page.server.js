@@ -9,7 +9,7 @@ export function load({ locals }) {
 
 export const actions = {
 	logout: async ({ cookies }) => {
-		cookies.delete('session', { path: '/' });
+		cookies.delete('access', { path: '/' });
 		throw redirect(303, ROUTES.signIn);
 	}
 };

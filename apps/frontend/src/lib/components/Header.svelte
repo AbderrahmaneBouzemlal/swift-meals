@@ -1,7 +1,7 @@
 <script>
-	import Icon from './ui/Icon.svelte';
+	import Icon from '$lib/components/ui/Icon.svelte';
 	import { goto } from '$app/navigation';
-	export let backUrl = '/';
+	const { backUrl = '/' } = $props();
 </script>
 
 <div class="shrink-0 px-8 pt-2">

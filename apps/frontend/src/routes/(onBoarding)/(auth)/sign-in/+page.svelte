@@ -11,6 +11,7 @@
 	import { ROUTES } from '$lib/utils/routes.js';
 	import { applyAction, enhance } from '$app/forms';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
+	import AuthLayout from '$lib/components/layout/AuthLayout.svelte';
 
 	let { form } = $props();
 
@@ -47,76 +48,75 @@
 	}
 </script>
 
-<div
-	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
->
-	<Header backUrl={ROUTES.home} />
-
-	<div class="shrink-0 px-8 pt-2 pb-4">
-		<Title size="medium">Sign In</Title>
+<AuthLayout>
+	<div class="lg:hidden">
+		<Header backUrl={ROUTES.home} />
 	</div>
 
-	<form
-		method="POST"
-		use:enhance={handleSignIn}
-		class="flex shrink-0 flex-col gap-3 px-8"
-	>
-		<InputField
-			name="email"
-			type="email"
-			placeholder="Email"
-			bind:value={email}
-			error={errors.email}
-			onblur={() => schemaForm.touch('email')}
-			icon="mail"
-		/>
+		<div class="shrink-0 px-8 pt-2 pb-8 flex items-center justify-center">
+			<Title size="medium">Sign In</Title>
+		</div>
 
-		<!-- Password -->
-		<PasswordInput
-			name="password"
-			placeholder="Password"
-			bind:value={password}
-			error={errors.password}
-			onblur={() => schemaForm.touch('password')}
-		/>
-
-		<!-- Forgot password -->
-		<button
-			type="button"
-			class="cursor-pointer border-none bg-transparent p-0 text-left font-abeezee text-[12px] text-brand-gray italic transition-colors duration-200 hover:text-brand-yellow"
-			>Forgot your password?</button
+		<form
+			method="POST"
+			use:enhance={handleSignIn}
+			class="flex shrink-0 flex-col gap-3 px-8"
 		>
-
-		<div class="flex shrink-0 justify-center py-5">
-			<PrimaryButton
-				type="submit"
-				text="Sign In"
-				loading={isSigningIn}
-				disabled={isSigningIn}
+			<InputField
+				name="email"
+				type="email"
+				placeholder="Email"
+				bind:value={email}
+				error={errors.email}
+				onblur={() => schemaForm.touch('email')}
+				icon="mail"
 			/>
-		</div>
-	</form>
 
-	<div class="flex shrink-0 flex-col items-center gap-3 px-8">
-		<div class="flex w-full items-center gap-4">
-			<div class="h-px flex-1 bg-brand-gray"></div>
-			<span class="text-base text-brand-gray-dark italic">OR</span>
-			<div class="h-px flex-1 bg-brand-gray"></div>
+			<PasswordInput
+				name="password"
+				placeholder="Password"
+				bind:value={password}
+				error={errors.password}
+				onblur={() => schemaForm.touch('password')}
+			/>
+
+			<button
+				type="button"
+				class="cursor-pointer border-none bg-transparent p-0 text-left font-abeezee text-[12px] text-brand-gray italic transition-colors duration-200 hover:text-brand-yellow"
+				>Forgot your password?</button
+			>
+
+			<div class="flex shrink-0 justify-center py-5">
+				<PrimaryButton
+					type="submit"
+					text="Sign In"
+					loading={isSigningIn}
+					disabled={isSigningIn}
+				/>
+			</div>
+		</form>
+
+		<div class="flex shrink-0 flex-col items-center gap-3 px-8">
+			<div class="flex w-full items-center gap-4">
+				<div class="h-px flex-1 bg-brand-gray"></div>
+				<span class="text-base text-brand-gray-dark italic">OR</span>
+				<div class="h-px flex-1 bg-brand-gray"></div>
+			</div>
+
+			<p class="m-0 text-lg text-brand-gray-dark italic">Sign In using</p>
+
+			<div class="flex items-center justify-center gap-4">
+				<SocialLoginButton provider="google" />
+			</div>
 		</div>
 
-		<p class="m-0 text-lg text-brand-gray-dark italic">Sign In using</p>
-
-		<div class="flex items-center justify-center gap-4">
-			<SocialLoginButton provider="google" />
-		</div>
+		<!-- Bottom: Need an account -->
+		<div class="mt-auto flex items-center justify-center gap-2 pt-8">
+			<span class="text-sm text-brand-gray-dark italic">Need An Account?</span>
+			<button
+				class="cursor-pointer border-none bg-transparent p-0 font-abeezee text-sm font-semibold
+                 text-brand-yellow italic transition-opacity duration-200 hover:opacity-80"
+				onclick={() => goto(ROUTES.signUp.account)}>Sign Up</button
+			>
 	</div>
-
-	<!-- Bottom: Need an account -->
-	<div class="flex flex-1 shrink-0 items-end justify-center gap-2 pt-4 pb-3">
-		<span class="text-lg text-brand-gray-dark italic">Need An Account?</span>
-		<button
-			class="cursor-pointer border-none bg-transparent p-0 font-abeezee text-lg font-semibold text-brand-yellow italic transition-opacity duration-200 hover:opacity-80"
-			onclick={() => goto(ROUTES.signUp.account)}>Sign Up</button
-		>
-	</div>
-</div>
+</AuthLayout>

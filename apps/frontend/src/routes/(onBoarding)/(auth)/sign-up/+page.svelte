@@ -1,6 +1,5 @@
 <script>
 	import { applyAction, enhance } from '$app/forms';
-	import Header from '$lib/components/Header.svelte';
 	import SocialLoginButton from '$lib/components/ui/SocialLoginButton.svelte';
 	import InputField from '$lib/components/ui/InputField.svelte';
 	import PasswordInput from '$lib/components/ui/PasswordInput.svelte';
@@ -78,13 +77,9 @@
 	}
 </script>
 
-<div
-	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
-         bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
->
-	<Header backUrl={ROUTES.signUp.chooseRole} />
+<div class="flex h-full flex-col bg-white">
 
-	<div class="shrink-0 px-8 pt-1.5 pb-3">
+	<div class="shrink-0 px-8 pt-1.5 pb-8 flex flex-col items-center justify-center gap-2">
 		<Title size="medium">Sign Up</Title>
 		<span
 			class="mt-1 inline-block rounded-full px-3 py-0.5 text-xs text-white italic

@@ -140,10 +140,6 @@
 					}
 				]
 			: [
-					{
-						label: 'Student ID',
-						value: valueOrDash(customerProfile.student_id)
-					},
 					{ label: 'Phone', value: valueOrDash(customerProfile.phone_number) },
 					{ label: 'Gender', value: valueOrDash(customerProfile.gender) },
 					{
@@ -154,11 +150,7 @@
 	);
 </script>
 
-<div
-	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
-         bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
->
-	<Header />
+<div class="flex h-full flex-col bg-white">
 
 	{#if user}
 		<!-- ── not live nudge (business only) ───────────────────── -->
@@ -186,93 +178,93 @@
 			</div>
 		{/if}
 
-		<!-- ── profile card ─────────────────────────────────────── -->
 		<div
-			class="mx-8 my-2 flex shrink-0 items-center justify-between
-                rounded-[7px] bg-gray-50 px-4 py-3"
+			class="mx-8 my-4 flex shrink-0 flex-col items-center justify-between gap-6
+                rounded-2xl bg-gray-50 px-8 py-6 lg:flex-row lg:items-center"
 		>
-			<div class="flex flex-col gap-0.75">
-				<p class="m-0 text-[16px] font-normal text-brand-dark italic">
-					{valueOrDash(user.name)}
-				</p>
-				<p class="m-0 text-[13px] text-brand-dark italic">
-					{valueOrDash(user.email)}
-				</p>
-				<div class="flex items-center gap-1.5">
-					<span
-						class="inline-block rounded-full px-2 py-0.5 text-[10px] text-white italic
-                   {isBusiness ? 'bg-brand-dark' : 'bg-brand-yellow'}"
-					>
-						{isBusiness
-							? isStudentSeller
-								? 'Student Seller'
-								: 'Business Account'
-							: 'Customer Account'}
-					</span>
-					<!-- live badge -->
-					{#if isBusiness}
-						<span
-							class="inline-block rounded-full px-2 py-0.5 text-[10px] text-white italic
-                     {isLive ? 'bg-green-500' : 'bg-gray-400'}"
-						>
-							{isLive ? 'Live' : 'Offline'}
-						</span>
-					{/if}
-				</div>
+			<div class="flex flex-col items-center gap-4 lg:flex-row lg:gap-8">
 				<button
-					onclick={() => goto(ROUTES.account + '/edit')}
-					class="mt-0.5 text-left font-abeezee text-sm text-brand-yellow italic
-                 hover:underline"
+					onclick={() => goto(ROUTES.account + '/picture')}
+					class="relative h-24 w-24 shrink-0 transition-transform hover:scale-105"
+					title="Change photo"
 				>
-					Edit profile
+					<div
+						class="absolute top-2 left-2 flex h-20 w-20 items-center
+                     justify-center overflow-hidden rounded-full bg-white shadow-sm"
+					>
+						{#if avatarUrl}
+							<img
+								src={avatarUrl}
+								alt={user.name}
+								class="h-full w-full object-cover"
+							/>
+						{:else}
+							<Icon name="profile" width="48" height="56" />
+						{/if}
+					</div>
+					<div
+						class="absolute inset-0 rounded-full border-2 border-brand-yellow/20"
+					></div>
+					<div
+						class="absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center
+                     rounded-full bg-brand-yellow shadow-lg transition-transform active:scale-90"
+					>
+						<Icon name="camera" width="16" height="16" color="white" />
+					</div>
 				</button>
+
+				<div class="flex flex-col items-center gap-1 lg:items-start">
+					<p class="m-0 text-2xl font-bold text-brand-dark italic">
+						{valueOrDash(user.name)}
+					</p>
+					<p class="m-0 text-brand-gray-dark italic">
+						{valueOrDash(user.email)}
+					</p>
+					<div class="mt-2 flex items-center gap-2">
+						<span
+							class="inline-block rounded-full px-3 py-1 text-xs font-medium text-white italic
+                       {isBusiness ? 'bg-brand-dark' : 'bg-brand-yellow'}"
+						>
+							{isBusiness
+								? isStudentSeller
+									? 'Student Seller'
+									: 'Business Account'
+								: 'Customer Account'}
+						</span>
+						{#if isBusiness}
+							<span
+								class="inline-block rounded-full px-3 py-1 text-xs font-medium text-white italic
+                         {isLive ? 'bg-green-500' : 'bg-gray-400'}"
+							>
+								{isLive ? 'Live' : 'Offline'}
+							</span>
+						{/if}
+					</div>
+				</div>
 			</div>
 
 			<button
-				onclick={() => goto(ROUTES.account + '/picture')}
-				class="relative h-12.25 w-12.25 shrink-0"
-				title="Change photo"
+				onclick={() => goto(ROUTES.account + '/edit')}
+				class="rounded-xl border border-brand-yellow px-6 py-2.5 font-abeezee text-sm font-bold text-brand-yellow italic transition-all hover:bg-brand-yellow hover:text-white"
 			>
-				<div
-					class="absolute top-1.25 left-1.25 flex h-9.75 w-9.75 items-center
-                 justify-center overflow-hidden rounded-full bg-gray-100"
-				>
-					{#if avatarUrl}
-						<img
-							src={avatarUrl}
-							alt={user.name}
-							class="h-full w-full object-cover"
-						/>
-					{:else}
-						<Icon name="profile" width="32" height="38" />
-					{/if}
-				</div>
-				<div
-					class="absolute inset-0 rounded-full border-[0.75px] border-brand-gray-dark"
-				></div>
-				<div
-					class="absolute right-0 bottom-0 flex h-4 w-4 items-center justify-center
-                 rounded-full bg-brand-yellow shadow"
-				>
-					<Icon name="camera" width="8" height="8" color="white" />
-				</div>
+				Edit profile
 			</button>
 		</div>
 
 		<!-- ── quick actions ─────────────────────────────────────── -->
-		<div class="mx-8 my-2 flex shrink-0 gap-2">
+		<div class="mx-8 my-4 grid shrink-0 grid-cols-2 gap-4 lg:grid-cols-4">
 			{#each quickActions as action}
 				<button
 					type="button"
 					onclick={() => goto(action.href)}
-					class="flex h-17.5 flex-1 cursor-pointer flex-col items-center gap-1.5
-                 rounded-[5px] border-none bg-gray-100 px-1 pt-2.5 pb-2
-                 transition-all duration-200 hover:-translate-y-px hover:bg-gray-200"
+					class="flex flex-col items-center gap-3
+                 rounded-2xl border border-gray-100 bg-white p-6
+                 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-yellow hover:shadow-md"
 				>
-					<div class="flex h-7 items-center justify-center">
-						<Icon name={action.icon} width="24" height="24" color="#757373" />
+					<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-50">
+						<Icon name={action.icon} width="28" height="28" color="#757373" />
 					</div>
-					<span class="text-center text-[8px] text-brand-dark italic">
+					<span class="text-center text-sm font-medium text-brand-dark italic">
 						{action.label}
 					</span>
 				</button>
@@ -288,13 +280,13 @@
 					{isBusiness ? 'Restaurant details' : 'Profile details'}
 				</p>
 			</div>
-			<div class="divide-y divide-gray-100">
+			<div class="grid grid-cols-1 divide-y divide-gray-100 lg:grid-cols-2 lg:divide-y-0 lg:divide-x">
 				{#each detailRows as row}
-					<div class="flex items-start justify-between gap-4 px-4 py-2.5">
-						<span class="shrink-0 text-[12px] text-brand-gray italic"
+					<div class="flex items-center justify-between gap-4 px-6 py-4">
+						<span class="shrink-0 text-sm text-brand-gray-dark italic"
 							>{row.label}</span
 						>
-						<span class="text-right text-[12px] text-brand-dark italic"
+						<span class="font-medium text-brand-dark italic"
 							>{row.value}</span
 						>
 					</div>
@@ -303,8 +295,10 @@
 		</div>
 
 		<!-- ── menu list ──────────────────────────────────────────── -->
-		<div class="my-1 flex-1 overflow-y-auto px-8 pb-4">
-			<p class="pb-1 text-[11px] text-brand-gray italic">Account & support</p>
+		<div class="my-6 flex-1 overflow-y-auto px-8 pb-8">
+			<p class="mb-4 text-xs font-bold text-brand-gray uppercase tracking-wider italic">Account & support</p>
+
+			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-x-8">
 
 			{#each menuItems as item}
 				<button
@@ -326,25 +320,26 @@
 				</button>
 			{/each}
 
-			<!-- logout always last, needs a form -->
-			<form method="POST" action="?/logout" use:enhance>
-				<button
-					type="submit"
-					class="flex w-full cursor-pointer items-center gap-4 border-b border-gray-100
-                 bg-transparent py-3.5 transition-all duration-150
-                 hover:-mx-1 hover:rounded-md hover:bg-gray-200 hover:px-1"
-				>
-					<div class="flex w-6 shrink-0 items-center justify-center">
-						<Icon name="logout" width="20" height="20" color="#BDBDBD" />
-					</div>
-					<span
-						class="flex-1 text-left text-[15px] font-normal text-brand-dark italic"
+				<!-- logout always last, needs a form -->
+				<form method="POST" action="?/logout" use:enhance>
+					<button
+						type="submit"
+						class="group flex w-full cursor-pointer items-center gap-4 rounded-xl border border-transparent
+                 bg-transparent px-4 py-4 transition-all duration-200
+                 hover:bg-red-50"
 					>
-						Logout
-					</span>
-					<Icon name="forward-arrow" width="7" height="11" color="#BDBDBD" />
-				</button>
-			</form>
+						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-50 group-hover:bg-red-100">
+							<Icon name="logout" width="20" height="20" color="#BDBDBD" />
+						</div>
+						<span
+							class="flex-1 text-left text-base font-medium text-brand-dark italic group-hover:text-red-500"
+						>
+							Logout
+						</span>
+						<Icon name="forward-arrow" width="7" height="11" color="#BDBDBD" />
+					</button>
+				</form>
+			</div>
 		</div>
 	{:else}
 		<div

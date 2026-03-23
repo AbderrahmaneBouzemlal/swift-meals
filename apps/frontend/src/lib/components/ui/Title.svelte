@@ -1,10 +1,10 @@
 <script>
 	let {
 		children,
-		size = 'medium', // small, medium, large
-		align = 'left', // left, center
-		weight = 'normal', // normal, bold
-		color = 'brand-dark', // brand-dark, stone-800
+		size = 'medium',
+		align = 'left',
+		weight = 'normal',
+		color = 'brand-dark',
 		class: className = ''
 	} = $props();
 

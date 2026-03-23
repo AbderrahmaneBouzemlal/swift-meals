@@ -1,5 +1,4 @@
 <script>
-	import Header from '$lib/components/Header.svelte';
 	import InputField from '$lib/components/ui/InputField.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
@@ -60,10 +59,7 @@
 	}
 </script>
 
-<div
-	class="relative mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-hidden
-         bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone"
->
+<div class="flex h-full flex-col bg-white">
 	<div class="shrink-0 px-8 pt-6 pb-3">
 		<Title size="medium">Your Profile</Title>
 		<span
