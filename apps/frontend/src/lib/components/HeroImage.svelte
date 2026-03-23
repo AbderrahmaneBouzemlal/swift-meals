@@ -7,7 +7,7 @@
 </script>
 
 <div
-	class="relative flex flex-1 items-center justify-center overflow-hidden bg-[#FDFAF4] rounded-3xl {hideOnMobile
+	class="relative flex flex-1 items-center justify-center overflow-hidden rounded-3xl bg-[#FDFAF4] {hideOnMobile
 		? 'hidden lg:flex'
 		: 'flex'}"
 >

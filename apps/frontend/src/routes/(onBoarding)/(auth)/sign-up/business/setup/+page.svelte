@@ -72,7 +72,6 @@
 </script>
 
 <div class="flex h-full flex-col bg-white">
-
 	<div class="shrink-0 px-8 pt-1.5 pb-3">
 		<Title size="medium">Restaurant Setup</Title>
 		<span

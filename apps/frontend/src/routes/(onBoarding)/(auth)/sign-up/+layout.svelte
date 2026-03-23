@@ -14,7 +14,9 @@
 		[ROUTES.signUp.review]: ROUTES.signUp.customer.profile // Default for review, might need more logic
 	};
 
-	let backUrl = $derived(backMap[$page.url.pathname] ?? ROUTES.signUp.chooseRole);
+	let backUrl = $derived(
+		backMap[$page.url.pathname] ?? ROUTES.signUp.chooseRole
+	);
 </script>
 
 <AuthLayout>

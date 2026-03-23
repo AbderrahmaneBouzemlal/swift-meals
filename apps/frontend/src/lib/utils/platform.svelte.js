@@ -10,9 +10,13 @@ if (browser) {
 	// Or we can check for specific protocol/hostname if needed.
 	platform.isCapacitor = !!window.Capacitor;
 	platform.isLoaded = true;
-	
+
 	// Optional: listen for Capacitor ready if available
-	document.addEventListener('deviceready', () => {
-		platform.isCapacitor = true;
-	}, false);
+	document.addEventListener(
+		'deviceready',
+		() => {
+			platform.isCapacitor = true;
+		},
+		false
+	);
 }

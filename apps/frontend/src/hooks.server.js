@@ -43,7 +43,9 @@ export async function handle({ event, resolve }) {
 
 	if (access) {
 		try {
-			event.locals.user = await api.get(ENDPOINTS.profile.me, { token: access });
+			event.locals.user = await api.get(ENDPOINTS.profile.me, {
+				token: access
+			});
 		} catch (err) {
 			// Access token might be invalid/expired, try refreshing if we have a refresh token
 			if (refresh) {

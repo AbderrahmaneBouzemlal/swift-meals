@@ -27,12 +27,14 @@
 </script>
 
 <nav
-	class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-brand-gray-light bg-white px-4 pt-3 pb-6 lg:hidden"
+	class="fixed right-0 bottom-0 left-0 z-50 flex items-center justify-around border-t border-brand-gray-light bg-white px-4 pt-3 pb-6 lg:hidden"
 >
 	{#each menuItems as item}
 		<button
 			onclick={() => goto(item.href)}
-			class="flex flex-col items-center gap-1 transition-all duration-200 {isActive(item.href)
+			class="flex flex-col items-center gap-1 transition-all duration-200 {isActive(
+				item.href
+			)
 				? 'text-brand-yellow'
 				: 'text-brand-gray'}"
 		>

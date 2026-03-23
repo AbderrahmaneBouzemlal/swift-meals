@@ -151,7 +151,6 @@
 </script>
 
 <div class="flex h-full flex-col bg-white">
-
 	{#if user}
 		<!-- ── not live nudge (business only) ───────────────────── -->
 		{#if isBusiness && !isLive}
@@ -261,7 +260,9 @@
                  rounded-2xl border border-gray-100 bg-white p-6
                  shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-yellow hover:shadow-md"
 				>
-					<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-50">
+					<div
+						class="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-50"
+					>
 						<Icon name={action.icon} width="28" height="28" color="#757373" />
 					</div>
 					<span class="text-center text-sm font-medium text-brand-dark italic">
@@ -280,15 +281,15 @@
 					{isBusiness ? 'Restaurant details' : 'Profile details'}
 				</p>
 			</div>
-			<div class="grid grid-cols-1 divide-y divide-gray-100 lg:grid-cols-2 lg:divide-y-0 lg:divide-x">
+			<div
+				class="grid grid-cols-1 divide-y divide-gray-100 lg:grid-cols-2 lg:divide-x lg:divide-y-0"
+			>
 				{#each detailRows as row}
 					<div class="flex items-center justify-between gap-4 px-6 py-4">
 						<span class="shrink-0 text-sm text-brand-gray-dark italic"
 							>{row.label}</span
 						>
-						<span class="font-medium text-brand-dark italic"
-							>{row.value}</span
-						>
+						<span class="font-medium text-brand-dark italic">{row.value}</span>
 					</div>
 				{/each}
 			</div>
@@ -296,29 +297,32 @@
 
 		<!-- ── menu list ──────────────────────────────────────────── -->
 		<div class="my-6 flex-1 overflow-y-auto px-8 pb-8">
-			<p class="mb-4 text-xs font-bold text-brand-gray uppercase tracking-wider italic">Account & support</p>
+			<p
+				class="mb-4 text-xs font-bold tracking-wider text-brand-gray uppercase italic"
+			>
+				Account & support
+			</p>
 
 			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-x-8">
-
-			{#each menuItems as item}
-				<button
-					type="button"
-					onclick={() => goto(item.href)}
-					class="flex w-full cursor-pointer items-center gap-4 border-b border-gray-100
+				{#each menuItems as item}
+					<button
+						type="button"
+						onclick={() => goto(item.href)}
+						class="flex w-full cursor-pointer items-center gap-4 border-b border-gray-100
                  bg-transparent py-3.5 transition-all duration-150
                  hover:-mx-1 hover:rounded-md hover:bg-gray-200 hover:px-1"
-				>
-					<div class="flex w-6 shrink-0 items-center justify-center">
-						<Icon name={item.icon} width="20" height="20" color="#BDBDBD" />
-					</div>
-					<span
-						class="flex-1 text-left text-[15px] font-normal text-brand-dark italic"
 					>
-						{item.label}
-					</span>
-					<Icon name="forward-arrow" width="7" height="11" color="#BDBDBD" />
-				</button>
-			{/each}
+						<div class="flex w-6 shrink-0 items-center justify-center">
+							<Icon name={item.icon} width="20" height="20" color="#BDBDBD" />
+						</div>
+						<span
+							class="flex-1 text-left text-[15px] font-normal text-brand-dark italic"
+						>
+							{item.label}
+						</span>
+						<Icon name="forward-arrow" width="7" height="11" color="#BDBDBD" />
+					</button>
+				{/each}
 
 				<!-- logout always last, needs a form -->
 				<form method="POST" action="?/logout" use:enhance>
@@ -328,7 +332,9 @@
                  bg-transparent px-4 py-4 transition-all duration-200
                  hover:bg-red-50"
 					>
-						<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-50 group-hover:bg-red-100">
+						<div
+							class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-50 group-hover:bg-red-100"
+						>
 							<Icon name="logout" width="20" height="20" color="#BDBDBD" />
 						</div>
 						<span

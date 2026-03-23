@@ -96,7 +96,6 @@
 {/snippet}
 
 <div class="flex h-full flex-col bg-white">
-
 	<div class="shrink-0 px-8 pt-1.5 pb-3">
 		<Title size="medium">Review</Title>
 		<span
@@ -133,9 +132,9 @@
 				</div>
 			</div>
 		{:else}
-        {#if profilePicturePreview}
-            <LogoPreview previewUrl={profilePicturePreview} Deleteable={false} />
-        {/if}
+			{#if profilePicturePreview}
+				<LogoPreview previewUrl={profilePicturePreview} Deleteable={false} />
+			{/if}
 			<div class="overflow-hidden rounded-lg border border-[#E8E8E8]">
 				{@render sectionHeader('customer Profile')}
 				<div class="divide-y divide-[#F6F6F6]">
@@ -206,7 +205,8 @@
 		enctype="multipart/form-data"
 		use:enhance={({ formData }) => {
 			if (registration.logo) formData.set('logo', registration.logo);
-			if (registration.profile_picture) formData.set('profile_picture', registration.profile_picture);
+			if (registration.profile_picture)
+				formData.set('profile_picture', registration.profile_picture);
 			isSubmitting = true;
 			return async ({ result, update }) => {
 				isSubmitting = false;

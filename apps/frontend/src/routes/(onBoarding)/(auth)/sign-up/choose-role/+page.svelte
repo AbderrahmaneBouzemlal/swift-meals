@@ -14,7 +14,6 @@
 </script>
 
 <div class="flex h-full flex-col bg-white">
-
 	<div class="flex flex-1 flex-col gap-6 overflow-y-auto px-8 pt-4">
 		<div class="text-center">
 			<h1

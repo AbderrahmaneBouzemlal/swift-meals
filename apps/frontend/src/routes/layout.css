@@ -23,7 +23,12 @@
 		scroll-behavior: smooth;
 	}
 
-	h1, h2, h3, h4, h5, h6 {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
 		font-family: var(--font-outfit);
 	}
 
@@ -40,7 +45,7 @@
 			background: transparent;
 		}
 		::-webkit-scrollbar-thumb {
-			@apply bg-brand-gray/30 rounded-full hover:bg-brand-gray/50;
+			@apply rounded-full bg-brand-gray/30 hover:bg-brand-gray/50;
 		}
 	}
 }

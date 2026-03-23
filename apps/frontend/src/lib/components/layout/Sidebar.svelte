@@ -14,7 +14,11 @@
 		isBusiness
 			? [
 					{ icon: 'order', label: 'Dashboard', href: ROUTES.dashboard.orders },
-					{ icon: 'booking', label: 'Meal Slots', href: ROUTES.dashboard.slots },
+					{
+						icon: 'booking',
+						label: 'Meal Slots',
+						href: ROUTES.dashboard.slots
+					},
 					{ icon: 'history', label: 'History', href: ROUTES.dashboard.history },
 					{ icon: 'profile', label: 'Account', href: ROUTES.account }
 				]
@@ -29,7 +33,9 @@
 	const isActive = (href) => $page.url.pathname === href;
 </script>
 
-<aside class="flex h-screen w-64 flex-col border-r border-brand-gray-light bg-white px-4 py-8">
+<aside
+	class="flex h-screen w-64 flex-col border-r border-brand-gray-light bg-white px-4 py-8"
+>
 	<!-- Logo -->
 	<div class="mb-10 flex items-center gap-3 px-2">
 		<img src={logo} alt="Logo" class="h-10 w-10" />
@@ -59,7 +65,7 @@
 	</nav>
 
 	<!-- Logout -->
-	<div class="mt-auto pt-4 border-t border-brand-gray-light">
+	<div class="mt-auto border-t border-brand-gray-light pt-4">
 		<form method="POST" action="/account?/logout">
 			<button
 				type="submit"

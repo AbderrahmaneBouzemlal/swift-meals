@@ -13,7 +13,9 @@
 	];
 </script>
 
-<header class="sticky top-0 z-50 w-full border-b border-brand-gray-light bg-white/80 backdrop-blur-md">
+<header
+	class="sticky top-0 z-50 w-full border-b border-brand-gray-light bg-white/80 backdrop-blur-md"
+>
 	<div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 		<!-- Logo -->
 		<button onclick={() => goto(ROUTES.home)} class="flex items-center gap-3">
@@ -26,7 +28,7 @@
 			{#each navLinks as link}
 				<a
 					href={link.href}
-					class="text-sm font-medium text-brand-gray-dark transition-colors hover:text-brand-yellow italic"
+					class="text-sm font-medium text-brand-gray-dark italic transition-colors hover:text-brand-yellow"
 				>
 					{link.label}
 				</a>
@@ -34,13 +36,13 @@
 			<div class="ml-4 flex items-center gap-4">
 				<button
 					onclick={() => goto(ROUTES.signIn)}
-					class="text-sm font-medium text-brand-dark hover:text-brand-yellow italic"
+					class="text-sm font-medium text-brand-dark italic hover:text-brand-yellow"
 				>
 					Sign In
 				</button>
 				<button
 					onclick={() => goto(ROUTES.signUp.chooseRole)}
-					class="rounded-full bg-brand-yellow px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand-yellow/20 transition-all hover:scale-105 active:scale-95 italic"
+					class="rounded-full bg-brand-yellow px-6 py-2.5 text-sm font-bold text-white italic shadow-lg shadow-brand-yellow/20 transition-all hover:scale-105 active:scale-95"
 				>
 					Get Started
 				</button>

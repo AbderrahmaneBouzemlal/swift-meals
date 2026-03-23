@@ -78,8 +78,9 @@
 </script>
 
 <div class="flex h-full flex-col bg-white">
-
-	<div class="shrink-0 px-8 pt-1.5 pb-8 flex flex-col items-center justify-center gap-2">
+	<div
+		class="flex shrink-0 flex-col items-center justify-center gap-2 px-8 pt-1.5 pb-8"
+	>
 		<Title size="medium">Sign Up</Title>
 		<span
 			class="mt-1 inline-block rounded-full px-3 py-0.5 text-xs text-white italic
