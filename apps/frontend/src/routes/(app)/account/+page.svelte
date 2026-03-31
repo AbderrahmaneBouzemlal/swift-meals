@@ -152,7 +152,6 @@
 
 <div class="flex h-full flex-col bg-white">
 	{#if user}
-		<!-- ── not live nudge (business only) ───────────────────── -->
 		{#if isBusiness && !isLive}
 			<div
 				class="mx-8 mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3"
@@ -160,7 +159,7 @@
 				<p class="text-[12px] font-semibold text-amber-700 italic">
 					Your restaurant isn't live yet
 				</p>
-				<p class="mt-0.5 text-[11px] text-amber-600 italic">
+				<p class="mt-0.5 text-sm text-amber-600 italic">
 					{isStudentSeller
 						? 'Post your first daily offering to start receiving orders.'
 						: 'Add a meal slot and at least one menu item to go live.'}
@@ -170,7 +169,7 @@
 						goto(
 							isStudentSeller ? ROUTES.dashboard.today : ROUTES.dashboard.slots
 						)}
-					class="mt-2 rounded-full bg-amber-400 px-3 py-1 text-[11px] text-white italic"
+					class="mt-2 rounded-full bg-amber-400 px-3 py-1 text-sm text-white italic"
 				>
 					{isStudentSeller ? 'Post an offering' : 'Set up meal slots'}
 				</button>
@@ -250,7 +249,6 @@
 			</button>
 		</div>
 
-		<!-- ── quick actions ─────────────────────────────────────── -->
 		<div class="mx-8 my-4 grid shrink-0 grid-cols-2 gap-4 lg:grid-cols-4">
 			{#each quickActions as action}
 				<button
@@ -272,12 +270,11 @@
 			{/each}
 		</div>
 
-		<!-- ── detail rows ────────────────────────────────────────── -->
 		<div
 			class="mx-8 my-2 shrink-0 overflow-hidden rounded-[7px] border border-gray-100"
 		>
 			<div class="border-b border-gray-100 bg-gray-50 px-4 py-2">
-				<p class="text-[11px] text-brand-gray italic">
+				<p class="text-sm text-brand-gray italic">
 					{isBusiness ? 'Restaurant details' : 'Profile details'}
 				</p>
 			</div>
@@ -295,7 +292,6 @@
 			</div>
 		</div>
 
-		<!-- ── menu list ──────────────────────────────────────────── -->
 		<div class="my-6 flex-1 overflow-y-auto px-8 pb-8">
 			<p
 				class="mb-4 text-xs font-bold tracking-wider text-brand-gray uppercase italic"
@@ -324,7 +320,6 @@
 					</button>
 				{/each}
 
-				<!-- logout always last, needs a form -->
 				<form method="POST" action="?/logout" use:enhance>
 					<button
 						type="submit"

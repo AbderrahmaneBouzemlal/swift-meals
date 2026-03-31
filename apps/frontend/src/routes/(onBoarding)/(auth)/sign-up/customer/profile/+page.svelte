@@ -137,7 +137,7 @@
 				onblur={() => form.touch('default_pickup_location')}
 			/>
 			<!-- helper -->
-			<p class="mt-1 px-1 text-[11px] text-brand-gray italic">
+			<p class="mt-1 px-1 text-sm text-brand-gray italic">
 				e.g. Hostel A Lobby, Library Entrance
 			</p>
 		</div>

@@ -8,25 +8,18 @@ from .models import User, CustomerProfile, BusinessProfile
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
-    role_str = serializers.CharField(write_only=True, required=False, source="role")
+    role = serializers.CharField(required=False)
     access = serializers.CharField(read_only=True)
     refresh = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
-        fields = ("email", "password", "name", "role_str", "access", "refresh")
+        fields = ("email", "password", "name", "role", "access", "refresh")
 
     def validate_email(self, value):
         return value.lower().strip()
 
     def create(self, validated_data):
-        role_map = {
-            "business": User.BUSINESS,
-            "customer": User.CUSTOMER,
-        }
-        role_input = validated_data.pop("role", "customer").lower()
-        validated_data["role"] = role_map.get(role_input, User.CUSTOMER)
-
         user = User.objects.create_user(**validated_data)
         refresh = RefreshToken.for_user(user)
         refresh_token = str(refresh)

@@ -109,7 +109,7 @@
 				error={form.errors.location}
 				onblur={() => form.touch('location')}
 			/>
-			<p class="mt-1 px-1 text-[11px] text-brand-gray italic">
+			<p class="mt-1 px-1 text-sm text-brand-gray italic">
 				e.g. Block C Cafeteria, Near Library Gate
 			</p>
 		</div>
@@ -138,7 +138,7 @@
 				error={form.errors.ssm_registration}
 				onblur={() => form.touch('ssm_registration')}
 			/>
-			<p class="mt-1 px-1 text-[11px] text-brand-gray italic">
+			<p class="mt-1 px-1 text-sm text-brand-gray italic">
 				Business registration number if applicable
 			</p>
 		</div>

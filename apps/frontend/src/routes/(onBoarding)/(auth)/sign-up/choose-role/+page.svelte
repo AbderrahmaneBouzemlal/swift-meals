@@ -21,7 +21,7 @@
 			>
 				I am a...
 			</h1>
-			<p class="m-0 text-[14px] text-brand-gray italic">
+			<p class="text-md m-0 text-brand-gray italic">
 				Tell us how you'll be using Swift Meals
 			</p>
 		</div>
@@ -132,7 +132,7 @@
 			\
 			<div class="flex items-center gap-3 px-1 py-4">
 				<div class="h-px flex-1 bg-brand-gray-light"></div>
-				<span class="text-[14px] text-brand-gray italic">or</span>
+				<span class="text-md text-brand-gray italic">or</span>
 				<div class="h-px flex-1 bg-brand-gray-light"></div>
 			</div>
 
@@ -265,19 +265,19 @@
 
 		<div class="flex flex-col gap-2.5 px-1 py-2">
 			<div
-				class="m-0 flex items-center gap-2.5 text-[13px] text-subtext-gray italic"
+				class="m-0 flex items-center gap-2.5 text-sm text-subtext-gray italic"
 			>
 				<div class="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-yellow"></div>
 				<span>Fast delivery to your door</span>
 			</div>
 			<div
-				class="m-0 flex items-center gap-2.5 text-[13px] text-subtext-gray italic"
+				class="m-0 flex items-center gap-2.5 text-sm text-subtext-gray italic"
 			>
 				<div class="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-yellow"></div>
 				<span>Grow your business business</span>
 			</div>
 			<div
-				class="m-0 flex items-center gap-2.5 text-[13px] text-subtext-gray italic"
+				class="m-0 flex items-center gap-2.5 text-sm text-subtext-gray italic"
 			>
 				<div class="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-yellow"></div>
 				<span>Switch roles any time</span>

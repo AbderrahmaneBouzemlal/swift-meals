@@ -44,7 +44,7 @@
 				height="24"
 				color={isActive(item.href) ? 'currentColor' : '#BDBDBD'}
 			/>
-			<span class="text-[10px] font-medium italic">{item.label}</span>
+			<span class="text-sm font-medium italic">{item.label}</span>
 		</button>
 	{/each}
 </nav>

@@ -1,4 +1,3 @@
-# models.py
 from django.db import models
 from django.utils import timezone
 import datetime
@@ -55,7 +54,8 @@ class MealSlot(models.Model):
         """Is this slot available for ordering right now?"""
         now = timezone.localtime()
         today = now.date()
-
+        if not self.is_active:
+            return False
         if self.repeat == "once":
             if self.date != today:
                 return False

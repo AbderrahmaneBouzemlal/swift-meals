@@ -19,7 +19,11 @@ export const ENDPOINTS = {
 		byId: (id) => `${BASE}/business/${id}`
 	},
 	orders: {
-		list: `${BASE}/orders`,
-		byId: (id) => `${BASE}/orders/${id}`
+		list: `${BASE}/orders/`,
+		byId: (id) => `${BASE}/orders/${id}/`
+	},
+	slots: {
+		list: `${BASE}/slots/`,
+		byId: (id) => `${BASE}/slots/${id}/`
 	}
 };

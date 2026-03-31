@@ -97,14 +97,14 @@
                  hover:opacity-100"
 				>
 					<Icon name="camera" width="20" height="20" color="white" />
-					<span class="text-[10px] text-white italic">Change</span>
+					<span class="text-sm text-white italic">Change</span>
 				</button>
 			</div>
 
 			{#if selectedFile}
 				<div
 					class="flex items-center gap-2 rounded-full bg-green-50
-                    px-3 py-1 text-[11px] text-green-600 italic"
+                    px-3 py-1 text-sm text-green-600 italic"
 				>
 					<Icon name="check" width="10" height="10" color="#16a34a" />
 					{selectedFile.name}
@@ -134,10 +134,10 @@
 				: 'border-gray-200 bg-gray-50 hover:border-brand-yellow hover:bg-brand-yellow/5'}"
 		>
 			<Icon name="upload" width="28" height="28" color="#BDBDBD" />
-			<p class="text-[13px] text-brand-gray italic">
+			<p class="text-sm text-brand-gray italic">
 				Drag & drop or <span class="text-brand-yellow">browse</span>
 			</p>
-			<p class="text-[11px] text-brand-gray italic">JPG, PNG, WebP up to 5MB</p>
+			<p class="text-sm text-brand-gray italic">JPG, PNG, WebP up to 5MB</p>
 		</button>
 
 		{#if errors.picture}

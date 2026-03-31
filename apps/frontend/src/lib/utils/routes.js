@@ -22,7 +22,7 @@ export const ROUTES = {
 		today: '/today',
 		history: '/history',
 		orders: '/orders',
-		slots: '/slots'
+		slots: '/dashboard/slots'
 	},
 	favorites: '/favorites',
 	payment: '/payment',

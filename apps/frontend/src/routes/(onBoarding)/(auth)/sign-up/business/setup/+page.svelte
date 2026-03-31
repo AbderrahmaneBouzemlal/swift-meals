@@ -119,7 +119,7 @@
                  duration-200 outline-none placeholder:text-brand-gray
                  focus:border-brand-yellow focus:bg-white"
 				></textarea>
-				<p class="mt-0.5 px-1 text-right text-[11px] text-brand-gray italic">
+				<p class="mt-0.5 px-1 text-right text-sm text-brand-gray italic">
 					{registration.description?.length ?? 0}/500
 				</p>
 			</div>

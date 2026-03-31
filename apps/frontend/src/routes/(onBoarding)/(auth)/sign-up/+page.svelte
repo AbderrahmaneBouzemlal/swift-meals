@@ -133,7 +133,7 @@
 		/>
 
 		{#if isBusiness}
-			<p class="text-[11px] text-brand-gray italic">
+			<p class="text-sm text-brand-gray italic">
 				You'll add your restaurant details in the next step.
 			</p>
 		{/if}

@@ -15,12 +15,12 @@ router.register(r"profile", ProfileViewSet, basename="profile")
 
 urlpatterns = [
     path(
-        "auth/token/obtain/",
+        "auth/token/obtain",
         jwt_views.TokenObtainPairView.as_view(),
         name="token_create",
     ),
     path(
-        "auth/token/refresh/",
+        "auth/token/refresh",
         jwt_views.TokenRefreshView.as_view(),
         name="token_refresh",
     ),

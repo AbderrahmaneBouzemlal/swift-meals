@@ -69,7 +69,7 @@ class MealSlotSerializer(serializers.ModelSerializer):
 
 
 class MealSlotWriteSerializer(serializers.ModelSerializer):
-    """Used for create/update — leaner, no nested data."""
+    """Used for create — leaner, no nested data."""
 
     class Meta:
         model = MealSlot

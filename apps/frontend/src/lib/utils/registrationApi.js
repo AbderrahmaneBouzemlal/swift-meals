@@ -6,7 +6,7 @@ export async function registerCustomer(data) {
 		email: data.email,
 		name: data.name,
 		password: data.password,
-		role_str: data.role || 'customer'
+		role: data.role || 'customer'
 	});
 	return { access: response.access, refresh: response.refresh };
 }
@@ -39,7 +39,7 @@ export async function registerBusiness(data) {
 		email: data.email,
 		name: data.name,
 		password: data.password,
-		role_str: 'business'
+		role: 'BUSINESS'
 	});
 	return { access: response?.access, refresh: response?.refresh };
 }

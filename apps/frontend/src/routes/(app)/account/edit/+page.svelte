@@ -142,7 +142,7 @@
                    focus:bg-white"
 					></textarea>
 					<span
-						class="absolute right-3 bottom-2 text-[10px] text-brand-gray italic"
+						class="absolute right-3 bottom-2 text-sm text-brand-gray italic"
 					>
 						{registration.description.length}/500
 					</span>

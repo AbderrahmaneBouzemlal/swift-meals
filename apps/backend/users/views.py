@@ -36,9 +36,8 @@ class UserRegistrationView(APIView):
                 "message": "User successfully registered!",
                 "access": serializer.data["access"],
                 "refresh": serializer.data["refresh"],
-                "user": {
-                    "email": serializer.data["email"],
-                },
+                "user": {"email": serializer.data["email"]},
+                "data": serializer.data,
             }
 
             return Response(response)
@@ -112,7 +111,6 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
         profile = request.user.business_profile
         serializer = BusinessProfileSerializer(profile, data=request.data, partial=True)
-        print(profile, request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
