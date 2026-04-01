@@ -8,6 +8,7 @@
 
 	let { slot, formErrors = {}, activeSlotId = $bindable() } = $props();
 
+	// svelte-ignore state_referenced_locally
 	let draft = $state(toDraft(slot));
 	let isSubmitting = $state(false);
 	let isDeleting = $state(false);

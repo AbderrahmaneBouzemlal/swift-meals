@@ -10,6 +10,7 @@
 
 	let { data, form } = $props();
 
+	// svelte-ignore state_referenced_locally
 	const user = data.user;
 	const isBusiness = user?.role?.toLowerCase() === 'business';
 	const customerProfile = user?.customer_profile ?? {};

@@ -14,14 +14,11 @@
 	const customerProfile = $derived(user?.customer_profile ?? {});
 	const businessProfile = $derived(user?.business_profile ?? {});
 
-	// student seller vs proper restaurant
 	const businessType = $derived(businessProfile.business_type ?? '');
 	const isStudentSeller = $derived(businessType === 'student');
 
-	// is the business ready to accept orders?
 	const isLive = $derived(businessProfile?.is_live ?? false);
 
-	// picture — business shows logo, customer shows profile picture
 	const avatarUrl = $derived(
 		isBusiness
 			? (businessProfile.logo_url ?? null)
@@ -32,7 +29,6 @@
 		return value === null || value === undefined || value === '' ? '—' : value;
 	}
 
-	// ── quick actions ────────────────────────────────────────────
 	const quickActions = $derived(
 		isBusiness
 			? isStudentSeller
@@ -76,7 +72,6 @@
 				]
 	);
 
-	// ── menu items ───────────────────────────────────────────────
 	const menuItems = $derived(
 		isBusiness
 			? [
@@ -116,7 +111,6 @@
 				]
 	);
 
-	// ── detail rows ──────────────────────────────────────────────
 	const detailRows = $derived(
 		isBusiness
 			? [

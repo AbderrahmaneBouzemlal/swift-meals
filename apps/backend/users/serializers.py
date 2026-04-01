@@ -189,6 +189,7 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
             "logo_url",
             "ssm_registration",
             "pickup_locations",
+            "is_live"
         ]
         read_only_fields = ["id", "email", "owner_name"]
 
