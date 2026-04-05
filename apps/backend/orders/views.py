@@ -5,8 +5,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, JSONParser
 from django.utils import timezone
 
-from .models import MealSlot, MenuItem, Order
+from .models import Menu, MealSlot, MenuItem, Order
 from .serializers import (
+    MenuSerializer,
+    MenuWriteSerializer,
     MealSlotSerializer,
     MealSlotWriteSerializer,
     MenuItemSerializer,
@@ -15,7 +17,36 @@ from .serializers import (
     OrderWriteSerializer,
     OrderStatusSerializer,
 )
-from .permissions import IsBusinessOwner, IsCustomer, IsSlotOwner, IsOrderOwner
+from .permissions import (
+    IsBusinessOwner,
+    IsCustomer,
+    IsSlotOwner,
+    IsOrderOwner,
+    IsMenuOwner,
+)
+
+
+class MenuViewSet(viewsets.ModelViewSet):
+    """
+    GET    /menus/          — business lists their menus
+    POST   /menus/          — business creates a menu
+    GET    /menus/{id}/     — menu detail
+    PATCH  /menus/{id}/     — business updates their menu
+    DELETE /menus/{id}/     — business deletes their menu
+    """
+
+    permission_classes = [IsAuthenticated, IsBusinessOwner, IsMenuOwner]
+
+    def get_serializer_class(self):
+        if self.action in ("create", "update", "partial_update"):
+            return MenuWriteSerializer
+        return MenuSerializer
+
+    def get_queryset(self):
+        return Menu.objects.filter(business=self.request.user.business_profile)
+
+    def perform_create(self, serializer):
+        serializer.save(business=self.request.user.business_profile)
 
 
 class MealSlotViewSet(viewsets.ModelViewSet):
@@ -42,13 +73,13 @@ class MealSlotViewSet(viewsets.ModelViewSet):
         if self.request.user.role == "BUSINESS":
             return MealSlot.objects.filter(
                 restaurant=self.request.user.business_profile
-            ).prefetch_related("menu_items")
+            ).select_related("menu")
 
         # customers see active slots available today
         return (
             MealSlot.objects.filter(is_active=True)
-            .select_related("restaurant")
-            .prefetch_related("menu_items")
+            .select_related("restaurant", "menu")
+            .prefetch_related("menu__items")
         )
 
     def get_permissions(self):
@@ -81,12 +112,11 @@ class MealSlotViewSet(viewsets.ModelViewSet):
 
 class MenuItemViewSet(viewsets.ModelViewSet):
     """
-    Nested under a slot: /slots/{slot_pk}/menu-items/
+    Nested under a menu: /menus/{menu_pk}/items/
     Business manages their own menu items.
-    Customers read them via the slot detail.
     """
 
-    permission_classes = [IsAuthenticated, IsBusinessOwner]
+    permission_classes = [IsAuthenticated, IsBusinessOwner, IsMenuOwner]
     parser_classes = [JSONParser, MultiPartParser]
 
     def get_serializer_class(self):
@@ -99,21 +129,16 @@ class MenuItemViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return MenuItem.objects.filter(
-            slot__id=self.kwargs["slot_pk"],
-            slot__restaurant=self.request.user.business_profile,
+            menu__id=self.kwargs["menu_pk"],
+            menu__business=self.request.user.business_profile,
         )
-
-    def get_permissions(self):
-        if self.action in ("list", "retrieve"):
-            return [IsAuthenticated()]
-        return [IsAuthenticated(), IsBusinessOwner()]
 
     def perform_create(self, serializer):
-        slot = MealSlot.objects.get(
-            pk=self.kwargs["slot_pk"],
-            restaurant=self.request.user.business_profile,
+        menu = Menu.objects.get(
+            pk=self.kwargs["menu_pk"],
+            business=self.request.user.business_profile,
         )
-        serializer.save(slot=slot)
+        serializer.save(menu=menu)
 
 
 class OrderViewSet(viewsets.ModelViewSet):

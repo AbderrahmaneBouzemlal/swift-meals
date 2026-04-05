@@ -1,6 +1,13 @@
 from rest_framework import serializers
 from django.utils import timezone
-from .models import MealSlot, MenuItem, Order, OrderItem
+from .models import Menu, MealSlot, MenuItem, Order, OrderItem
+
+
+
+class MenuWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Menu
+        fields = ["name", "description", "is_active"]
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
@@ -33,10 +40,33 @@ class MenuItemWriteSerializer(serializers.ModelSerializer):
         fields = ["name", "description", "price", "image", "is_available"]
 
 
+class MenuSerializer(serializers.ModelSerializer):
+    items_count = serializers.IntegerField(source="items.count", read_only=True)
+    menu_items = MenuItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Menu
+        fields = [
+            "id",
+            "name",
+            "description",
+            "is_active",
+            "items_count",
+            "created_at",
+            "updated_at",
+            "menu_items",
+        ]
+        read_only_fields = ["id", "created_at", "updated_at"]
+
+
 class MealSlotSerializer(serializers.ModelSerializer):
     """Read — includes nested menu items and derived fields."""
 
-    menu_items = MenuItemSerializer(many=True, read_only=True)
+    menu_items = serializers.SerializerMethodField()
+    menu_id = serializers.PrimaryKeyRelatedField(
+        source="menu", queryset=Menu.objects.all(), required=False, allow_null=True
+    )
+    menu_name = serializers.CharField(source="menu.name", read_only=True)
     restaurant_name = serializers.CharField(
         source="restaurant.restaurant_name", read_only=True
     )
@@ -46,6 +76,15 @@ class MealSlotSerializer(serializers.ModelSerializer):
     def get_orders_today(self, obj):
         today = timezone.localdate()
         return obj.orders.filter(scheduled_at=today).count()
+
+    def get_menu_items(self, obj):
+        if obj.menu:
+            return MenuItemSerializer(
+                obj.menu.items.filter(is_available=True),
+                many=True,
+                context=self.context,
+            ).data
+        return []
 
     class Meta:
         model = MealSlot
@@ -59,13 +98,13 @@ class MealSlotSerializer(serializers.ModelSerializer):
             "start_time",
             "end_time",
             "max_orders",
-            "order_cutoff",
-            "is_active",
-            "is_available_today",
-            "orders_today",
+            "menu_id",
+            "menu_name",
             "menu_items",
+            "is_available_today",
+            "orders_today"
         ]
-        read_only_fields = ["id", "is_available_today", "orders_today"]
+        read_only_fields = ["id", "is_available_today", "orders_today", "menu_name"]
 
 
 class MealSlotWriteSerializer(serializers.ModelSerializer):
@@ -83,6 +122,7 @@ class MealSlotWriteSerializer(serializers.ModelSerializer):
             "max_orders",
             "order_cutoff",
             "is_active",
+            "menu",
         ]
 
     def validate(self, data):
@@ -192,13 +232,16 @@ class OrderWriteSerializer(serializers.ModelSerializer):
 
         # validate each item belongs to this slot and is available
         for item in data.get("items", []):
+            if not slot.menu:
+                raise serializers.ValidationError("This slot has no menu assigned.")
+
             try:
                 menu_item = MenuItem.objects.get(
-                    id=item["menu_item"], slot=slot, is_available=True
+                    id=item["menu_item"], menu=slot.menu, is_available=True
                 )
             except MenuItem.DoesNotExist:
                 raise serializers.ValidationError(
-                    f"Menu item {item.get('menu_item')} is not available in this slot."
+                    f"Menu item {item.get('menu_item')} is not available in this slot's menu."
                 )
 
         return data

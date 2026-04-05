@@ -4,6 +4,23 @@ import datetime
 from users.models import BusinessProfile, CustomerProfile
 
 
+class Menu(models.Model):
+    business = models.ForeignKey(
+        BusinessProfile, on_delete=models.CASCADE, related_name="menus"
+    )
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.name} — {self.business.restaurant_name}"
+
+
 class MealSlot(models.Model):
     """
     Covers both recurring restaurant slots and one-off student offerings.
@@ -41,6 +58,9 @@ class MealSlot(models.Model):
         help_text="Minutes before start_time that orders stop being accepted",
     )
     is_active = models.BooleanField(default=True)
+    menu = models.ForeignKey(
+        Menu, on_delete=models.SET_NULL, null=True, blank=True, related_name="slots"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -73,8 +93,8 @@ class MealSlot(models.Model):
 
 
 class MenuItem(models.Model):
-    slot = models.ForeignKey(
-        MealSlot, on_delete=models.CASCADE, related_name="menu_items"
+    menu = models.ForeignKey(
+        Menu, on_delete=models.CASCADE, related_name="items", null=True, blank=True
     )
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
@@ -86,7 +106,7 @@ class MenuItem(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return f"{self.name} — {self.slot.name}"
+        return f"{self.name} — {self.menu.name}"
 
 
 class Order(models.Model):

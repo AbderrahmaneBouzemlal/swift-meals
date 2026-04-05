@@ -1,6 +1,7 @@
 <script>
 	import LogoPreview from '$lib/components/LogoPreview.svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { registration, reset } from '$lib/stores/registration.svelte.js';
 	import { applyAction, enhance } from '$app/forms';
 	import {
@@ -23,7 +24,7 @@
 	onMount(() => {
 		if (!registration.role) {
 			toastStore.error('Something went wrong. Please start again.');
-			goto(ROUTES.signUp.chooseRole);
+			goto(resolve(ROUTES.signUp.chooseRole));
 		}
 	});
 	const logoPreview = $derived(
@@ -152,7 +153,7 @@
 			<button
 				class="text-left text-sm text-brand-yellow italic underline-offset-2
                hover:underline"
-				onclick={() => goto(ROUTES.signUp.account)}
+				onclick={() => goto(resolve(ROUTES.signUp.account))}
 			>
 				Edit account details
 			</button>
@@ -160,14 +161,14 @@
 				<button
 					class="text-left text-sm text-brand-yellow italic underline-offset-2
                  hover:underline"
-					onclick={() => goto(ROUTES.signUp.business.details)}
+					onclick={() => goto(resolve(ROUTES.signUp.business.details))}
 				>
 					Edit business details
 				</button>
 				<button
 					class="text-left text-sm text-brand-yellow italic underline-offset-2
                  hover:underline"
-					onclick={() => goto(ROUTES.signUp.business.setup)}
+					onclick={() => goto(resolve(ROUTES.signUp.business.setup))}
 				>
 					Edit restaurant setup
 				</button>
@@ -175,7 +176,7 @@
 				<button
 					class="text-left text-sm text-brand-yellow italic underline-offset-2
                  hover:underline"
-					onclick={() => goto(ROUTES.signUp.customer.profile)}
+					onclick={() => goto(resolve(ROUTES.signUp.customer.profile))}
 				>
 					Edit customer profile
 				</button>

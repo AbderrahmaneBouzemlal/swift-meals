@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import Header from '$lib/components/Header.svelte';
 	import SocialLoginButton from '$lib/components/ui/SocialLoginButton.svelte';
 	import InputField from '$lib/components/ui/InputField.svelte';
@@ -82,7 +83,7 @@
 
 		<button
 			type="button"
-			class="cursor-pointer border-none bg-transparent p-0 text-left font-abeezee text-[12px] text-brand-gray italic transition-colors duration-200 hover:text-brand-yellow"
+			class="cursor-pointer border-none bg-transparent p-0 text-left font-abeezee text-sm text-brand-gray italic transition-colors duration-200 hover:text-brand-yellow"
 			>Forgot your password?</button
 		>
 
@@ -116,7 +117,7 @@
 		<button
 			class="cursor-pointer border-none bg-transparent p-0 font-abeezee text-sm font-semibold
                  text-brand-yellow italic transition-opacity duration-200 hover:opacity-80"
-			onclick={() => goto(ROUTES.signUp.account)}>Sign Up</button
+			onclick={() => goto(resolve(ROUTES.signUp.account))}>Sign Up</button
 		>
 	</div>
 </AuthLayout>

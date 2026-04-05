@@ -6,6 +6,7 @@
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { registration } from '$lib/stores/registration.svelte.js';
 	import { useFormValidation } from '$lib/utils/useFormValidation.svelte.js';
 	import {
@@ -27,7 +28,7 @@
 	onMount(() => {
 		if (!registration.role) {
 			toastStore.error('Something went wrong. Please start again.');
-			goto(ROUTES.signUp.chooseRole);
+			goto(resolve(ROUTES.signUp.chooseRole));
 		}
 	});
 	const schemaForm = useFormValidation(accountSchema, () => ({

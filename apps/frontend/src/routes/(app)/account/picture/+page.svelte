@@ -66,7 +66,7 @@
 		<Title size="medium">
 			{isBusiness ? 'Restaurant Logo' : 'Profile Photo'}
 		</Title>
-		<p class="mt-1 text-[12px] text-brand-gray italic">
+		<p class="mt-1 text-sm text-brand-gray italic">
 			JPG, PNG or WebP — max 5MB
 		</p>
 	</div>

@@ -1,5 +1,3 @@
-import { ja } from 'zod/locales';
-
 export const ROUTES = {
 	home: '/',
 
@@ -22,7 +20,11 @@ export const ROUTES = {
 		today: '/today',
 		history: '/history',
 		orders: '/orders',
-		slots: '/dashboard/slots'
+		slots: '/dashboard/slots',
+		menu: {
+			list: '/dashboard/menu',
+			byId: (id) => `/dashboard/menu/${id}`
+		}
 	},
 	favorites: '/favorites',
 	payment: '/payment',

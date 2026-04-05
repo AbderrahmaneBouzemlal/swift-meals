@@ -2,6 +2,7 @@
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { registration } from '$lib/stores/registration.svelte.js';
 	import { BUSINESS_SIGNUP_STEPS } from '$lib/utils/constants';
 	import StepTracker from '$lib/components/StepTracker.svelte';
@@ -17,7 +18,7 @@
 	onMount(() => {
 		if (registration.role !== 'business') {
 			toastStore.error('Please start sign-up and choose your role first.');
-			goto(ROUTES.signUp.chooseRole);
+			goto(resolve(ROUTES.signUp.chooseRole));
 		}
 	});
 
@@ -67,7 +68,7 @@
 		if (!form.submitValidate(['description', 'pickup_locations', 'logo']))
 			return;
 
-		goto(ROUTES.signUp.review);
+		goto(resolve(ROUTES.signUp.review));
 	}
 </script>
 
@@ -149,7 +150,7 @@
 	<div class="shrink-0 px-8 pt-2 text-center">
 		<button
 			class="text-sm text-brand-gray italic underline-offset-2 hover:underline"
-			onclick={() => goto(ROUTES.signUp.review)}
+			onclick={() => goto(resolve(ROUTES.signUp.review))}
 		>
 			Skip for now
 		</button>

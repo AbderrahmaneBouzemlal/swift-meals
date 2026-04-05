@@ -37,3 +37,17 @@ class IsOrderOwner(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return obj.customer == request.user.customer_profile
+
+
+class IsMenuOwner(BasePermission):
+    """Business can only modify their own menus and their items."""
+
+    message = "You do not own this menu."
+
+    def has_object_permission(self, request, view, obj):
+        # obj could be a Menu or a MenuItem
+        if hasattr(obj, "business"):
+            return obj.business == request.user.business_profile
+        if hasattr(obj, "menu"):
+            return obj.menu.business == request.user.business_profile
+        return False

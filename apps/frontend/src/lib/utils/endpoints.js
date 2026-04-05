@@ -25,5 +25,11 @@ export const ENDPOINTS = {
 	slots: {
 		list: `${BASE}/slots/`,
 		byId: (id) => `${BASE}/slots/${id}/`
+	},
+	menus: {
+		list: `${BASE}/menus/`,
+		byId: (id) => `${BASE}/menus/${id}/`,
+		items: (menuId) => `${BASE}/menus/${menuId}/items/`,
+		itemById: (menuId, itemId) => `${BASE}/menus/${menuId}/items/${itemId}/`
 	}
 };

@@ -136,9 +136,9 @@
 						placeholder="Tell customers about your restaurant..."
 						maxlength="500"
 						bind:value={registration.description}
-						class="box-border h-24 w-full resize-none rounded-lg border
-                   border-brand-gray-light bg-gray-50 px-4 py-3 font-abeezee
-                   text-[16px] text-brand-dark italic outline-none
+						class="text-md box-border h-24 w-full resize-none rounded-lg
+                   border border-brand-gray-light bg-gray-50 px-4 py-3
+                   font-abeezee text-brand-dark italic outline-none
                    placeholder:text-brand-gray focus:border-brand-yellow
                    focus:bg-white"
 					></textarea>
@@ -178,9 +178,9 @@
 					<select
 						name="gender"
 						bind:value={registration.gender}
-						class="box-border h-13 w-full appearance-none rounded-lg border
-                   border-brand-gray-light bg-gray-50 px-4 font-abeezee
-                   text-[16px] text-brand-dark italic outline-none
+						class="text-md box-border h-13 w-full appearance-none rounded-lg
+                   border border-brand-gray-light bg-gray-50 px-4
+                   font-abeezee text-brand-dark italic outline-none
                    focus:border-brand-yellow focus:bg-white"
 					>
 						<option value="">Select gender</option>

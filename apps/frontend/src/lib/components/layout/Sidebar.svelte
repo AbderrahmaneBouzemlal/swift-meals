@@ -4,6 +4,7 @@
 	import { page } from '$app/stores';
 	import logo from '$lib/assets/logo.svg';
 	import { ROUTES } from '$lib/utils/routes.js';
+	import { resolve } from '$app/paths';
 
 	/** @type {{ role: string }} */
 	let { role } = $props();
@@ -46,7 +47,7 @@
 	<nav class="flex flex-1 flex-col gap-2">
 		{#each menuItems as item}
 			<button
-				onclick={() => goto(item.href)}
+				onclick={() => goto(resolve(item.href))}
 				class="flex items-center gap-4 rounded-xl px-4 py-3 transition-all duration-200 {isActive(
 					item.href
 				)

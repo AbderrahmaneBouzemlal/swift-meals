@@ -23,7 +23,7 @@
 		{onblur}
 		class="box-border h-13 w-full rounded-lg border border-brand-gray-light
 		{error ? 'ring-2 ring-red-400' : 'border border-transparent'}
-		bg-gray-50 pr-11 pl-4 font-abeezee text-[16px] text-brand-dark italic transition-colors duration-200 outline-none
+		text-md bg-gray-50 pr-11 pl-4 font-abeezee text-brand-dark italic transition-colors duration-200 outline-none
 		placeholder:text-brand-gray focus:border-brand-yellow focus:bg-white"
 	/>
 	<button

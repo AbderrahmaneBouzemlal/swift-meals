@@ -30,7 +30,8 @@
 			days: [0, 1, 2, 3, 4],
 			max_orders: '',
 			order_cutoff: 30,
-			is_active: true
+			is_active: true,
+			menu_id: null
 		};
 	}
 
@@ -51,8 +52,8 @@
 </script>
 
 <div
-	class="relative mx-auto flex min-h-dvh w-full sm:max-w-md flex-col overflow-hidden
-         bg-white font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:rounded-phone lg:w-full lg:max-w-full lg:shadow-none lg:rounded-none"
+	class="relative mx-auto flex min-h-dvh w-full flex-col overflow-hidden bg-white
+         font-abeezee shadow-2xl sm:my-8 sm:min-h-211 sm:max-w-md sm:rounded-phone lg:w-full lg:max-w-full lg:rounded-none lg:shadow-none"
 >
 	<div class="lg:hidden">
 		<Header backUrl={ROUTES.account} />
@@ -71,7 +72,7 @@
 				type="button"
 				onclick={openNew}
 				class="flex items-center gap-1.5 rounded-full bg-brand-yellow
-               px-4 py-2 text-[12px] text-white italic shadow-sm
+               px-4 py-2 text-sm text-white italic shadow-sm
                transition hover:bg-yellow-400"
 			>
 				<Icon name="plus" width="10" height="10" color="white" />
@@ -122,6 +123,7 @@
 						action="create"
 						oncancel={closeNew}
 						{isSubmitting}
+						menus={data.menus?.results || []}
 					/>
 				</form>
 			</div>
@@ -137,6 +139,7 @@
 							{slot}
 							formErrors={form?.errors ?? {}}
 							bind:activeSlotId
+							menus={data.menus?.results || []}
 						/>
 					{/each}
 				</div>
@@ -153,6 +156,7 @@
 							{slot}
 							formErrors={form?.errors ?? {}}
 							bind:activeSlotId
+							menus={data.menus?.results || []}
 						/>
 					{/each}
 				</div>
@@ -170,7 +174,7 @@
 				<button
 					type="button"
 					onclick={openNew}
-					class="rounded-full bg-brand-yellow px-5 py-2 text-[12px]
+					class="rounded-full bg-brand-yellow px-5 py-2 text-sm
                  text-white italic shadow-sm"
 				>
 					Create your first slot

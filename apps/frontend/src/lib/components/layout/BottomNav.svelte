@@ -3,6 +3,8 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { ROUTES } from '$lib/utils/routes.js';
+	import { resolve } from '$app/paths';
+
 
 	/** @type {{ role: string }} */
 	let { role } = $props();
@@ -31,7 +33,7 @@
 >
 	{#each menuItems as item}
 		<button
-			onclick={() => goto(item.href)}
+			onclick={() => goto(resolve(item.href))}
 			class="flex flex-col items-center gap-1 transition-all duration-200 {isActive(
 				item.href
 			)

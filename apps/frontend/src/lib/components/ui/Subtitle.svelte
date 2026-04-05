@@ -9,7 +9,7 @@
 
 	const sizeClasses = {
 		small: 'text-sm',
-		medium: 'text-[15px]',
+		medium: 'text-md',
 		large: 'text-lg',
 		xl: 'text-xl'
 	};

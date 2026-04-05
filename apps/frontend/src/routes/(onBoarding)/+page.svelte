@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import LandingLayout from '$lib/components/layout/LandingLayout.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import { ROUTES } from '$lib/utils/routes.js';
@@ -17,18 +18,17 @@
 			<PrimaryButton
 				text="Get Started"
 				icon="arrow-right"
-				onclick={() => goto(ROUTES.signUp.chooseRole)}
+				onclick={() => goto(resolve(ROUTES.signUp.chooseRole))}
 			/>
 			<PrimaryButton
 				text="Sign In"
 				variant="secondary"
-				onclick={() => goto(ROUTES.signIn)}
+				onclick={() => goto(resolve(ROUTES.signIn))}
 			/>
 		</div>
 	</AuthLayout>
 {:else if platform.isLoaded}
 	<LandingLayout>
-		<!-- Hero Section -->
 		<section
 			class="mx-auto flex max-w-7xl flex-col items-center gap-12 px-6 py-20 lg:flex-row lg:py-32"
 		>
@@ -52,10 +52,10 @@
 					<PrimaryButton
 						text="Get Started Now"
 						icon="arrow-right"
-						onclick={() => goto(ROUTES.signUp.chooseRole)}
+						onclick={() => goto(resolve(ROUTES.signUp.chooseRole))}
 					/>
 					<button
-						onclick={() => goto(ROUTES.signIn)}
+						onclick={() => goto(resolve(ROUTES.signIn))}
 						class="text-sm font-bold text-brand-dark italic transition-colors hover:text-brand-yellow"
 					>
 						Already have an account? Sign In
@@ -177,7 +177,7 @@
 				<PrimaryButton
 					text="Create Your Account"
 					icon="arrow-right"
-					onclick={() => goto(ROUTES.signUp.chooseRole)}
+					onclick={() => goto(resolve(ROUTES.signUp.chooseRole))}
 				/>
 			</div>
 		</section>

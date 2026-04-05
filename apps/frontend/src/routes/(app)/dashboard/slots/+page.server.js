@@ -12,10 +12,13 @@ export async function load({ locals, cookies }) {
 	const access = cookies.get('access');
 
 	try {
-		const slots = await api.get(ENDPOINTS.slots.list, { token: access });
-		return { slots, user: locals.user };
+		const [slots, menus] = await Promise.all([
+			api.get(ENDPOINTS.slots.list, { token: access }),
+			api.get(ENDPOINTS.menus.list, { token: access })
+		]);
+		return { slots, menus, user: locals.user };
 	} catch {
-		return { slots: [], user: locals.user };
+		return { slots: [], menus: { results: [] }, user: locals.user };
 	}
 }
 
@@ -30,7 +33,6 @@ export const actions = {
 				buildSlotPayload(form),
 				{ token: access }
 			);
-			console.log('Create slot response:', buildSlotPayload(form), response);
 			return { success: true, action: 'create' };
 		} catch (err) {
 			return handleError(err, 'create');
@@ -95,7 +97,8 @@ function buildSlotPayload(form) {
 		days: repeat === 'weekly' ? JSON.parse(form.get('days') || '[]') : [],
 		max_orders: form.get('max_orders') || null,
 		order_cutoff: Number(form.get('order_cutoff')) || 30,
-		is_active: form.get('is_active') === 'true'
+		is_active: form.get('is_active') === 'true',
+		menu: form.get('menu_id') || null
 	};
 }
 

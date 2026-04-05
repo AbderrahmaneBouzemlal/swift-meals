@@ -4,6 +4,7 @@
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { registration } from '$lib/stores/registration.svelte.js';
 	import { BUSINESS_SIGNUP_STEPS } from '$lib/utils/constants';
 	import StepTracker from '$lib/components/StepTracker.svelte';
@@ -18,7 +19,7 @@
 	onMount(() => {
 		if (registration.role !== 'business') {
 			toastStore.error('Please start sign-up and choose your role first.');
-			goto(ROUTES.signUp.chooseRole);
+			goto(resolve(ROUTES.signUp.chooseRole));
 		}
 	});
 
@@ -66,7 +67,7 @@
 		)
 			return;
 
-		goto(ROUTES.signUp.business.setup);
+		goto(resolve(ROUTES.signUp.business.setup));
 	}
 </script>
 

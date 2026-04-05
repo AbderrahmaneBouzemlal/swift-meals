@@ -6,7 +6,12 @@
 	import SlotForm from './SlotForm.svelte';
 	import { formatTime, formatDays } from '$lib/utils/helpers.js';
 
-	let { slot, formErrors = {}, activeSlotId = $bindable() } = $props();
+	let {
+		slot,
+		formErrors = {},
+		activeSlotId = $bindable(),
+		menus = []
+	} = $props();
 
 	// svelte-ignore state_referenced_locally
 	let draft = $state(toDraft(slot));
@@ -15,7 +20,9 @@
 	let confirmDelete = $state(false);
 
 	const isExpanded = $derived(activeSlotId === slot.id);
-	const isDirty = $derived(JSON.stringify(draft) !== JSON.stringify(toDraft(slot)));
+	const isDirty = $derived(
+		JSON.stringify(draft) !== JSON.stringify(toDraft(slot))
+	);
 
 	function toDraft(s) {
 		return {
@@ -26,7 +33,8 @@
 			days: [...(s.days ?? [])].sort((a, b) => a - b),
 			max_orders: s.max_orders ?? '',
 			order_cutoff: s.order_cutoff ?? 30,
-			is_active: s.is_active
+			is_active: s.is_active,
+			menu_id: s.menu_id || ''
 		};
 	}
 
@@ -66,7 +74,7 @@
 			onclick={toggle}
 			class="flex flex-1 flex-col gap-0.5 text-left"
 		>
-			<p class="text-[14px] text-brand-dark italic">{slot.name}</p>
+			<p class="text-md text-brand-dark italic">{slot.name}</p>
 			<p class="text-sm text-brand-gray italic">
 				{formatTime(slot.start_time)} – {formatTime(slot.end_time)}
 				· {formatDays(slot.days, slot.repeat)}
@@ -137,6 +145,7 @@
 					slotId={slot.id}
 					oncancel={close}
 					{isSubmitting}
+					{menus}
 				/>
 			</form>
 
@@ -147,7 +156,7 @@
 						class="flex items-center gap-2 rounded-lg border
                    border-red-200 bg-red-50 px-3 py-2"
 					>
-						<p class="flex-1 text-[11px] text-red-600 italic">
+						<p class="flex-1 text-xs text-red-600 italic">
 							Delete "{slot.name}"? This cannot be undone.
 						</p>
 						<form
@@ -168,7 +177,7 @@
 							<button
 								type="submit"
 								disabled={isDeleting}
-								class="rounded-full bg-red-500 px-3 py-1 text-[11px]
+								class="rounded-full bg-red-500 px-3 py-1 text-xs
                        text-white italic hover:bg-red-600 disabled:opacity-50"
 							>
 								{isDeleting ? 'Deleting…' : 'Delete'}
@@ -177,7 +186,7 @@
 						<button
 							type="button"
 							onclick={() => (confirmDelete = false)}
-							class="rounded-full border border-gray-200 px-3 py-1 text-[11px]
+							class="rounded-full border border-gray-200 px-3 py-1 text-xs
                      text-brand-gray italic hover:bg-gray-100"
 						>
 							Cancel
@@ -187,7 +196,7 @@
 					<button
 						type="button"
 						onclick={() => (confirmDelete = true)}
-						class="mt-1 text-[11px] text-brand-gray italic
+						class="mt-1 text-xs text-brand-gray italic
                    hover:text-red-400 hover:underline"
 					>
 						Delete this slot

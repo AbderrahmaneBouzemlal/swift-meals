@@ -1,8 +1,8 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { businessDetailsSchema } from '$lib/utils/schemas';
 	import { useFormValidation } from '$lib/utils/useFormValidation.svelte';
 	import { registration } from '$lib/stores/registration.svelte.js';
+
 
 	let { previewUrl, Deleteable = true, fileInput = null } = $props();
 

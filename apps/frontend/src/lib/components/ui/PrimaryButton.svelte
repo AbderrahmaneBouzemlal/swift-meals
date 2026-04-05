@@ -1,5 +1,4 @@
 <script>
-	import { goto } from '$app/navigation';
 	import Icon from './Icon.svelte';
 	import { ROUTES } from '$lib/utils/routes.js';
 

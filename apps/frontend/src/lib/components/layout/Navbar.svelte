@@ -1,6 +1,7 @@
 <script>
 	import logo from '$lib/assets/logo.svg';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { ROUTES } from '$lib/utils/routes.js';
 	import Icon from '../ui/Icon.svelte';
 
@@ -18,7 +19,7 @@
 >
 	<div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 		<!-- Logo -->
-		<button onclick={() => goto(ROUTES.home)} class="flex items-center gap-3">
+		<button onclick={() => goto(resolve(ROUTES.home))} class="flex items-center gap-3">
 			<img src={logo} alt="Swift Meals" class="h-10 w-10" />
 			<span class="text-xl font-bold text-brand-dark italic">Swift Meals</span>
 		</button>
@@ -35,13 +36,13 @@
 			{/each}
 			<div class="ml-4 flex items-center gap-4">
 				<button
-					onclick={() => goto(ROUTES.signIn)}
+					onclick={() => goto(resolve(ROUTES.signIn))}
 					class="text-sm font-medium text-brand-dark italic hover:text-brand-yellow"
 				>
 					Sign In
 				</button>
 				<button
-					onclick={() => goto(ROUTES.signUp.chooseRole)}
+					onclick={() => goto(resolve(ROUTES.signUp.chooseRole))}
 					class="rounded-full bg-brand-yellow px-6 py-2.5 text-sm font-bold text-white italic shadow-lg shadow-brand-yellow/20 transition-all hover:scale-105 active:scale-95"
 				>
 					Get Started
@@ -76,7 +77,7 @@
 				<button
 					onclick={() => {
 						isMenuOpen = false;
-						goto(ROUTES.signIn);
+						goto(resolve(ROUTES.signIn));
 					}}
 					class="text-left text-lg font-medium text-brand-dark italic"
 				>
@@ -85,7 +86,7 @@
 				<button
 					onclick={() => {
 						isMenuOpen = false;
-						goto(ROUTES.signUp.chooseRole);
+						goto(resolve(ROUTES.signUp.chooseRole));
 					}}
 					class="rounded-full bg-brand-yellow py-4 text-center text-lg font-bold text-white italic"
 				>

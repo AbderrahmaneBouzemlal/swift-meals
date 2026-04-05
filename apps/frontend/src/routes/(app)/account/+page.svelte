@@ -1,9 +1,8 @@
 <script>
 	import { enhance } from '$app/forms';
-	import LogoPreview from '$lib/components/LogoPreview.svelte';
-	import Header from '$lib/components/Header.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { ROUTES } from '$lib/utils/routes.js';
 
 	let { data } = $props();
@@ -83,7 +82,7 @@
 					{
 						icon: 'order',
 						label: isStudentSeller ? 'My Offerings' : 'Manage Menu',
-						href: ROUTES.dashboard.menu
+						href: ROUTES.dashboard.menu.list
 					},
 					{
 						icon: 'history',
@@ -150,7 +149,7 @@
 			<div
 				class="mx-8 mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3"
 			>
-				<p class="text-[12px] font-semibold text-amber-700 italic">
+				<p class="text-sm font-semibold text-amber-700 italic">
 					Your restaurant isn't live yet
 				</p>
 				<p class="mt-0.5 text-sm text-amber-600 italic">
@@ -161,7 +160,11 @@
 				<button
 					onclick={() =>
 						goto(
-							isStudentSeller ? ROUTES.dashboard.today : ROUTES.dashboard.slots
+							resolve(
+								isStudentSeller
+									? ROUTES.dashboard.today
+									: ROUTES.dashboard.slots
+							)
 						)}
 					class="mt-2 rounded-full bg-amber-400 px-3 py-1 text-sm text-white italic"
 				>
@@ -176,7 +179,7 @@
 		>
 			<div class="flex flex-col items-center gap-4 lg:flex-row lg:gap-8">
 				<button
-					onclick={() => goto(ROUTES.account + '/picture')}
+					onclick={() => goto(resolve(ROUTES.account + '/picture'))}
 					class="relative h-24 w-24 shrink-0 transition-transform hover:scale-105"
 					title="Change photo"
 				>
@@ -236,7 +239,7 @@
 			</div>
 
 			<button
-				onclick={() => goto(ROUTES.account + '/edit')}
+				onclick={() => goto(resolve(ROUTES.account + '/edit'))}
 				class="rounded-xl border border-brand-yellow px-6 py-2.5 font-abeezee text-sm font-bold text-brand-yellow italic transition-all hover:bg-brand-yellow hover:text-white"
 			>
 				Edit profile
@@ -244,10 +247,10 @@
 		</div>
 
 		<div class="mx-8 my-4 grid shrink-0 grid-cols-2 gap-4 lg:grid-cols-4">
-			{#each quickActions as action}
+			{#each quickActions as action (action.label)}
 				<button
 					type="button"
-					onclick={() => goto(action.href)}
+					onclick={() => goto(resolve(action.href))}
 					class="flex flex-col items-center gap-3
                  rounded-2xl border border-gray-100 bg-white p-6
                  shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-yellow hover:shadow-md"
@@ -275,7 +278,7 @@
 			<div
 				class="grid grid-cols-1 divide-y divide-gray-100 lg:grid-cols-2 lg:divide-x lg:divide-y-0"
 			>
-				{#each detailRows as row}
+				{#each detailRows as row (row.label)}
 					<div class="flex items-center justify-between gap-4 px-6 py-4">
 						<span class="shrink-0 text-sm text-brand-gray-dark italic"
 							>{row.label}</span
@@ -294,10 +297,10 @@
 			</p>
 
 			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-x-8">
-				{#each menuItems as item}
+				{#each menuItems as item (item.label)}
 					<button
 						type="button"
-						onclick={() => goto(item.href)}
+						onclick={() => goto(resolve(item.href))}
 						class="flex w-full cursor-pointer items-center gap-4 border-b border-gray-100
                  bg-transparent py-3.5 transition-all duration-150
                  hover:-mx-1 hover:rounded-md hover:bg-gray-200 hover:px-1"
@@ -306,7 +309,7 @@
 							<Icon name={item.icon} width="20" height="20" color="#BDBDBD" />
 						</div>
 						<span
-							class="flex-1 text-left text-[15px] font-normal text-brand-dark italic"
+							class="text-md flex-1 text-left font-normal text-brand-dark italic"
 						>
 							{item.label}
 						</span>
@@ -340,9 +343,9 @@
 		<div
 			class="mx-8 my-4 rounded-[7px] border border-red-200 bg-red-50 px-4 py-3"
 		>
-			<p class="text-[12px] text-red-500 italic">
+			<p class="text-sm text-red-500 italic">
 				Unable to load account data. Please
-				<a href={ROUTES.signIn} class="underline">sign in again</a>.
+				<a href={resolve(ROUTES.signIn)} class="underline">sign in again</a>.
 			</p>
 		</div>
 	{/if}

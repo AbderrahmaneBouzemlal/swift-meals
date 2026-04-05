@@ -1,12 +1,12 @@
 from rest_framework_nested import routers
-from .views import MealSlotViewSet, MenuItemViewSet, OrderViewSet
+from .views import MenuViewSet, MenuItemViewSet, MealSlotViewSet, OrderViewSet
 
 router = routers.DefaultRouter()
-router.register("slots",  MealSlotViewSet, basename="slots")
-router.register("orders", OrderViewSet,    basename="orders")
+router.register("menus", MenuViewSet, basename="menus")
+router.register("slots", MealSlotViewSet, basename="slots")
+router.register("orders", OrderViewSet, basename="orders")
 
-# nested: /slots/{slot_pk}/menu-items/
-slots_router = routers.NestedDefaultRouter(router, "slots", lookup="slot")
-slots_router.register("menu-items", MenuItemViewSet, basename="slot-menu-items")
+menus_router = routers.NestedDefaultRouter(router, "menus", lookup="menu")
+menus_router.register("items", MenuItemViewSet, basename="menu-items")
 
-urlpatterns = router.urls + slots_router.urls
+urlpatterns = router.urls + menus_router.urls

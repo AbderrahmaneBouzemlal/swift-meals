@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { createEventDispatcher } from 'svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { setRole } from '$lib/stores/registration.svelte.js';
@@ -9,16 +10,14 @@
 
 	function choose(role) {
 		setRole(role);
-		goto(ROUTES.signUp.account);
+		goto(resolve(ROUTES.signUp.account));
 	}
 </script>
 
 <div class="flex h-full flex-col bg-white">
 	<div class="flex flex-1 flex-col gap-6 overflow-y-auto px-8 pt-4">
 		<div class="text-center">
-			<h1
-				class="m-0 mt-0 mb-1.5 text-[32px] font-normal text-brand-dark italic"
-			>
+			<h1 class="m-0 mt-0 mb-1.5 text-3xl font-normal text-brand-dark italic">
 				I am a...
 			</h1>
 			<p class="text-md m-0 text-brand-gray italic">
@@ -92,12 +91,10 @@
 					</svg>
 				</div>
 				<div class="flex-1">
-					<h2
-						class="m-0 mt-0 mb-1 text-[20px] font-normal text-brand-dark italic"
-					>
+					<h2 class="m-0 mt-0 mb-1 text-xl font-normal text-brand-dark italic">
 						customer
 					</h2>
-					<p class="m-0 text-[12px] leading-[1.4] text-subtext-gray italic">
+					<p class="m-0 text-sm leading-[1.4] text-subtext-gray italic">
 						Order food from your favourite restaurants
 					</p>
 				</div>
@@ -225,12 +222,10 @@
 					</svg>
 				</div>
 				<div class="flex-1">
-					<h2
-						class="m-0 mt-0 mb-1 text-[20px] font-normal text-brand-dark italic"
-					>
+					<h2 class="m-0 mt-0 mb-1 text-xl font-normal text-brand-dark italic">
 						business
 					</h2>
-					<p class="m-0 text-[12px] leading-[1.4] text-subtext-gray italic">
+					<p class="m-0 text-sm leading-[1.4] text-subtext-gray italic">
 						List your business and manage orders
 					</p>
 				</div>

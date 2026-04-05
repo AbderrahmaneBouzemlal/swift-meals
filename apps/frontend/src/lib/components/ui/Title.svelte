@@ -10,7 +10,7 @@
 
 	const sizeClasses = {
 		small: 'text-xl',
-		medium: 'text-[28px]',
+		medium: 'text-2xl',
 		large: 'text-4xl'
 	};
 
