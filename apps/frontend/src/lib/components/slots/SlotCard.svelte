@@ -1,8 +1,9 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { slide } from 'svelte/transition';
+	import { fly, slide } from 'svelte/transition';
 	import Icon from '$lib/components/ui/Icon.svelte';
+	import { flip } from 'svelte/animate';
 	import SlotForm from './SlotForm.svelte';
 	import { formatTime, formatDays } from '$lib/utils/helpers.js';
 
@@ -92,6 +93,9 @@
 		>
 			<input type="hidden" name="id" value={slot.id} />
 			<input type="hidden" name="is_active" value={slot.is_active} />
+			<p class="text-xs text-brand-gray italic">
+				isActive: {slot.is_active ? 'true' : 'false'}
+			</p>
 			<button
 				type="submit"
 				title={slot.is_active ? 'Deactivate' : 'Activate'}

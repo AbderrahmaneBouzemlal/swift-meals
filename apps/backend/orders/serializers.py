@@ -3,7 +3,6 @@ from django.utils import timezone
 from .models import Menu, MealSlot, MenuItem, Order, OrderItem
 
 
-
 class MenuWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
@@ -102,7 +101,8 @@ class MealSlotSerializer(serializers.ModelSerializer):
             "menu_name",
             "menu_items",
             "is_available_today",
-            "orders_today"
+            "orders_today",
+            "is_active",
         ]
         read_only_fields = ["id", "is_available_today", "orders_today", "menu_name"]
 
