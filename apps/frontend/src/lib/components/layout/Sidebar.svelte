@@ -6,7 +6,6 @@
 	import { ROUTES } from '$lib/utils/routes.js';
 	import { resolve } from '$app/paths';
 
-	/** @type {{ role: string }} */
 	let { role } = $props();
 
 	const isBusiness = $derived(role === 'business');
@@ -14,20 +13,37 @@
 	const menuItems = $derived(
 		isBusiness
 			? [
-					{ icon: 'order', label: 'Dashboard', href: ROUTES.dashboard.orders },
+					{
+						icon: 'order',
+						label: 'Dashboard',
+						href: resolve(ROUTES.dashboard.orders)
+					},
 					{
 						icon: 'booking',
 						label: 'Meal Slots',
-						href: ROUTES.dashboard.slots
+						href: resolve(ROUTES.dashboard.slots)
 					},
-					{ icon: 'history', label: 'History', href: ROUTES.dashboard.history },
-					{ icon: 'profile', label: 'Account', href: ROUTES.account }
+					{
+						icon: 'order',
+						label: 'Menues',
+						href: resolve(ROUTES.dashboard.menu.list)
+					},
+					{
+						icon: 'history',
+						label: 'History',
+						href: resolve(ROUTES.dashboard.history)
+					},
+					{ icon: 'profile', label: 'Account', href: resolve(ROUTES.account) }
 				]
 			: [
-					{ icon: 'order', label: 'Browse', href: ROUTES.home },
-					{ icon: 'heart', label: 'Favorites', href: ROUTES.favorites },
-					{ icon: 'history', label: 'Orders', href: ROUTES.orders },
-					{ icon: 'profile', label: 'Account', href: ROUTES.account }
+					{ icon: 'order', label: 'Browse', href: resolve(ROUTES.home) },
+					{
+						icon: 'heart',
+						label: 'Favorites',
+						href: resolve(ROUTES.favorites)
+					},
+					{ icon: 'history', label: 'Orders', href: resolve(ROUTES.orders) },
+					{ icon: 'profile', label: 'Account', href: resolve(ROUTES.account) }
 				]
 	);
 
