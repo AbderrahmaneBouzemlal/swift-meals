@@ -1,11 +1,44 @@
 <script>
+	import DropZone from '$lib/components/DropZone.svelte';
+
 	let {
 		draft = $bindable(),
 		errors = {},
 		action = 'create',
 		oncancel,
-		isSubmitting = false
+		isSubmitting = false,
+		currentImageUrl = null
 	} = $props();
+
+	let fileInput = $state(null);
+	let previewUrl = $state(null);
+
+	$effect(() => {
+		const file = draft.image;
+
+		if (file instanceof File) {
+			const objectUrl = URL.createObjectURL(file);
+			previewUrl = objectUrl;
+
+			return () => URL.revokeObjectURL(objectUrl);
+		}
+
+		previewUrl = currentImageUrl;
+	});
+
+	function handleFileSelect(file) {
+		if (!file || !file.type.startsWith('image/')) return;
+		draft.image = file;
+	}
+
+	function handleFileInputChange(event) {
+		handleFileSelect(event.currentTarget.files?.[0]);
+	}
+
+	function clearImage() {
+		draft.image = null;
+		if (fileInput) fileInput.value = '';
+	}
 </script>
 
 <input type="hidden" name="id" value={draft.id} />
@@ -36,8 +69,11 @@
 <!-- price + availability row -->
 <div class="flex gap-3">
 	<div class="flex flex-1 flex-col gap-1">
-		<label class="text-xs text-brand-gray italic">Price (RM) *</label>
+		<label class="text-xs text-brand-gray italic" for="item-price">
+			Price (RM) *
+		</label>
 		<input
+			id="item-price"
 			name="price"
 			type="number"
 			step="0.01"
@@ -75,19 +111,54 @@
 </div>
 
 <!-- image upload -->
-<div class="flex flex-col gap-1">
-	<label class="text-xs text-brand-gray italic" for="item-image">
-		Item image
-	</label>
+<div class="flex flex-col gap-2">
+	<div class="flex items-end justify-between gap-3">
+		<div>
+			<p class="text-xs text-brand-gray italic">Item image</p>
+			<p class="text-[11px] text-brand-gray/70 italic">
+				Add or replace the cover image for the menu item.
+			</p>
+		</div>
+		{#if draft.image instanceof File}
+			<button
+				type="button"
+				onclick={clearImage}
+				class="text-xs text-red-500 italic hover:underline"
+			>
+				Clear selected image
+			</button>
+		{/if}
+	</div>
+
+	{#if previewUrl}
+		<div class="overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
+			<div class="relative">
+				<img src={previewUrl} alt="" class="h-44 w-full object-cover" />
+				<div
+					class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/45 to-transparent px-3 py-2"
+				>
+					<p class="text-[11px] text-white italic">
+						{draft.image instanceof File ? draft.image.name : 'Current image'}
+					</p>
+				</div>
+			</div>
+		</div>
+	{/if}
+
+	<DropZone {handleFileSelect} {fileInput} />
+
 	<input
-		id="item-image"
+		bind:this={fileInput}
 		type="file"
 		name="image"
 		accept="image/*"
-		class="text-xs text-brand-gray italic file:mr-3 file:rounded-full
-           file:border-0 file:bg-brand-yellow/10 file:px-3 file:py-1
-           file:text-xs file:text-brand-yellow file:italic"
+		class="hidden"
+		onchange={handleFileInputChange}
 	/>
+
+	{#if errors.image}
+		<p class="text-[10px] text-red-500 italic">{errors.image}</p>
+	{/if}
 </div>
 
 <!-- actions -->
