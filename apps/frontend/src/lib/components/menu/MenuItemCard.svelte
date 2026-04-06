@@ -53,59 +53,12 @@
 <InlineCard
 	title={item.name}
 	subtitle="RM {item.price} · {item.is_available ? 'Available' : 'Unavailable'}"
+	image={item.image_url}
 	statusDot={item.is_available ? 'green' : 'gray'}
 	{isExpanded}
 	onExpand={() => (isExpanded ? close() : open())}
 >
-	{#snippet rightSlot()}
-		<div class="flex items-center gap-2">
-			{#if item.image_url}
-				<img
-					src={item.image_url}
-					alt={item.name}
-					class="h-10 w-10 rounded-lg object-cover ring-1 ring-black/5"
-				/>
-			{/if}
-
-			<!-- quick availability toggle -->
-			<form
-				method="POST"
-				action="?/toggleItem"
-				use:enhance={() =>
-					async ({ result }) => {
-						if (result.type === 'success') await invalidateAll();
-					}}
-			>
-				<input type="hidden" name="id" value={item.id} />
-				<input type="hidden" name="is_available" value={item.is_available} />
-				<button
-					type="submit"
-					title={item.is_available ? 'Mark unavailable' : 'Mark available'}
-					class="flex h-6 w-10 shrink-0 items-center rounded-full transition-colors
-               {item.is_available ? 'bg-green-400' : 'bg-gray-200'}"
-				>
-					<span
-						class="h-4 w-4 rounded-full bg-white shadow transition-transform
-                 {item.is_available ? 'translate-x-5' : 'translate-x-1'}"
-					></span>
-				</button>
-			</form>
-		</div>
-	{/snippet}
-
 	{#snippet expandedContent()}
-		<!-- image preview -->
-		{#if item.image_url}
-			<div class="px-4 pt-3">
-				<img
-					src={item.image_url}
-					alt={item.name}
-					class="h-32 w-full rounded-lg object-cover"
-				/>
-			</div>
-		{/if}
-
-		<!-- edit form -->
 		<form
 			method="POST"
 			action="?/upsertItem"

@@ -1,4 +1,5 @@
 <script>
+	import LogoPreview from '$lib/components/LogoPreview.svelte';
 	import DropZone from '$lib/components/DropZone.svelte';
 
 	let {
@@ -131,18 +132,7 @@
 	</div>
 
 	{#if previewUrl}
-		<div class="overflow-hidden rounded-xl border border-gray-100 bg-gray-50">
-			<div class="relative">
-				<img src={previewUrl} alt="" class="h-44 w-full object-cover" />
-				<div
-					class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/45 to-transparent px-3 py-2"
-				>
-					<p class="text-[11px] text-white italic">
-						{draft.image instanceof File ? draft.image.name : 'Current image'}
-					</p>
-				</div>
-			</div>
-		</div>
+		<LogoPreview {previewUrl} Deleteable={false} />
 	{/if}
 
 	<DropZone {handleFileSelect} {fileInput} />

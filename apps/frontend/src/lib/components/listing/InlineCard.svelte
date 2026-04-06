@@ -7,6 +7,7 @@
 	let {
 		id = null,
 		title,
+		image = null,
 		subtitle = '',
 		isExpanded = $bindable(false),
 		statusDot = null,
@@ -33,6 +34,8 @@
 >
 	<!-- header row -->
 	<div class="flex items-center gap-3 px-4 py-3">
+		// remove the a tag and make the whole header a button that toggles the
+		expansion
 		<a
 			href={ROUTES.dashboard.menu.byId(id)}
 			class="flex flex-1 items-center gap-3"
@@ -42,6 +45,15 @@
 					class="h-2 w-2 shrink-0 rounded-full
                {statusDot === 'green' ? 'bg-green-400' : 'bg-gray-300'}"
 				></div>
+			{/if}
+			{#if image}
+				<div class="px-4 pt-3">
+					<img
+						src={image}
+						alt={title}
+						class="h-32 w-full rounded-lg object-cover"
+					/>
+				</div>
 			{/if}
 
 			<!-- title area — tap to expand -->
