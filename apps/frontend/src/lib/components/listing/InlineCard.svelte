@@ -1,4 +1,3 @@
-<!-- src/lib/components/listing/InlineCard.svelte -->
 <script>
 	import { slide } from 'svelte/transition';
 	import Icon from '$lib/components/ui/Icon.svelte';
@@ -7,10 +6,16 @@
 		title,
 		subtitle = '',
 		isExpanded = $bindable(false),
-		statusDot = null, // 'green' | 'gray' | null
-		rightSlot, // snippet: rendered right of title (e.g. toggle switch)
-		expandedContent // snippet: shown when expanded
+		statusDot = null,
+		onExpand = null,
+		rightSlot,
+		expandedContent
 	} = $props();
+
+	function handleToggle() {
+		if (onExpand) onExpand();
+		else isExpanded = !isExpanded;
+	}
 </script>
 
 <div
@@ -31,10 +36,10 @@
 		<!-- title area — tap to expand -->
 		<button
 			type="button"
-			onclick={() => (isExpanded = !isExpanded)}
+			onclick={handleToggle}
 			class="flex flex-1 flex-col gap-0.5 text-left"
 		>
-			<p class="text-[14px] text-brand-dark italic">{title}</p>
+			<p class="text-md text-brand-dark italic">{title}</p>
 			{#if subtitle}
 				<p class="text-sm text-brand-gray italic">{subtitle}</p>
 			{/if}
@@ -48,7 +53,7 @@
 		<!-- chevron -->
 		<button
 			type="button"
-			onclick={() => (isExpanded = !isExpanded)}
+			onclick={handleToggle}
 			class="shrink-0 text-brand-gray transition-transform duration-200
              {isExpanded ? 'rotate-180' : ''}"
 		>

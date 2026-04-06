@@ -25,7 +25,7 @@
 					},
 					{
 						icon: 'order',
-						label: 'Menues',
+						label: 'Menus',
 						href: resolve(ROUTES.dashboard.menu.list)
 					},
 					{

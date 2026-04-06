@@ -10,13 +10,13 @@
 		backUrl,
 		stats = '',
 		showNewForm = $bindable(false),
-		onOpenNew,
+		onOpenNew = null,
 		serverError = null,
 		emptyIcon = 'order',
 		emptyMessage = 'Nothing here yet',
 		isEmpty = false,
-		children, // the list content
-		newFormContent // snippet for the new form
+		children,
+		newFormContent
 	} = $props();
 </script>
 

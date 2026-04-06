@@ -90,11 +90,6 @@
 
 	<ListingSection label="Active" count={activeSlots.length}>
 		{#each activeSlots as slot (slot.id)}
-			<!-- 
-				out: fly upward when leaving active (going to inactive below)
-				in:  fly in from above when coming back to active
-				animate:flip handles reordering within the same list
-			-->
 			<div
 				animate:flip={{ duration: 300 }}
 				in:fly={{ y: -20, duration: 250, delay: 150 }}
