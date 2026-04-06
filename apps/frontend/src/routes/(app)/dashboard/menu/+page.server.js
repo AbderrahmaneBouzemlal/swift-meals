@@ -1,17 +1,28 @@
 import { fail } from '@sveltejs/kit';
 import { ENDPOINTS } from '$lib/utils/endpoints.js';
 import { api } from '$lib/utils/api.js';
+import { ApiError } from '$lib/utils/apiError.js';
 
 export async function load({ cookies }) {
 	const token = cookies.get('access');
-	const res = await api.get(ENDPOINTS.menus.list, { token });
-	if (!res.results) {
+	try {
+		const res = await api.get(ENDPOINTS.menus.list, { token });
+		if (!res?.results) {
+			return {
+				menus: [],
+				error: res?.error || 'Could not load menus'
+			};
+		}
+		return { menus: res.results };
+	} catch (err) {
 		return {
 			menus: [],
-			error: res.error || 'Could not load menus'
+			error:
+				err instanceof ApiError
+					? err.message
+					: 'Could not load menus'
 		};
 	}
-	return { menus: res.results };
 }
 
 export const actions = {
@@ -22,21 +33,33 @@ export const actions = {
 		const is_active = formData.get('is_active') === 'true';
 		const token = cookies.get('access');
 
-		const res = await api.post(
-			ENDPOINTS.menus.list,
-			{ name, description, is_active },
-			{ token }
-		);
+		try {
+			const res = await api.post(
+				ENDPOINTS.menus.list,
+				{ name, description, is_active },
+				{ token }
+			);
 
-		if (!res.ok) {
-			return fail(res.status, {
+			return { success: true, action: 'create', menu: res.results ?? res };
+		} catch (err) {
+			if (err instanceof ApiError) {
+				const status = err.type === 'validation' ? 400 : 500;
+				return fail(status, {
+					action: 'create',
+					errors:
+						err.type === 'validation'
+							? err.fieldErrors
+							: { server: err.message },
+					values: { name, description, is_active }
+				});
+			}
+
+			return fail(500, {
 				action: 'create',
-				errors: res.error,
+				errors: { server: 'Could not create menu' },
 				values: { name, description, is_active }
 			});
 		}
-
-		return { success: true, action: 'create', menu: res.results };
 	},
 
 	delete: async ({ request, cookies }) => {
@@ -44,15 +67,22 @@ export const actions = {
 		const id = formData.get('id');
 		const token = cookies.get('access');
 
-		const res = await api.delete(ENDPOINTS.menus.byId(id), { token });
+		try {
+			await api.delete(ENDPOINTS.menus.byId(id), { token });
+			return { success: true, action: 'delete' };
+		} catch (err) {
+			if (err instanceof ApiError) {
+				const status = err.type === 'validation' ? 400 : 500;
+				return fail(status, {
+					action: 'delete',
+					error: err.message
+				});
+			}
 
-		if (!res.ok) {
-			return fail(res.status, {
+			return fail(500, {
 				action: 'delete',
-				error: res.error || 'Could not delete menu'
+				error: 'Could not delete menu'
 			});
 		}
-
-		return { success: true, action: 'delete' };
 	}
 };

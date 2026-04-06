@@ -328,6 +328,16 @@
 		/>
 		<circle cx="12" cy="11" r="3" stroke={color} stroke-width="2" />
 	</svg>
+{:else if name === 'trash'}
+	<svg {width} {height} viewBox="0 0 24 24" fill="none">
+		<path
+			d="M3 6h18M8 6v12a2 2 0 002 2h4a2 2 0 002-2V6M10 11v6M14 11v6"
+			stroke={color}
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		/>
+	</svg>
 {:else}
 	<svg {width} {height} viewBox="0 0 24 24" fill="none">
 		<rect

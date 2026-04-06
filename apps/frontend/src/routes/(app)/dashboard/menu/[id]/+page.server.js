@@ -1,6 +1,7 @@
 import { error, fail } from '@sveltejs/kit';
 import { ENDPOINTS } from '$lib/utils/endpoints.js';
 import { api } from '$lib/utils/api.js';
+import { ApiError } from '$lib/utils/apiError.js';
 
 export async function load({ params, cookies }) {
 	const token = cookies.get('access');
@@ -27,15 +28,30 @@ export const actions = {
 		const is_active = formData.get('is_active') === 'true';
 		const token = cookies.get('access');
 
-		const res = await api.patch(
-			ENDPOINTS.menus.byId(params.id),
-			{ name, description, is_active },
-			{ token }
-		);
+		try {
+			const res = await api.patch(
+				ENDPOINTS.menus.byId(params.id),
+				{ name, description, is_active },
+				{ token }
+			);
 
-		if (!res.ok)
-			return fail(res.status, { action: 'updateMenu', errors: res.error });
-		return { success: true, action: 'updateMenu', menu: res };
+			return { success: true, action: 'updateMenu', menu: res };
+		} catch (err) {
+			if (err instanceof ApiError) {
+				return fail(err.type === 'validation' ? 400 : 500, {
+					action: 'updateMenu',
+					errors:
+						err.type === 'validation'
+							? err.fieldErrors
+							: { server: err.message }
+				});
+			}
+
+			return fail(500, {
+				action: 'updateMenu',
+				errors: { server: 'Could not update menu' }
+			});
+		}
 	},
 
 	upsertItem: async ({ request, params, cookies }) => {
@@ -59,13 +75,28 @@ export const actions = {
 			? ENDPOINTS.menus.itemById(params.id, itemId)
 			: ENDPOINTS.menus.items(params.id);
 
-		const res = itemId
-			? await api.patch(url, payload, { token })
-			: await api.post(url, payload, { token });
+		try {
+			const res = itemId
+				? await api.patch(url, payload, { token })
+				: await api.post(url, payload, { token });
 
-		if (!res.ok)
-			return fail(res.status, { action: 'upsertItem', errors: res.error });
-		return { success: true, action: 'upsertItem', item: res };
+			return { success: true, action: 'upsertItem', item: res };
+		} catch (err) {
+			if (err instanceof ApiError) {
+				return fail(err.type === 'validation' ? 400 : 500, {
+					action: 'upsertItem',
+					errors:
+						err.type === 'validation'
+							? err.fieldErrors
+							: { server: err.message }
+				});
+			}
+
+			return fail(500, {
+				action: 'upsertItem',
+				errors: { server: 'Could not save item' }
+			});
+		}
 	},
 
 	deleteItem: async ({ request, params, cookies }) => {
@@ -73,17 +104,24 @@ export const actions = {
 		const itemId = formData.get('id');
 		const token = cookies.get('access');
 
-		const res = await api.delete(ENDPOINTS.menus.itemById(params.id, itemId), {
-			token
-		});
+		try {
+			await api.delete(ENDPOINTS.menus.itemById(params.id, itemId), {
+				token
+			});
 
-		if (!res.ok) {
-			return fail(res.status, {
+			return { success: true, action: 'deleteItem' };
+		} catch (err) {
+			if (err instanceof ApiError) {
+				return fail(err.type === 'validation' ? 400 : 500, {
+					action: 'deleteItem',
+					error: err.message
+				});
+			}
+
+			return fail(500, {
 				action: 'deleteItem',
-				error: res.error || 'Could not delete item'
+				error: 'Could not delete item'
 			});
 		}
-
-		return { success: true, action: 'deleteItem' };
 	}
 };
