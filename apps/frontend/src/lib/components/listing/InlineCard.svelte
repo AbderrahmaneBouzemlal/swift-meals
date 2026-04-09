@@ -1,7 +1,7 @@
 <script>
 	import { slide } from 'svelte/transition';
 	import Icon from '$lib/components/ui/Icon.svelte';
-	import DeleteSection from '../DeleteSection.svelte';
+	import DeleteSection from '$lib/components/DeleteSection.svelte';
 	import { ROUTES } from '$lib/utils/routes.js';
 
 	let {
@@ -9,7 +9,7 @@
 		title,
 		image = null,
 		subtitle = '',
-		isExpanded = $bindable(false),
+		isExpanded = false,
 		statusDot = null,
 		onExpand = null,
 		deletable = false,
@@ -27,7 +27,7 @@
 </script>
 
 <div
-	class="overflow-hidden rounded-xl border transition-all duration-200
+	class="rounded-xl border transition-all duration-200
          {isExpanded
 		? 'border-brand-yellow shadow-sm'
 		: 'border-gray-100 bg-gray-50'}"

@@ -78,7 +78,7 @@
 </script>
 
 {#snippet sectionHeader(title)}
-	<div class="border-b border-[#E8E8E8] bg-[#F6F6F6] px-4 py-2">
+	<div class="border-b border-brand-gray-light bg-[#F6F6F6] px-4 py-2">
 		<p
 			class="text-xs font-semibold tracking-wide text-brand-gray uppercase italic"
 		>
@@ -110,7 +110,7 @@
 	<StepTracker {steps} currentStep={steps.length - 1} />
 
 	<div class="flex flex-1 flex-col gap-4 overflow-y-auto px-8 pb-4">
-		<div class="overflow-hidden rounded-lg border border-[#E8E8E8]">
+		<div class="overflow-hidden rounded-lg border border-brand-gray-light">
 			{@render sectionHeader('Account')}
 			<div class="divide-y divide-[#F6F6F6]">
 				{#each accountFields as field}
@@ -124,7 +124,7 @@
 				<LogoPreview previewUrl={logoPreview} Deleteable={false} />
 			{/if}
 
-			<div class="overflow-hidden rounded-lg border border-[#E8E8E8]">
+			<div class="overflow-hidden rounded-lg border border-brand-gray-light">
 				{@render sectionHeader('Business Details')}
 				<div class="divide-y divide-[#F6F6F6]">
 					{#each businessFields as field}
@@ -136,7 +136,7 @@
 			{#if profilePicturePreview}
 				<LogoPreview previewUrl={profilePicturePreview} Deleteable={false} />
 			{/if}
-			<div class="overflow-hidden rounded-lg border border-[#E8E8E8]">
+			<div class="overflow-hidden rounded-lg border border-brand-gray-light">
 				{@render sectionHeader('customer Profile')}
 				<div class="divide-y divide-[#F6F6F6]">
 					{#each customerFields as field}

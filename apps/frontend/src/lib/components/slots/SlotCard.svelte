@@ -1,11 +1,10 @@
-<!-- src/lib/components/slots/SlotCard.svelte -->
 <script>
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { slide } from 'svelte/transition';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import InlineCard from '$lib/components/listing/InlineCard.svelte';
 	import SlotForm from '$lib/components/slots/SlotForm.svelte';
+	import DeleteSection from '$lib/components/DeleteSection.svelte';
 	import { formatTime, formatDays } from '$lib/utils/helpers.js';
 
 	let {
@@ -19,7 +18,7 @@
 	let draft = $state(toDraft(slot));
 	let isSubmitting = $state(false);
 
-	let isExpanded = $derived(activeSlotId === slot.id);
+	const isExpanded = $derived(activeSlotId === slot.id);
 	const isDirty = $derived(
 		JSON.stringify(draft) !== JSON.stringify(toDraft(slot))
 	);
@@ -31,10 +30,10 @@
 			end_time: s.end_time,
 			repeat: s.repeat,
 			days: [...(s.days ?? [])].sort((a, b) => a - b),
-			max_orders: s.max_orders ?? '',
+			max_orders: s.max_orders ?? null,
 			order_cutoff: s.order_cutoff ?? 30,
 			is_active: s.is_active,
-			menu_id: s.menu_id ?? ''
+			menu_id: s.menu_id ?? null
 		};
 	}
 
@@ -57,7 +56,7 @@
             · {formatDays(slot.days, slot.repeat)}
             {slot.max_orders ? `· max ${slot.max_orders}` : ''}"
 	statusDot={slot.is_active ? 'green' : 'gray'}
-	bind:isExpanded
+	{isExpanded}
 	onExpand={() => (isExpanded ? close() : open())}
 >
 	{#snippet rightSlot()}
@@ -86,7 +85,6 @@
 	{/snippet}
 
 	{#snippet expandedContent()}
-		<!-- edit form -->
 		<form
 			method="POST"
 			action="?/update"

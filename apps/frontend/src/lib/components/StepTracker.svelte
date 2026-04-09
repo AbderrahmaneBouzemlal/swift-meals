@@ -30,7 +30,7 @@
 		</div>
 
 		{#if i < steps.length - 1}
-			<div class="h-px flex-1 bg-[#E8E8E8]"></div>
+			<div class="h-px flex-1 bg-brand-gray-light"></div>
 		{/if}
 	{/each}
 </div>

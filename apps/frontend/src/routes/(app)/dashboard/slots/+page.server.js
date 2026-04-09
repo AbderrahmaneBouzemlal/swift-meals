@@ -16,9 +16,17 @@ export async function load({ locals, cookies }) {
 			api.get(ENDPOINTS.slots.list, { token: access }),
 			api.get(ENDPOINTS.menus.list, { token: access })
 		]);
-		return { slots, menus, user: locals.user };
+		return {
+			slots: slots.results,
+			menus: menus.results,
+			user: locals.user
+		};
 	} catch {
-		return { slots: [], menus: { results: [] }, user: locals.user };
+		return {
+			slots: { results: [] },
+			menus: { results: [] },
+			user: locals.user
+		};
 	}
 }
 
@@ -44,9 +52,15 @@ export const actions = {
 		const id = form.get('id');
 
 		try {
-			await api.patch(ENDPOINTS.slots.byId(id), buildSlotPayload(form), {
-				token: access
-			});
+			let response = await api.patch(
+				ENDPOINTS.slots.byId(id),
+				buildSlotPayload(form),
+				{
+					token: access
+				}
+			);
+			console.log(response);
+
 			return { success: true, action: 'update' };
 		} catch (err) {
 			return handleError(err, 'update');
@@ -87,6 +101,7 @@ export const actions = {
 
 function buildSlotPayload(form) {
 	const repeat = form.get('repeat');
+	console.log(form.get('menu_id'));
 
 	return {
 		name: form.get('name'),
@@ -98,7 +113,7 @@ function buildSlotPayload(form) {
 		max_orders: form.get('max_orders') || null,
 		order_cutoff: Number(form.get('order_cutoff')) || 30,
 		is_active: form.get('is_active') === 'true',
-		menu: form.get('menu_id') || null
+		menu_id: form.get('menu_id') || null
 	};
 }
 

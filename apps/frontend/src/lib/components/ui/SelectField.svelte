@@ -31,7 +31,7 @@
 		class="flex w-full items-center justify-between rounded-lg border
            bg-[#F6F6F6] px-4 py-3.5 font-abeezee text-base italic
            transition-colors duration-200 outline-none
-           {open ? 'border-brand-yellow bg-white' : 'border-[#E8E8E8]'}
+           {open ? 'border-brand-yellow bg-white' : 'border-brand-gray-light'}
            {error ? 'border-red-400 ring-2 ring-red-400' : ''}
            {value ? 'text-brand-dark' : 'text-brand-gray'}"
 	>
@@ -57,8 +57,10 @@
 
 	{#if open}
 		<div
-			class="absolute top-[calc(100%+4px)] left-0 z-50 w-full overflow-hidden
-                rounded-lg border border-[#E8E8E8] bg-white shadow-lg"
+			class="absolute top-[calc(100%+4px)] left-0 z-50 max-h-52
+             w-full overflow-y-auto rounded-lg border border-brand-gray-light
+             bg-white shadow-lg"
+			max-height="208"
 		>
 			{#each normalised as option}
 				<button

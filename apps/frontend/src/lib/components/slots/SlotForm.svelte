@@ -1,6 +1,7 @@
 <script>
 	import { slide } from 'svelte/transition';
 	import { REPEAT_OPTIONS, DAYS } from '$lib/utils/constants.js';
+	import SelectField from '$lib/components/ui/SelectField.svelte';
 
 	let {
 		draft = $bindable(),
@@ -142,22 +143,15 @@
 	<label class="text-sm text-brand-gray italic" for="slot-menu">
 		Menu to serve *
 	</label>
-	<select
-		id="slot-menu"
+	<SelectField
 		name="menu_id"
 		bind:value={draft.menu_id}
-		class="text-md h-11 w-full rounded-lg border bg-gray-50 px-3
-           font-abeezee text-brand-dark italic outline-none
-           focus:border-brand-yellow focus:bg-white
-           {errors.menu
-			? 'border-red-400 ring-1 ring-red-400'
-			: 'border-gray-200'}"
-	>
-		<option value={null} disabled>Select a menu</option>
-		{#each menus as menu (menu.id)}
-			<option value={menu.id}>{menu.name}</option>
-		{/each}
-	</select>
+		options={menus.map((m) => ({ value: m.id, label: m.name }))}
+	/>
+	<input type="hidden" name="menu_id" value={draft.menu_id} />
+	{#if errors.menu_id}
+		<p class="text-xs text-red-500 italic">{errors.menu_id}</p>
+	{/if}
 	{#if errors.menu}
 		<p class="text-xs text-red-500 italic">{errors.menu}</p>
 	{/if}

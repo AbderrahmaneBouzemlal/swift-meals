@@ -33,7 +33,7 @@
 <div>
 	<div
 		class="flex min-h-13 w-full flex-wrap items-center gap-1.5 rounded-lg
-               border border-[#E8E8E8] bg-[#F6F6F6] px-3 py-2 transition-colors
+               border border-brand-gray-light bg-[#F6F6F6] px-3 py-2 transition-colors
                duration-200 focus-within:border-brand-yellow focus-within:bg-white"
 	>
 		{#each tags as tag}

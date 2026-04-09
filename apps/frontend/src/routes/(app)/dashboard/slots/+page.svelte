@@ -12,7 +12,8 @@
 
 	let { data, form } = $props();
 
-	const slots = $derived(data.slots?.results ?? []);
+	const slots = $derived(data.slots ?? []);
+	console.log(slots);
 	const activeSlots = $derived(slots.filter((s) => s.is_active));
 	const inactiveSlots = $derived(slots.filter((s) => !s.is_active));
 
@@ -31,6 +32,7 @@
 			days: [0, 1, 2, 3, 4],
 			max_orders: '',
 			order_cutoff: 30,
+			menu_id: null,
 			is_active: true
 		};
 	}
@@ -95,7 +97,12 @@
 				in:fly={{ y: -20, duration: 250, delay: 150 }}
 				out:fly={{ y: 20, duration: 200 }}
 			>
-				<SlotCard {slot} formErrors={form?.errors ?? {}} bind:activeSlotId />
+				<SlotCard
+					{slot}
+					formErrors={form?.errors ?? {}}
+					bind:activeSlotId
+					menus={data.menus}
+				/>
 			</div>
 		{/each}
 	</ListingSection>
@@ -107,7 +114,12 @@
 				in:fly={{ y: 20, duration: 250, delay: 150 }}
 				out:fly={{ y: -20, duration: 200 }}
 			>
-				<SlotCard {slot} formErrors={form?.errors ?? {}} bind:activeSlotId />
+				<SlotCard
+					{slot}
+					formErrors={form?.errors ?? {}}
+					bind:activeSlotId
+					menus={data.menus}
+				/>
 			</div>
 		{/each}
 	</ListingSection>

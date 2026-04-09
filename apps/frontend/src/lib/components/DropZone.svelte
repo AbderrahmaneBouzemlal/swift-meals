@@ -15,7 +15,7 @@
                  border-2 border-dashed py-7 transition-colors duration-200
                  {isDragging
 		? 'border-brand-yellow bg-brand-yellow-lighter'
-		: 'border-[#E8E8E8] bg-[#F6F6F6] hover:border-brand-yellow hover:bg-brand-yellow-lighter'}"
+		: 'border-brand-gray-light bg-[#F6F6F6] hover:border-brand-yellow hover:bg-brand-yellow-lighter'}"
 	onclick={() => fileInput?.click()}
 	ondragover={(e) => {
 		e.preventDefault();

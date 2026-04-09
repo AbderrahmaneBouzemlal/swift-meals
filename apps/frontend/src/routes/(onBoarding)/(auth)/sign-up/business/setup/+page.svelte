@@ -115,7 +115,7 @@
 					placeholder="Tell customers about your restaurant, specialties, opening hours..."
 					rows="4"
 					maxlength="500"
-					class="w-full resize-none rounded-lg border border-[#E8E8E8] bg-[#F6F6F6]
+					class="w-full resize-none rounded-lg border border-brand-gray-light bg-[#F6F6F6]
                  px-4 py-3 font-abeezee text-base text-brand-dark italic transition-colors
                  duration-200 outline-none placeholder:text-brand-gray
                  focus:border-brand-yellow focus:bg-white"
