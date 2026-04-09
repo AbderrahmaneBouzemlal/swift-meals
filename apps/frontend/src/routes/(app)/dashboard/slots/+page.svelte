@@ -13,7 +13,6 @@
 	let { data, form } = $props();
 
 	const slots = $derived(data.slots ?? []);
-	console.log(slots);
 	const activeSlots = $derived(slots.filter((s) => s.is_active));
 	const inactiveSlots = $derived(slots.filter((s) => !s.is_active));
 

@@ -63,7 +63,6 @@
 				isSubmitting = true;
 				return async ({ result }) => {
 					isSubmitting = false;
-					console.log('Form submission result:', result);
 					closeNew();
 					await invalidateAll();
 				};

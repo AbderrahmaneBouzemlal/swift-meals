@@ -59,7 +59,6 @@ export const actions = {
 					token: access
 				}
 			);
-			console.log(response);
 
 			return { success: true, action: 'update' };
 		} catch (err) {
@@ -101,7 +100,6 @@ export const actions = {
 
 function buildSlotPayload(form) {
 	const repeat = form.get('repeat');
-	console.log(form.get('menu_id'));
 
 	return {
 		name: form.get('name'),
