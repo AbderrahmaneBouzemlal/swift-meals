@@ -102,10 +102,6 @@
 
 	<ListingSection label="Inactive" count={inactiveSlots.length}>
 		{#each inactiveSlots as slot (slot.id)}
-			<!--
-      			out: fly downward when leaving inactive (going back up to active)
-      			in:  fly in from below when arriving in inactive
-   	 		-->
 			<div
 				animate:flip={{ duration: 300 }}
 				in:fly={{ y: 20, duration: 250, delay: 150 }}

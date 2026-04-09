@@ -13,6 +13,8 @@
 	import NewFormHeader from '$lib/components/listing/NewFormHeader.svelte';
 	import ListingSection from '$lib/components/listing/ListingSection.svelte';
 	import { fly } from 'svelte/transition';
+	import { goto } from '$app/navigation';
+
 	let { data, form } = $props();
 
 	const menus = $derived(data.menus ?? []);
@@ -74,9 +76,11 @@
 	<ListingSection label="Active" count={activeMenus.length}>
 		<div class="flex flex-col gap-3">
 			{#each menus as menu (menu.id)}
-				<div
+				<button
+					type="button"
 					in:fly={{ y: -20, duration: 250, delay: 150 }}
 					out:fly={{ y: 20, duration: 200 }}
+					onclick={() => goto(ROUTES.dashboard.menu.byId(menu.id))}
 				>
 					<InlineCard
 						id={menu.id}
@@ -88,7 +92,7 @@
 						deletable={true}
 						{isDeleting}
 					/>
-				</div>
+				</button>
 			{/each}
 		</div>
 	</ListingSection>
