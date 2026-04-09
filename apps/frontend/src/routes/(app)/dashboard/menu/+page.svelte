@@ -14,6 +14,7 @@
 	import ListingSection from '$lib/components/listing/ListingSection.svelte';
 	import { fly } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import DeleteSection from '$lib/components/DeleteSection.svelte';
 
 	let { data, form } = $props();
 
@@ -75,23 +76,33 @@
 	<ListingSection label="Active" count={activeMenus.length}>
 		<div class="flex flex-col gap-3">
 			{#each menus as menu (menu.id)}
-				<button
-					type="button"
+				<div
 					in:fly={{ y: -20, duration: 250, delay: 150 }}
 					out:fly={{ y: 20, duration: 200 }}
-					onclick={() => goto(ROUTES.dashboard.menu.byId(menu.id))}
 				>
-					<InlineCard
+					<button
+						type="button"
+						onclick={() => goto(ROUTES.dashboard.menu.byId(menu.id))}
+					>
+						<InlineCard
+							id={menu.id}
+							title={menu.name}
+							subtitle="{menu.items_count} items · {menu.is_active
+								? 'Active'
+								: 'Inactive'}"
+							statusDot={menu.is_active ? 'green' : 'grey'}
+							{isDeleting}
+						/>
+					</button>
+					<DeleteSection
 						id={menu.id}
-						title={menu.name}
-						subtitle="{menu.items_count} items · {menu.is_active
-							? 'Active'
-							: 'Inactive'}"
-						statusDot={menu.is_active ? 'green' : 'grey'}
-						deletable={true}
-						{isDeleting}
+						name="menu"
+						isDeleting={false}
+						onclose={() => {
+							isDeleting = true;
+						}}
 					/>
-				</button>
+				</div>
 			{/each}
 		</div>
 	</ListingSection>
