@@ -6,11 +6,15 @@ from .views import (
     UserLoginView,
     UserLogoutView,
     ProfileViewSet,
+    CuisineViewSet,
+    PickupLocationViewSet,
 )
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r"profile", ProfileViewSet, basename="profile")
+router.register(r"cuisines", CuisineViewSet, basename="cuisine")
+router.register(r"pickup-locations", PickupLocationViewSet, basename="pickup-location")
 
 
 urlpatterns = [

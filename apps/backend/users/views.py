@@ -16,8 +16,10 @@ from .serializers import (
     BusinessProfileSerializer,
     CustomerPictureSerializer,
     RestaurantLogoSerializer,
+    CuisineSerializer,
+    PickupLocationSerializer,
 )
-from .models import User, CustomerProfile, BusinessProfile
+from .models import User, CustomerProfile, BusinessProfile, Cuisine, PickupLocation
 
 
 class UserRegistrationView(APIView):
@@ -161,3 +163,15 @@ class ProfileViewSet(viewsets.GenericViewSet):
                 "url": self._picture_url(request, field),
             }
         )
+
+
+class CuisineViewSet(viewsets.ModelViewSet):
+    queryset = Cuisine.objects.all()
+    serializer_class = CuisineSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class PickupLocationViewSet(viewsets.ModelViewSet):
+    queryset = PickupLocation.objects.all()
+    serializer_class = PickupLocationSerializer
+    permission_classes = [IsAuthenticated]

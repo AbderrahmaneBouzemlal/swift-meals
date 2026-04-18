@@ -3,7 +3,7 @@ from django.contrib.auth.models import update_last_login
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, CustomerProfile, BusinessProfile
+from .models import User, CustomerProfile, BusinessProfile, Cuisine, PickupLocation
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -156,11 +156,24 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
+        instance.user.save()
         instance.save()
         return instance
 
 
 class BusinessProfileSerializer(serializers.ModelSerializer):
+    cuisines = serializers.SlugRelatedField(
+        many=True,
+        read_only=False,
+        slug_field="name",
+        queryset=Cuisine.objects.filter(is_active=True),
+    )
+    pickup_locations = serializers.SlugRelatedField(
+        many=True,
+        read_only=False,
+        slug_field="name",
+        queryset=PickupLocation.objects.filter(is_active=True),
+    )
     email = serializers.EmailField(source="user.email", read_only=True)
     owner_name = serializers.CharField(source="user.name", read_only=True)
     logo_url = serializers.SerializerMethodField()
@@ -183,12 +196,12 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
             "location",
             "business_type",
             "description",
-            "cuisine_type",
             "phone_number",
             "logo",
             "logo_url",
             "ssm_registration",
             "pickup_locations",
+            "cuisines",
             "is_live",
         ]
         read_only_fields = ["id", "email", "owner_name"]
@@ -204,3 +217,16 @@ class RestaurantLogoSerializer(serializers.ModelSerializer):
     class Meta:
         model = BusinessProfile
         fields = ["logo"]
+
+
+class CuisineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cuisine
+        fields = "__all__"
+        read_only_fields = ["id", "slug"]
+
+
+class PickupLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PickupLocation
+        fields = "__all__"
