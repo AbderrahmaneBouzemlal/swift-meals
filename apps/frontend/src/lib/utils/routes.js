@@ -34,7 +34,7 @@ export const ROUTES = {
 };
 
 export function reviewBackRoute(role) {
-	return role === 'business'
+	return role === 'BUSINESS'
 		? ROUTES.signUp.business.setup
 		: ROUTES.signUp.customer.profile;
 }

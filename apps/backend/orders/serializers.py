@@ -282,7 +282,6 @@ class OrderStatusSerializer(serializers.ModelSerializer):
 
         if value not in allowed:
             raise serializers.ValidationError(
-                f"Cannot transition from '{current}' to '{value}'. "
-                f"Allowed: {allowed}"
+                f"Cannot transition from '{current}' to '{value}'. Allowed: {allowed}"
             )
         return value

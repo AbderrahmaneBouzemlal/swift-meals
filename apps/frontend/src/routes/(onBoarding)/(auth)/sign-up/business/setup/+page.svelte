@@ -16,7 +16,7 @@
 	import TagInput from '$lib/components/ui/TagInput.svelte';
 
 	onMount(() => {
-		if (registration.role !== 'business') {
+		if (registration.role !== 'BUSINESS') {
 			toastStore.error('Please start sign-up and choose your role first.');
 			goto(resolve(ROUTES.signUp.chooseRole));
 		}

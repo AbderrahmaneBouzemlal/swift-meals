@@ -6,7 +6,7 @@ export async function registerCustomer(data) {
 		email: data.email,
 		name: data.name,
 		password: data.password,
-		role: data.role || 'customer'
+		role: data.role || 'CUSTOMER'
 	});
 	return { access: response.access, refresh: response.refresh };
 }
@@ -22,7 +22,7 @@ export async function setUpProfile(data, token) {
 		{
 			phone_number: data.phone_number,
 			gender: data.gender,
-			default_pickup_location: data.default_pickup_location
+			default_pickup_location: data.default_pickup_location,
 		},
 		{ token }
 	);

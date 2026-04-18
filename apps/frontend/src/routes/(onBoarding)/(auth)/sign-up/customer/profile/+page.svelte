@@ -17,7 +17,7 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		if (registration.role !== 'customer') {
+		if (registration.role !== 'CUSTOMER') {
 			toastStore.error('Please start sign-up and choose your role first.');
 			goto(resolve(ROUTES.signUp.chooseRole));
 		}

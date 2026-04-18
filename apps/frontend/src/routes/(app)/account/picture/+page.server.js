@@ -37,7 +37,7 @@ export const actions = {
 			const formData = new FormData();
 			// field name matches what Django expects per role
 			const fieldName =
-				locals.user.role?.toLowerCase() === 'business'
+				locals.user.role?.toLowerCase() === 'BUSINESS'
 					? 'logo'
 					: 'profile_picture';
 

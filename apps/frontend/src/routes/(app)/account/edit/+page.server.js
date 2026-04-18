@@ -18,7 +18,7 @@ export const actions = {
 		const role = locals.user?.role?.toLowerCase();
 
 		try {
-			if (role === 'business') {
+			if (role === 'BUSINESS') {
 				await api.patch(
 					ENDPOINTS.profile.business,
 					{

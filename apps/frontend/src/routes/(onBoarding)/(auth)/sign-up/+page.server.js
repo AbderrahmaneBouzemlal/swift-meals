@@ -13,17 +13,16 @@ import {
 export const actions = {
 	default: async ({ request, cookies, url }) => {
 		const form = await request.formData();
-
+		console.log(form.get('role'));
 		const data = {
 			name: String(form.get('name') || '').trim(),
 			email: String(form.get('email') || '').trim(),
 			password: String(form.get('password') || ''),
-			role: String(form.get('role') || '')
-				.trim()
-				.toLowerCase()
+			role: String(form.get('role')).trim()
 		};
 
-		if (!['customer', 'business'].includes(data.role)) {
+		if (!['CUSTOMER', 'BUSINESS'].includes(data.role)) {
+			console.log(data.role);
 			return fail(400, {
 				errors: { role: 'Please choose a valid account type.' }
 			});
@@ -31,7 +30,7 @@ export const actions = {
 
 		try {
 			const tokens =
-				data.role === 'business'
+				data.role === 'BUSINESS'
 					? await registerBusiness(data)
 					: await registerCustomer(data);
 
@@ -63,7 +62,7 @@ export const actions = {
 		}
 
 		const next =
-			data.role === 'business'
+			data.role === 'BUSINESS'
 				? ROUTES.signUp.business.details
 				: ROUTES.signUp.customer.profile;
 

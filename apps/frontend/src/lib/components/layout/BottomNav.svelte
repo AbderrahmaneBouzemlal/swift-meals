@@ -5,11 +5,10 @@
 	import { ROUTES } from '$lib/utils/routes.js';
 	import { resolve } from '$app/paths';
 
-
 	/** @type {{ role: string }} */
 	let { role } = $props();
 
-	const isBusiness = $derived(role === 'business');
+	const isBusiness = $derived(role === 'BUSINESS');
 
 	const menuItems = $derived(
 		isBusiness

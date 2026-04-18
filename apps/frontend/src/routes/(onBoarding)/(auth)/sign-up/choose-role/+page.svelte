@@ -5,6 +5,7 @@
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { setRole } from '$lib/stores/registration.svelte.js';
 	import { ROUTES } from '$lib/utils/routes.js';
+	import { registration } from '$lib/stores/registration.svelte.js';
 
 	let selected = null;
 
@@ -28,10 +29,10 @@
 		<div class="flex flex-col gap-0">
 			<button
 				class="relative flex w-full cursor-pointer items-center gap-4 rounded-[14px] border-2 border-transparent bg-brand-light p-5 text-left transition-all duration-[0.25s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 hover:border-brand-yellow hover:bg-white hover:shadow-[0_4px_20px_rgba(252,189,11,0.2)]
-				{selected === 'customer'
+				{selected === 'CUSTOMER'
 					? 'scale-[1.01] border-brand-yellow! bg-white! shadow-[0_6px_24px_rgba(252,189,11,0.25)]'
 					: ''}"
-				onclick={() => choose('customer')}
+				onclick={() => choose('CUSTOMER')}
 			>
 				<div
 					class="flex h-18 w-18 shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
@@ -100,7 +101,7 @@
 				</div>
 				<div
 					class="absolute top-3 right-9 origin-center transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]
-					{selected === 'customer' ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}"
+					{selected === 'CUSTOMER' ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}"
 				>
 					<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
 						<circle cx="10" cy="10" r="10" fill="#FCBD0B" />
@@ -135,10 +136,10 @@
 
 			<button
 				class="relative flex w-full cursor-pointer items-center gap-4 rounded-[14px] border-2 border-transparent bg-brand-light p-5 text-left transition-all duration-[0.25s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 hover:border-brand-yellow hover:bg-white hover:shadow-[0_4px_20px_rgba(252,189,11,0.2)]
-				{selected === 'business'
+				{selected === 'BUSINESS'
 					? 'scale-[1.01] border-brand-yellow! bg-white! shadow-[0_6px_24px_rgba(252,189,11,0.25)]'
 					: ''}"
-				onclick={() => choose('business')}
+				onclick={() => choose('BUSINESS')}
 			>
 				<div
 					class="flex h-18 w-18 shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
@@ -231,7 +232,7 @@
 				</div>
 				<div
 					class="absolute top-3 right-9 origin-center transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]
-					{selected === 'business' ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}"
+					{selected === 'BUSINESS' ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}"
 				>
 					<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
 						<circle cx="10" cy="10" r="10" fill="#FCBD0B" />

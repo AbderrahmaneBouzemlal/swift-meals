@@ -5,40 +5,66 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('orders', '0001_initial'),
-        ('users', '0006_businessprofile_is_live_and_more'),
+        ("orders", "0001_initial"),
+        ("users", "0006_businessprofile_is_live_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='menuitem',
-            name='slot',
+            model_name="menuitem",
+            name="slot",
         ),
         migrations.CreateModel(
-            name='Menu',
+            name="Menu",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('description', models.TextField(blank=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('business', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='menus', to='users.businessprofile')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("description", models.TextField(blank=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "business",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="menus",
+                        to="users.businessprofile",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-created_at'],
+                "ordering": ["-created_at"],
             },
         ),
         migrations.AddField(
-            model_name='mealslot',
-            name='menu',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='slots', to='orders.menu'),
+            model_name="mealslot",
+            name="menu",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="slots",
+                to="orders.menu",
+            ),
         ),
         migrations.AddField(
-            model_name='menuitem',
-            name='menu',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='items', to='orders.menu'),
+            model_name="menuitem",
+            name="menu",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="items",
+                to="orders.menu",
+            ),
         ),
     ]

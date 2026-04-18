@@ -9,7 +9,7 @@
 
 	const user = $derived(data?.user ?? null);
 	const role = $derived((user?.role ?? '').toLowerCase());
-	const isBusiness = $derived(role === 'business');
+	const isBusiness = $derived(role === 'BUSINESS');
 	const customerProfile = $derived(user?.customer_profile ?? {});
 	const businessProfile = $derived(user?.business_profile ?? {});
 

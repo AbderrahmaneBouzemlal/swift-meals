@@ -10,15 +10,15 @@ import {
 function isOnboardingComplete(user) {
 	if (!user) return false;
 
-	const role = String(user.role || '').toLowerCase();
+	const role = String(user.role || '');
 	const customerProfile = user.customer_profile;
 	const businessProfile = user.business_profile;
 
-	if (role === 'customer') {
+	if (role === 'CUSTOMER') {
 		return Boolean(customerProfile);
 	}
 
-	if (role === 'business') {
+	if (role === 'BUSINESS') {
 		return Boolean(
 			businessProfile?.restaurant_name && businessProfile?.location
 		);
@@ -28,8 +28,8 @@ function isOnboardingComplete(user) {
 }
 
 function getOnboardingRoute(user) {
-	const role = String(user?.role || '').toLowerCase();
-	return role === 'customer'
+	const role = String(user?.role || '');
+	return role === 'CUSTOMER'
 		? ROUTES.signUp.customer.profile
 		: ROUTES.signUp.business.details;
 }

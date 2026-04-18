@@ -4,20 +4,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0005_alter_customerprofile_gender_businessprofile_and_more'),
+        ("users", "0005_alter_customerprofile_gender_businessprofile_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='businessprofile',
-            name='is_live',
+            model_name="businessprofile",
+            name="is_live",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='businessprofile',
-            name='business_type',
-            field=models.CharField(default='restaurant', verbose_name=[('student seller', 'Student Seller'), ('restaurant', 'Restaurant')]),
+            model_name="businessprofile",
+            name="business_type",
+            field=models.CharField(
+                default="restaurant",
+                verbose_name=[
+                    ("student seller", "Student Seller"),
+                    ("restaurant", "Restaurant"),
+                ],
+            ),
         ),
     ]

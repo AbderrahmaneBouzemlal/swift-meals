@@ -17,7 +17,7 @@ export const actions = {
 		try {
 			const data = Object.fromEntries(form.entries());
 
-			if (role === 'business') {
+			if (role === 'BUSINESS') {
 				await setUpBusiness(data, token);
 			} else {
 				await setUpProfile(data, token);

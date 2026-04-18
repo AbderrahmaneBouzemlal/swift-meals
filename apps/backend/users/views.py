@@ -17,6 +17,7 @@ from .serializers import (
     CustomerPictureSerializer,
     RestaurantLogoSerializer,
 )
+from .models import User, CustomerProfile, BusinessProfile
 
 
 class UserRegistrationView(APIView):
@@ -95,9 +96,11 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=["PATCH"], url_path="customer/update")
     def update_customer(self, request):
-        if not hasattr(request.user, "customer_profile"):
+        print("Updating customer profile with data:", request.user.role, request.data)
+        if request.user.role != User.Role.customer:
             return Response({"detail": "Not a customer."}, status=403)
 
+        print(CustomerProfile.objects.filter(user=request.user).exists())
         profile = request.user.customer_profile
         serializer = CustomerProfileSerializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)

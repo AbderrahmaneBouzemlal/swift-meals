@@ -40,7 +40,7 @@
 
 	const errors = $derived({ ...schemaForm.errors, ...form?.errors });
 
-	const isBusiness = $derived(registration.role === 'business');
+	const isBusiness = $derived(registration.role === 'BUSINESS');
 
 	const steps = $derived(
 		isBusiness ? BUSINESS_SIGNUP_STEPS : CUSTOMER_SIGNUP_STEPS
@@ -98,6 +98,7 @@
 		use:enhance={handleSignUp}
 		class="flex shrink-0 flex-col gap-2.5 px-8"
 	>
+		<p>{registration.role}</p>
 		<input type="hidden" name="role" value={registration.role} />
 
 		<InputField

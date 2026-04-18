@@ -12,7 +12,7 @@
 
 	// svelte-ignore state_referenced_locally
 	const user = data.user;
-	const isBusiness = user?.role?.toLowerCase() === 'business';
+	const isBusiness = user?.role?.toLowerCase() === 'BUSINESS';
 	const customerProfile = user?.customer_profile ?? {};
 	const businessProfile = user?.business_profile ?? {};
 

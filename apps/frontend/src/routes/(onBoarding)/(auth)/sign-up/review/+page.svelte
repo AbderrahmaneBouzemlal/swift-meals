@@ -15,7 +15,7 @@
 	import StepTracker from '$lib/components/StepTracker.svelte';
 	import { onMount } from 'svelte';
 
-	const isBusiness = $derived(registration.role === 'business');
+	const isBusiness = $derived(registration.role === 'BUSINESS');
 	const backUrl = reviewBackRoute(registration.role);
 
 	let isSubmitting = $state(false);
@@ -40,7 +40,7 @@
 			: null
 	);
 	const steps =
-		registration.role === 'business'
+		registration.role === 'BUSINESS'
 			? BUSINESS_SIGNUP_STEPS
 			: CUSTOMER_SIGNUP_STEPS;
 
@@ -137,7 +137,7 @@
 				<LogoPreview previewUrl={profilePicturePreview} Deleteable={false} />
 			{/if}
 			<div class="overflow-hidden rounded-lg border border-brand-gray-light">
-				{@render sectionHeader('customer Profile')}
+				{@render sectionHeader('CUSTOMER Profile')}
 				<div class="divide-y divide-[#F6F6F6]">
 					{#each customerFields as field}
 						{@render reviewRow(field.label, field.value)}
