@@ -3,7 +3,7 @@
 	import { flip } from 'svelte/animate';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import ListingPage from '$lib/components/listing/ListingPage.svelte';
+	import ListingComponent from '$lib/components/listing/ListingComponent.svelte';
 	import ListingSection from '$lib/components/listing/ListingSection.svelte';
 	import NewFormHeader from '$lib/components/listing/NewFormHeader.svelte';
 	import SlotCard from '$lib/components/slots/SlotCard.svelte';
@@ -52,7 +52,7 @@
 	});
 </script>
 
-<ListingPage
+<ListingComponent
 	title="Meal Slots"
 	backUrl={ROUTES.account}
 	stats="{activeSlots.length} active · {inactiveSlots.length} inactive"
@@ -122,4 +122,4 @@
 			</div>
 		{/each}
 	</ListingSection>
-</ListingPage>
+</ListingComponent>

@@ -8,7 +8,7 @@
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
 	import { ROUTES } from '$lib/utils/routes.js';
-	import ListingPage from '$lib/components/listing/ListingPage.svelte';
+	import ListingComponent from '$lib/components/listing/ListingComponent.svelte';
 	import { is } from 'zod/locales';
 	import NewFormHeader from '$lib/components/listing/NewFormHeader.svelte';
 	import ListingSection from '$lib/components/listing/ListingSection.svelte';
@@ -46,7 +46,7 @@
 	});
 </script>
 
-<ListingPage
+<ListingComponent
 	title="Menus"
 	backUrl={ROUTES.account}
 	bind:showNewForm
@@ -106,4 +106,4 @@
 			{/each}
 		</div>
 	</ListingSection>
-</ListingPage>
+</ListingComponent>

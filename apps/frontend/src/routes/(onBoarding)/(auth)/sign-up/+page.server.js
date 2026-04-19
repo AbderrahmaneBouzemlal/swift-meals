@@ -13,7 +13,6 @@ import {
 export const actions = {
 	default: async ({ request, cookies, url }) => {
 		const form = await request.formData();
-		console.log(form.get('role'));
 		const data = {
 			name: String(form.get('name') || '').trim(),
 			email: String(form.get('email') || '').trim(),
@@ -22,7 +21,6 @@ export const actions = {
 		};
 
 		if (!['CUSTOMER', 'BUSINESS'].includes(data.role)) {
-			console.log(data.role);
 			return fail(400, {
 				errors: { role: 'Please choose a valid account type.' }
 			});

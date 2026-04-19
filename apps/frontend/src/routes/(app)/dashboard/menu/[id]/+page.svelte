@@ -2,7 +2,7 @@
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import ListingPage from '$lib/components/listing/ListingPage.svelte';
+	import ListingComponent from '$lib/components/listing/ListingComponent.svelte';
 	import ListingSection from '$lib/components/listing/ListingSection.svelte';
 	import NewFormHeader from '$lib/components/listing/NewFormHeader.svelte';
 	import MenuEditForm from '$lib/components/menu/MenuEditForm.svelte';
@@ -51,7 +51,7 @@
 	});
 </script>
 
-<ListingPage
+<ListingComponent
 	title={menu.name}
 	backUrl={ROUTES.dashboard.menu.list}
 	stats="{items.length} items · {availableItems.length} available · {unavailableItems.length} unavailable"
@@ -113,4 +113,4 @@
 			<MenuItemCard {item} formErrors={form?.errors ?? {}} bind:activeItemId />
 		{/each}
 	</ListingSection>
-</ListingPage>
+</ListingComponent>

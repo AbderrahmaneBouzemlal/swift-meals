@@ -1,4 +1,3 @@
-<!-- src/lib/components/listing/ListingPage.svelte -->
 <script>
 	import { slide } from 'svelte/transition';
 	import Header from '$lib/components/Header.svelte';
