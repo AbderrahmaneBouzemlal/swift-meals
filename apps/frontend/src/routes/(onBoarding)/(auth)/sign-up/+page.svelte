@@ -8,16 +8,15 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { registration } from '$lib/stores/registration.svelte.js';
-	import { useFormValidation } from '$lib/utils/useFormValidation.svelte.js';
+	import { useFormValidation } from '$lib/hooks/useFormValidation.svelte.js';
 	import {
 		BUSINESS_SIGNUP_STEPS,
 		CUSTOMER_SIGNUP_STEPS
 	} from '$lib/utils/constants';
 	import StepTracker from '$lib/components/StepTracker.svelte';
-	import { accountSchema } from '$lib/utils/schemas';
+	import { accountSchema } from '$lib/validation/schemas';
 	import { ROUTES } from '$lib/utils/routes.js';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
-	import { onMount } from 'svelte';
 
 	let { form } = $props();
 
@@ -25,12 +24,6 @@
 	let confirmPassword = $state('');
 	let isSubmitting = $state(false);
 
-	onMount(() => {
-		if (!registration.role) {
-			toastStore.error('Something went wrong. Please start again.');
-			goto(resolve(ROUTES.signUp.chooseRole));
-		}
-	});
 	const schemaForm = useFormValidation(accountSchema, () => ({
 		name: registration.name,
 		email: registration.email,

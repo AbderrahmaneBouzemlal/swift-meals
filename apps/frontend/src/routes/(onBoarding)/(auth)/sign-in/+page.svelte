@@ -7,8 +7,8 @@
 	import PasswordInput from '$lib/components/ui/PasswordInput.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
-	import { signInSchema } from '$lib/utils/schemas';
-	import { useFormValidation } from '$lib/utils/useFormValidation.svelte';
+	import { signInSchema } from '$lib/validation/schemas.js';
+	import { useFormValidation } from '$lib/hooks/useFormValidation.svelte.js';
 	import { ROUTES } from '$lib/utils/routes.js';
 	import { applyAction, enhance } from '$app/forms';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';

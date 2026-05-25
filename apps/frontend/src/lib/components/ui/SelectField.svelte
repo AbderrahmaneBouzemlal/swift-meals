@@ -1,5 +1,5 @@
 <script>
-	import { clickOutside } from '$lib/utils/clickOutside.js';
+	import { clickOutside } from '$lib/actions/clickOutside.js';
 
 	let {
 		value = $bindable(),

@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { ApiError } from '$lib/utils/apiError.js';
+import { ApiError } from '$lib/api/error.js';
 import { ROUTES } from '$lib/utils/routes.js';
-import { setUpProfile, setUpBusiness } from '$lib/utils/registrationApi.js';
+import { setUpProfile, setUpBusiness } from '$lib/api/registration.js';
 
 export const actions = {
 	default: async ({ request, cookies }) => {

@@ -1,27 +1,18 @@
 <script>
-	import { BUSINESS_TYPE } from '$lib/utils/constants.js';
+	import { BUSINESS_TYPE, BUSINESS_SIGNUP_STEPS } from '$lib/utils/constants.js';
 	import InputField from '$lib/components/ui/InputField.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { registration } from '$lib/stores/registration.svelte.js';
-	import { BUSINESS_SIGNUP_STEPS } from '$lib/utils/constants';
 	import StepTracker from '$lib/components/StepTracker.svelte';
-	import { businessDetailsSchema } from '$lib/utils/schemas';
-	import { useFormValidation } from '$lib/utils/useFormValidation.svelte';
+	import { businessDetailsSchema } from '$lib/validation/schemas';
+	import { useFormValidation } from '$lib/hooks/useFormValidation.svelte';
 	import { ROUTES } from '$lib/utils/routes.js';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
-	import { onMount } from 'svelte';
 	import SelectField from '$lib/components/ui/SelectField.svelte';
 	import TagInput from '$lib/components/ui/TagInput.svelte';
-
-	onMount(() => {
-		if (registration.role !== 'BUSINESS') {
-			toastStore.error('Please start sign-up and choose your role first.');
-			goto(resolve(ROUTES.signUp.chooseRole));
-		}
-	});
 
 	//TODO:
 	// cuisine_type is a comma-separated string in Django

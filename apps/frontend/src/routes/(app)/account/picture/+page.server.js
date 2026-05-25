@@ -1,8 +1,8 @@
 // +page.server.js
 import { fail, redirect } from '@sveltejs/kit';
-import { api } from '$lib/utils/api.js';
-import { ApiError } from '$lib/utils/apiError.js';
-import { ENDPOINTS } from '$lib/utils/endpoints.js';
+import { api } from '$lib/api/client.js';
+import { ApiError } from '$lib/api/error.js';
+import { ENDPOINTS } from '$lib/api/endpoints.js';
 import { ROUTES } from '$lib/utils/routes.js';
 
 export function load({ locals }) {

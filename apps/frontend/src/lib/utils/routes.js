@@ -30,7 +30,8 @@ export const ROUTES = {
 	payment: '/payment',
 	notifications: '/notifications',
 	settings: '/settings',
-	account: '/account'
+	account: '/account',
+	byparam: (route, param) => `${route}?${param}`
 };
 
 export function reviewBackRoute(role) {

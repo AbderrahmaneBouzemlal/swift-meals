@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import { ROUTES } from '$lib/utils/routes.js';
-import { api } from '$lib/utils/api.js';
-import { ENDPOINTS } from '$lib/utils/endpoints.js';
+import { api } from '$lib/api/client.js';
+import { ENDPOINTS } from '$lib/api/endpoints.js';
 
 export async function load({ locals, cookies }) {
 	const access = cookies.get('access');

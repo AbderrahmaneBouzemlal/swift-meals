@@ -1,4 +1,4 @@
-import { ApiError } from './apiError';
+import { ApiError } from './error';
 
 async function request(url, { method = 'GET', token, data, params } = {}) {
 	const fullUrl = params ? `${url}?${new URLSearchParams(params)}` : url;

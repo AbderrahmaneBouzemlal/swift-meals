@@ -1,6 +1,6 @@
 <script>
-	import { businessDetailsSchema } from '$lib/utils/schemas';
-	import { useFormValidation } from '$lib/utils/useFormValidation.svelte';
+	import { businessDetailsSchema } from '$lib/validation/schemas.js';
+	import { useFormValidation } from '$lib/hooks/useFormValidation.svelte.js';
 	import { registration } from '$lib/stores/registration.svelte.js';
 
 

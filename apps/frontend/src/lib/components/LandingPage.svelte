@@ -6,7 +6,7 @@
 	import { ROUTES } from '$lib/utils/routes.js';
 	import HeroImage from '$lib/components/HeroImage.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
-	import { platform } from '$lib/utils/platform.svelte.js';
+	import { platform } from '$lib/hooks/platform.svelte.js';
 	import AuthLayout from '$lib/components/layout/AuthLayout.svelte';
 </script>
 

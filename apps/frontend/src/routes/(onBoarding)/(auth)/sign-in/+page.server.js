@@ -1,11 +1,11 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { login } from '$lib/utils/registrationApi.js';
-import { ApiError } from '$lib/utils/apiError.js';
+import { login } from '$lib/api/registration';
+import { ApiError } from '$lib/api/error.js';
 import { ROUTES } from '$lib/utils/routes.js';
 import {
 	getAccessCookieOptions,
 	getRefreshCookieOptions
-} from '$lib/utils/authSession.server.js';
+} from '$lib/server/auth/session.js';
 
 export const actions = {
 	default: async ({ request, cookies, url }) => {

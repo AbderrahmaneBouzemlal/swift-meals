@@ -13,20 +13,12 @@
 	import { ROUTES, reviewBackRoute } from '$lib/utils/routes.js';
 	import Title from '$lib/components/ui/Title.svelte';
 	import StepTracker from '$lib/components/StepTracker.svelte';
-	import { onMount } from 'svelte';
 
 	const isBusiness = $derived(registration.role === 'BUSINESS');
 	const backUrl = reviewBackRoute(registration.role);
 
 	let isSubmitting = $state(false);
 	let { form } = $props();
-
-	onMount(() => {
-		if (!registration.role) {
-			toastStore.error('Something went wrong. Please start again.');
-			goto(resolve(ROUTES.signUp.chooseRole));
-		}
-	});
 	const logoPreview = $derived(
 		registration.logo
 			? URL.createObjectURL(registration.logo)

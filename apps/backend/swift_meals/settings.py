@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv # type: ignore
 from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
