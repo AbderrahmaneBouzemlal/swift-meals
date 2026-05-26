@@ -36,7 +36,7 @@
                border border-brand-gray-light bg-[#F6F6F6] px-3 py-2 transition-colors
                duration-200 focus-within:border-brand-yellow focus-within:bg-white"
 	>
-		{#each tags as tag}
+		{#each tags as tag (tag)}
 			<span
 				class="flex items-center gap-1 rounded-full bg-brand-yellow px-2.5
                    py-0.5 text-xs text-white italic"
@@ -72,7 +72,7 @@
 
 	{#if suggestions.filter((s) => !tags.includes(s)).length}
 		<div class="mt-1.5 flex flex-wrap gap-1.5 px-1">
-			{#each suggestions.filter((s) => !tags.includes(s)) as suggestion}
+			{#each suggestions.filter((s) => !tags.includes(s)) as suggestion (suggestion)}
 				<button
 					type="button"
 					class="rounded-full border border-brand-gray px-2.5 py-0.5

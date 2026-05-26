@@ -12,13 +12,13 @@ export function onboardingGuard(event, routeType) {
 	// Not logged in — send to sign in
 	if (!event.locals.user) throw redirect(303, ROUTES.signIn);
 
-	if (event.url.pathname === ROUTES.signUp.chooseRole) {
-		return;
-	}
-
 	// Logged in + already done onboarding — send to app
 	if (isOnboardingComplete(event.locals.user))
 		throw redirect(303, ROUTES.account);
+
+	if (event.url.pathname === ROUTES.signUp.chooseRole) {
+		return;
+	}
 
 	return null; // all good, let through
 }

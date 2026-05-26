@@ -1,11 +1,8 @@
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser, MultiPartParser
 from .serializers import (
@@ -43,7 +40,7 @@ class UserRegistrationView(APIView):
                 "data": serializer.data,
             }
 
-            return Response(response)
+            return Response(response, status=status.HTTP_201_CREATED)
 
 
 class UserLoginView(APIView):
@@ -98,10 +95,16 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=["PATCH"], url_path="customer/update")
     def update_customer(self, request):
-        if request.user.role != User.Role.customer:
-            return Response({"detail": "Not a customer."}, status=403)
+        user = request.user
+        if user.role != User.Role.customer:
+            user.role = User.Role.customer
+            user.save()
+            if hasattr(user, "business_profile"):
+                user.business_profile.delete()
+            if not hasattr(user, "customer_profile"):
+                CustomerProfile.objects.create(user=user)
 
-        profile = request.user.customer_profile
+        profile = user.customer_profile
         serializer = CustomerProfileSerializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -109,10 +112,16 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=["PATCH"], url_path="business/update")
     def update_business(self, request):
-        if not hasattr(request.user, "business_profile"):
-            return Response({"detail": "Not a business owner."}, status=403)
+        user = request.user
+        if user.role != User.Role.business:
+            user.role = User.Role.business
+            user.save()
+            if hasattr(user, "customer_profile"):
+                user.customer_profile.delete()
+            if not hasattr(user, "business_profile"):
+                BusinessProfile.objects.create(user=user)
 
-        profile = request.user.business_profile
+        profile = user.business_profile
         serializer = BusinessProfileSerializer(profile, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()

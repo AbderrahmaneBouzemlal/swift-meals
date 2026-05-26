@@ -3,18 +3,14 @@
 	import MenuForm from '$lib/components/menu/MenuForm.svelte';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { slide } from 'svelte/transition';
-	import Header from '$lib/components/Header.svelte';
-	import Icon from '$lib/components/ui/Icon.svelte';
-	import Title from '$lib/components/ui/Title.svelte';
 	import { ROUTES } from '$lib/utils/routes.js';
 	import ListingComponent from '$lib/components/listing/ListingComponent.svelte';
-	import { is } from 'zod/locales';
 	import NewFormHeader from '$lib/components/listing/NewFormHeader.svelte';
 	import ListingSection from '$lib/components/listing/ListingSection.svelte';
 	import { fly } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import DeleteSection from '$lib/components/DeleteSection.svelte';
+	import { resolve } from '$app/paths';
 
 	let { data, form } = $props();
 
@@ -30,7 +26,6 @@
 	});
 
 	let activeMenus = $derived(menus.filter((m) => m.is_active));
-	let inactiveMenus = $derived(menus.filter((m) => !m.is_active));
 
 	function openNew() {
 		newDraft = { name: '', description: '', is_active: true };
@@ -62,7 +57,7 @@
 			action="?/create"
 			use:enhance={() => {
 				isSubmitting = true;
-				return async ({ result }) => {
+				return async () => {
 					isSubmitting = false;
 					closeNew();
 					await invalidateAll();
@@ -82,7 +77,7 @@
 				>
 					<button
 						type="button"
-						onclick={() => goto(ROUTES.dashboard.menu.byId(menu.id))}
+						onclick={() => goto(resolve(ROUTES.dashboard.menu.byId(menu.id)))}
 					>
 						<InlineCard
 							id={menu.id}

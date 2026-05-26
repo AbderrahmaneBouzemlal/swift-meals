@@ -8,8 +8,9 @@ export function preAuthGuard(event, routeType) {
     if (!event.locals.user) return null;      // unauthenticated, let through
 
     const onboardingComplete = isOnboardingComplete(event.locals.user);
+    const signupRole = event.cookies.get('signup_role');
     throw redirect(303, onboardingComplete
         ? ROUTES.account
-        : getOnboardingRoute(event.locals.user, true)
+        : getOnboardingRoute(event.locals.user, signupRole, true)
     );
 }

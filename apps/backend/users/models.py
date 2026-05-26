@@ -8,7 +8,6 @@ from .managers import CustomUserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-
     class Role(models.TextChoices):
         admin = ("ADMIN", "admin")
         business = ("BUSINESS", "business")
@@ -26,7 +25,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(
         max_length=20,
         choices=Role.choices,
-        default=Role.customer,
+        blank=True,
+        null=True,
     )
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -140,7 +140,6 @@ class PickupLocation(models.Model):
 
 
 class BusinessProfile(models.Model):
-
     class BusinessType(models.TextChoices):
         STUDENT = ("student", "Student Seller")
         RESTAURANT = ("restaurant", "Restaurant")

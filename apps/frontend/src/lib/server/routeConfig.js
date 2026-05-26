@@ -1,7 +1,7 @@
 import { ROUTES } from '$lib/utils/routes.js';
 
 export const ROUTE_ACCESS = {
-	public: [ROUTES.home],
+	public: [ROUTES.home, '/200.html', '/index.html', '/[fallback]'],
 	preAuth: [
 		// Accessible only to unauthenticated users
 		ROUTES.signIn,
@@ -18,8 +18,7 @@ export const ROUTE_ACCESS = {
 	protected: [
 		// Requires auth + completed onboarding
 		ROUTES.account,
-		ROUTES.dashboard.today,
-		ROUTES.dashboard.orders,
+		'/dashboard',
 		ROUTES.favorites,
 		ROUTES.settings,
 		ROUTES.notifications,

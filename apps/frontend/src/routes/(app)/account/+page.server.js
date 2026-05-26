@@ -21,6 +21,8 @@ export async function load({ locals, cookies }) {
 export const actions = {
 	logout: async ({ cookies }) => {
 		cookies.delete('access', { path: '/' });
+		cookies.delete('refresh', { path: '/' });
+		cookies.delete('signup_role', { path: '/' });
 		throw redirect(303, ROUTES.signIn);
 	}
 };

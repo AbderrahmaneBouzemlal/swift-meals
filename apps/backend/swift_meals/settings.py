@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-from dotenv import load_dotenv # type: ignore
+from dotenv import load_dotenv  # type: ignore
 from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,6 +11,8 @@ load_dotenv(BASE_DIR / ".env")
 DEBUG = os.getenv("DEBUG") == "True"
 
 SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable is not set")
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
@@ -60,7 +62,7 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": False,
     "ALGORITHM": "HS256",
-    "SIGNING_KEY": os.getenv("JWT_SECRET"),
+    "SIGNING_KEY": SECRET_KEY,
     "VERIFYING_KEY": None,
     "AUTH_HEADER_TYPES": ("Bearer",),
     "USER_ID_FIELD": "id",

@@ -44,6 +44,7 @@ export const actions = {
 			});
 		}
 
+		cookies.delete('signup_role', { path: '/' });
 		throw redirect(303, ROUTES.account);
 	}
 };

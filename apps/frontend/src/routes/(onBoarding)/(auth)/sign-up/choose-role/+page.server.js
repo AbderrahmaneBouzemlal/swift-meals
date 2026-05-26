@@ -15,7 +15,7 @@ export const actions = {
 
 		// Store role in cookies for later use
 		cookies.set('signup_role', role, {
-			path: '/sign-up',
+			path: '/',
 			maxAge: 3600, // 1 hour
 			httpOnly: true,
 			sameSite: 'lax'

@@ -72,7 +72,7 @@ export const businessDetailsSchema = z.object({
 		.string()
 		.max(50, 'SSM number must be under 50 characters')
 		.optional(),
-	business_type: z.enum(['Student Seller', 'Restaurant']).optional()
+	business_type: z.enum(['student', 'restaurant']).optional()
 });
 
 export const businessSetupSchema = z.object({

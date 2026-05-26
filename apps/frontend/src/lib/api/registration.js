@@ -34,6 +34,13 @@ export async function setUpProfile(data, token) {
 }
 
 export async function setUpBusiness(data, token) {
+	const cuisines = data.cuisine_type
+		? data.cuisine_type.split(',').map((c) => c.trim()).filter(Boolean)
+		: [];
+	const pickup_locations = data.pickup_locations
+		? data.pickup_locations.split(',').map((p) => p.trim()).filter(Boolean)
+		: [];
+
 	await api.patch(
 		ENDPOINTS.profile.business,
 		{
@@ -41,11 +48,11 @@ export async function setUpBusiness(data, token) {
 			phone_number: data.phone_number,
 			location: data.location,
 			business_type: data.business_type,
-			cuisine_type: data.cuisine_type,
+			cuisines: cuisines,
 			ssm_registration: data.ssm_registration,
 			description: data.description,
 			gender: data.gender,
-			pickup_locations: data.pickup_locations
+			pickup_locations: pickup_locations
 		},
 		{ token }
 	);

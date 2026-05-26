@@ -62,7 +62,7 @@
              bg-white shadow-lg"
 			max-height="208"
 		>
-			{#each normalised as option}
+			{#each normalised as option (option)}
 				<button
 					type="button"
 					onclick={() => select(option.value)}

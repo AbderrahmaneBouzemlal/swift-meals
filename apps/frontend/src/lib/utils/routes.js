@@ -17,9 +17,9 @@ export const ROUTES = {
 		review: '/sign-up/review'
 	},
 	dashboard: {
-		today: '/today',
-		history: '/history',
-		orders: '/orders',
+		today: '/dashboard/today',
+		history: '/dashboard/history',
+		orders: '/dashboard/orders',
 		slots: '/dashboard/slots',
 		menu: {
 			list: '/dashboard/menu',

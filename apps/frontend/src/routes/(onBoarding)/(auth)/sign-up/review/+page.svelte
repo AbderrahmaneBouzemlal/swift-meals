@@ -5,26 +5,25 @@
 	import { registration, reset } from '$lib/stores/registration.svelte.js';
 	import { applyAction, enhance } from '$app/forms';
 	import {
+		BUSINESS_TYPE,
 		BUSINESS_SIGNUP_STEPS,
 		CUSTOMER_SIGNUP_STEPS
 	} from '$lib/utils/constants.js';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
-	import { ROUTES, reviewBackRoute } from '$lib/utils/routes.js';
+	import { ROUTES } from '$lib/utils/routes.js';
 	import Title from '$lib/components/ui/Title.svelte';
 	import StepTracker from '$lib/components/StepTracker.svelte';
 
 	const isBusiness = $derived(registration.role === 'BUSINESS');
-	const backUrl = reviewBackRoute(registration.role);
-
 	let isSubmitting = $state(false);
 	let { form } = $props();
 	const logoPreview = $derived(
 		registration.logo
 			? URL.createObjectURL(registration.logo)
-			: null || registration.profile_picture
-				? URL.createObjectURL(registration.profile_picture)
-				: null
+			: (registration.profile_picture &&
+					URL.createObjectURL(registration.profile_picture)) ||
+					null
 	);
 	let profilePicturePreview = $derived(
 		registration.profile_picture
@@ -60,7 +59,10 @@
 	const businessFields = $derived([
 		{ label: 'Restaurant', value: registration.restaurant_name || '—' },
 		{ label: 'Location', value: registration.location || '—' },
-		{ label: 'Business type', value: registration.business_type || '—' },
+		{
+			label: 'Business type',
+			value: BUSINESS_TYPE.find((t) => t.value === registration.business_type)?.label || '—'
+		},
 		{ label: 'Phone', value: registration.phone_number || '—' },
 		{ label: 'Cuisine', value: registration.cuisine_type || '—' },
 		{ label: 'SSM number', value: registration.ssm_registration || '—' },
@@ -105,7 +107,7 @@
 		<div class="overflow-hidden rounded-lg border border-brand-gray-light">
 			{@render sectionHeader('Account')}
 			<div class="divide-y divide-[#F6F6F6]">
-				{#each accountFields as field}
+				{#each accountFields as field (field.label + field.value)}
 					{@render reviewRow(field.label, field.value)}
 				{/each}
 			</div>
@@ -119,7 +121,7 @@
 			<div class="overflow-hidden rounded-lg border border-brand-gray-light">
 				{@render sectionHeader('Business Details')}
 				<div class="divide-y divide-[#F6F6F6]">
-					{#each businessFields as field}
+					{#each businessFields as field (field.label + field.value)}
 						{@render reviewRow(field.label, field.value)}
 					{/each}
 				</div>
@@ -131,7 +133,7 @@
 			<div class="overflow-hidden rounded-lg border border-brand-gray-light">
 				{@render sectionHeader('CUSTOMER Profile')}
 				<div class="divide-y divide-[#F6F6F6]">
-					{#each customerFields as field}
+					{#each customerFields as field (field.label + field.value)}
 						{@render reviewRow(field.label, field.value)}
 					{/each}
 				</div>
@@ -145,7 +147,7 @@
 			<button
 				class="text-left text-sm text-brand-yellow italic underline-offset-2
                hover:underline"
-				onclick={() => goto(resolve(ROUTES.signUp.customer.profile))}
+				onclick={() => goto(resolve(ROUTES.signUp.account))}
 			>
 				Edit account details
 			</button>
@@ -178,7 +180,7 @@
 					<p class="mb-2 text-xs font-semibold text-red-500 italic">
 						Please fix the following:
 					</p>
-					{#each Object.entries(form.errors) as [field, message]}
+					{#each Object.entries(form.errors) as [field, message] (field + message)}
 						<p class="text-xs text-red-400 italic">
 							<span class="capitalize">{field.replace(/_/g, ' ')}</span>: {message}
 						</p>

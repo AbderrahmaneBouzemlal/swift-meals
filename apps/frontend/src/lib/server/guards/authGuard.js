@@ -14,7 +14,8 @@ export function authGuard(event, routeType) {
 
 	// Logged in but onboarding incomplete
 	if (!isOnboardingComplete(event.locals.user)) {
-		throw redirect(303, getOnboardingRoute(event.locals.user, true));
+		const signupRole = event.cookies.get('signup_role');
+		throw redirect(303, getOnboardingRoute(event.locals.user, signupRole, true));
 	}
 
 	// Unknown routes: fail safe — you can change this to a 404 if preferred

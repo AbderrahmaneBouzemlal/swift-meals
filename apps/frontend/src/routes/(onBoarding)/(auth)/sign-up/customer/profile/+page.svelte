@@ -1,5 +1,7 @@
 <script>
-	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import { ROUTES } from '$lib/utils/routes.js';
 	import InputField from '$lib/components/ui/InputField.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
@@ -8,12 +10,10 @@
 	import StepTracker from '$lib/components/StepTracker.svelte';
 	import { customerProfileSchema } from '$lib/validation/schemas';
 	import { useFormValidation } from '$lib/hooks/useFormValidation.svelte.js';
-	import { toastStore } from '$lib/stores/toasts.svelte.js';
 	import LogoPreview from '$lib/components/LogoPreview.svelte';
 	import DropZone from '$lib/components/DropZone.svelte';
 	import SelectField from '$lib/components/ui/SelectField.svelte';
 
-	let { form: serverForm } = $props();
 	let isSubmitting = $state(false);
 
 	const form = useFormValidation(customerProfileSchema, () => ({
@@ -23,7 +23,6 @@
 	}));
 
 	let fileInput = $state(null);
-	let formElement = $state(null);
 
 	let previewUrl = $derived(
 		registration.profile_picture
@@ -40,7 +39,7 @@
 		handleFileSelect(e.target.files?.[0]);
 	}
 
-	function handleSubmit(e) {
+	function handleSubmit() {
 		if (
 			!form.submitValidate([
 				'phone_number',
@@ -48,15 +47,10 @@
 				'default_pickup_location'
 			])
 		) {
-			e.preventDefault();
 			return;
 		}
 
-		// Add file to FormData if present
-		if (registration.profile_picture && formElement) {
-			const formData = new FormData(formElement);
-			formData.append('profile_picture', registration.profile_picture);
-		}
+		goto(resolve(ROUTES.signUp.review));
 	}
 </script>
 
@@ -72,25 +66,7 @@
 
 	<StepTracker steps={CUSTOMER_SIGNUP_STEPS} currentStep={2} />
 
-	<form
-		bind:this={formElement}
-		method="POST"
-		enctype="multipart/form-data"
-		use:enhance={() => {
-			isSubmitting = true;
-			return ({ update, result }) => {
-				isSubmitting = false;
-				if (result.type === 'failure') {
-					toastStore.error(
-						result.data?.errors?.server ||
-							'An error occurred. Please try again.'
-					);
-				}
-				update();
-			};
-		}}
-		class="flex flex-col gap-2.5 px-8"
-	>
+	<div class="flex flex-col gap-2.5 px-8">
 		<!-- Profile picture -->
 		<div>
 			<p class="mb-1.5 text-sm text-brand-dark italic">Profile Picture</p>
@@ -120,7 +96,7 @@
 			type="tel"
 			placeholder="Phone number (optional)"
 			bind:value={registration.phone_number}
-			error={form.errors.phone_number || serverForm?.errors?.phone_number}
+			error={form.errors.phone_number}
 			onblur={() => form.touch('phone_number')}
 		/>
 
@@ -131,7 +107,7 @@
 				bind:value={registration.gender}
 				options={GENDER_OPTIONS}
 				placeholder="Gender (optional)"
-				error={form.errors.gender || serverForm?.errors?.gender}
+				error={form.errors.gender}
 			/>
 
 			<div
@@ -155,8 +131,7 @@
 				name="default_pickup_location"
 				placeholder="Default pickup location (optional)"
 				bind:value={registration.default_pickup_location}
-				error={form.errors.default_pickup_location ||
-					serverForm?.errors?.default_pickup_location}
+				error={form.errors.default_pickup_location}
 				onblur={() => form.touch('default_pickup_location')}
 			/>
 			<!-- helper -->
@@ -169,10 +144,9 @@
 		<div class="shrink-0 pt-6">
 			<PrimaryButton
 				text="Continue"
-				type="submit"
 				disabled={isSubmitting}
 				onclick={handleSubmit}
 			/>
 		</div>
-	</form>
+	</div>
 </div>

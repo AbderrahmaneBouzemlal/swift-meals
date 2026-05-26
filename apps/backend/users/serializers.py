@@ -2,8 +2,22 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings
 
 from .models import User, CustomerProfile, BusinessProfile, Cuisine, PickupLocation
+
+
+class CreatableSlugRelatedField(serializers.SlugRelatedField):
+    def to_internal_value(self, data):
+        try:
+            model = self.get_queryset().model
+            obj, created = model.objects.get_or_create(**{self.slug_field: data})
+            if not obj.is_active:
+                obj.is_active = True
+                obj.save()
+            return obj
+        except (TypeError, ValueError):
+            self.fail('invalid')
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -20,12 +34,26 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return value.lower().strip()
 
     def create(self, validated_data):
+        print("--- SERIALIZER CREATE DEBUG ---")
+        print("Validated Data:", validated_data)
+
+        email = validated_data["email"].lower().strip()
+        if User.objects.filter(email=email).exists():
+            print("ERROR: User with email", email, "already exists")
+            raise serializers.ValidationError({"detail": "Email already in use."})
+
         user = User.objects.create_user(**validated_data)
+        print("User created:", user.email)
+        print("SECRET KEY TYPE:", type(settings.SECRET_KEY), repr(settings.SECRET_KEY))
+
         refresh = RefreshToken.for_user(user)
         refresh_token = str(refresh)
         access_token = str(refresh.access_token)
 
         update_last_login(None, user)
+        print("Tokens generated")
+        print("--- DEBUG END ---")
+
         return {
             "access": access_token,
             "refresh": refresh_token,
@@ -162,13 +190,13 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 
 
 class BusinessProfileSerializer(serializers.ModelSerializer):
-    cuisines = serializers.SlugRelatedField(
+    cuisines = CreatableSlugRelatedField(
         many=True,
         read_only=False,
         slug_field="name",
         queryset=Cuisine.objects.filter(is_active=True),
     )
-    pickup_locations = serializers.SlugRelatedField(
+    pickup_locations = CreatableSlugRelatedField(
         many=True,
         read_only=False,
         slug_field="name",

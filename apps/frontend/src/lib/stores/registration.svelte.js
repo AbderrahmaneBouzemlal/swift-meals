@@ -39,7 +39,7 @@ export function reset() {
 		description: '',
 		pickup_locations: '',
 		logo: null,
-		buisness_type: '',
+		business_type: '',
 		profile_picture: null
 	});
 }
@@ -69,6 +69,6 @@ export function restaurantPayload() {
 		description: registration.description,
 		pickup_locations: registration.pickup_locations,
 		logo: registration.logo,
-		business_type: registration.buisness_type
+		business_type: registration.business_type
 	};
 }

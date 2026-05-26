@@ -16,12 +16,13 @@ export function isOnboardingComplete(user) {
 	return false;
 }
 
-export function getOnboardingRoute(user, cont = false) {
+export function getOnboardingRoute(user, signupRole = null, cont = false) {
 	const param = `continue=${cont}`;
+	const role = user?.role || signupRole;
 
-	if (user.role === 'CUSTOMER')
+	if (role === 'CUSTOMER')
 		return ROUTES.byparam(ROUTES.signUp.customer.profile, param);
-	if (user.role === 'BUSINESS')
+	if (role === 'BUSINESS')
 		return ROUTES.byparam(ROUTES.signUp.business.details, param);
 
 	return ROUTES.signUp.chooseRole;

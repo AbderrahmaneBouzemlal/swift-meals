@@ -3,8 +3,16 @@
 	import { page } from '$app/stores';
 	import { ROUTES } from '$lib/utils/routes.js';
 	import AuthLayout from '$lib/components/layout/AuthLayout.svelte';
+	import { registration } from '$lib/stores/registration.svelte.js';
 
-	let { children } = $props();
+	let { data, children } = $props();
+
+	// Restore registration role from cookie data on load/refresh
+	$effect(() => {
+		if (data?.signupRole && !registration.role) {
+			registration.role = data.signupRole;
+		}
+	});
 
 	// Map specific routes to their previous step
 	const backMap = {
@@ -17,7 +25,7 @@
 
 	// Get back URL from map
 	let backUrl = $derived(
-		backMap.hasOwnProperty($page.url.pathname)
+		Object.hasOwn(backMap, $page.url.pathname)
 			? backMap[$page.url.pathname]
 			: '/'
 	);
