@@ -20,7 +20,7 @@
 		{placeholder}
 		{onblur}
 		bind:value
-		class="box-border h-13 w-full rounded-lg border border-brand-gray-light ring-2
+		class="box-border h-14 w-full rounded-lg border border-brand-gray-light ring-2
 			{error ? 'ring-red-400' : 'ring-transparent'}
 			text-md bg-gray-50 pr-11 pl-4 font-abeezee text-brand-dark italic transition-colors duration-200 outline-none
 			placeholder:text-brand-gray focus:border-brand-yellow focus:bg-white
@@ -36,9 +36,13 @@
 	{/if}
 	{#if type === 'password'}
 		<button
-			class="absolute top-1/2 right-3.5 flex -translate-y-1/2 cursor-pointer items-center border-none bg-transparent p-0"
+			class="absolute top-1/2 right-3.5 flex -translate-y-1/2 cursor-pointer border-none bg-transparent p-0"
 			aria-label={showPassword ? 'Hide password' : 'Show password'}
-			onclick={() => (showPassword = !showPassword)}
+			type="button"
+			onclick={(e) => {
+				e.stopPropagation();
+				showPassword = !showPassword;
+			}}
 		>
 			<Icon
 				name={showPassword ? 'eye-open' : 'eye-closed'}
@@ -48,7 +52,7 @@
 			/>
 		</button>
 	{/if}
-	<div class="mt-1 text-xs text-red-500">
+	<div class="h-1 pt-1 text-xs text-red-500">
 		{error}
 	</div>
 </div>
