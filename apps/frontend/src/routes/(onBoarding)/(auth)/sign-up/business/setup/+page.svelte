@@ -75,7 +75,7 @@
 		</span>
 	</div>
 
-	<StepTracker steps={BUSINESS_SIGNUP_STEPS} currentStep={2} />
+	<StepTracker steps={BUSINESS_SIGNUP_STEPS} currentStep={3} />
 
 	<div class="flex shrink-0 flex-col gap-4 px-8">
 		<div>

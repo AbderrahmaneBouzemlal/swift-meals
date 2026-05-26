@@ -1,22 +1,34 @@
 <script>
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
-	import { createEventDispatcher } from 'svelte';
+	import { enhance } from '$app/forms';
 	import Icon from '$lib/components/ui/Icon.svelte';
-	import { setRole } from '$lib/stores/registration.svelte.js';
-	import { ROUTES } from '$lib/utils/routes.js';
-	import { registration } from '$lib/stores/registration.svelte.js';
+	import StepTracker from '$lib/components/StepTracker.svelte';
+	import { BUSINESS_SIGNUP_STEPS, CUSTOMER_SIGNUP_STEPS } from '$lib/utils/constants';
 
-	let selected = null;
+	let selected = $state(null);
+	let isSubmitting = $state(false);
 
-	function choose(role) {
-		setRole(role);
-		goto(resolve(ROUTES.signUp.account));
+	function handleChoose(role) {
+		selected = role;
 	}
 </script>
 
 <div class="flex h-full flex-col bg-white">
-	<div class="flex flex-1 flex-col gap-6 overflow-y-auto px-8 pt-4">
+	<StepTracker steps={BUSINESS_SIGNUP_STEPS} currentStep={1} />
+
+	<form
+		method="POST"
+		class="flex flex-1 flex-col"
+		use:enhance={() => {
+			isSubmitting = true;
+			return ({ update }) => {
+				isSubmitting = false;
+				update();
+			};
+		}}
+	>
+		<input type="hidden" name="role" value={selected} />
+
+		<div class="flex flex-1 flex-col gap-6 overflow-y-auto px-8 pt-4">
 		<div class="text-center">
 			<h1 class="m-0 mt-0 mb-1.5 text-3xl font-normal text-brand-dark italic">
 				I am a...
@@ -28,11 +40,12 @@
 
 		<div class="flex flex-col gap-0">
 			<button
+				type="button"
 				class="relative flex w-full cursor-pointer items-center gap-4 rounded-[14px] border-2 border-transparent bg-brand-light p-5 text-left transition-all duration-[0.25s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 hover:border-brand-yellow hover:bg-white hover:shadow-[0_4px_20px_rgba(252,189,11,0.2)]
 				{selected === 'CUSTOMER'
 					? 'scale-[1.01] border-brand-yellow! bg-white! shadow-[0_6px_24px_rgba(252,189,11,0.25)]'
 					: ''}"
-				onclick={() => choose('CUSTOMER')}
+				onclick={() => handleChoose('CUSTOMER')}
 			>
 				<div
 					class="flex h-18 w-18 shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
@@ -135,11 +148,12 @@
 			</div>
 
 			<button
+				type="button"
 				class="relative flex w-full cursor-pointer items-center gap-4 rounded-[14px] border-2 border-transparent bg-brand-light p-5 text-left transition-all duration-[0.25s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-0.5 hover:border-brand-yellow hover:bg-white hover:shadow-[0_4px_20px_rgba(252,189,11,0.2)]
 				{selected === 'BUSINESS'
 					? 'scale-[1.01] border-brand-yellow! bg-white! shadow-[0_6px_24px_rgba(252,189,11,0.25)]'
 					: ''}"
-				onclick={() => choose('BUSINESS')}
+				onclick={() => handleChoose('BUSINESS')}
 			>
 				<div
 					class="flex h-18 w-18 shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
@@ -280,4 +294,16 @@
 			</div>
 		</div>
 	</div>
+
+		<!-- Submit button -->
+		<div class="shrink-0 px-8 pb-8 pt-4">
+			<button
+				type="submit"
+				disabled={!selected || isSubmitting}
+				class="w-full rounded-full bg-brand-yellow py-3 text-sm font-medium text-brand-dark italic transition-opacity disabled:opacity-50"
+			>
+				{isSubmitting ? 'Continuing...' : 'Continue'}
+			</button>
+		</div>
+	</form>
 </div>

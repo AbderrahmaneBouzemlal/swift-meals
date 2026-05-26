@@ -37,7 +37,7 @@
 						<a href="#features" class="hover:text-brand-yellow">Features</a>
 					</li>
 					<li>
-						<a href={ROUTES.signUp.chooseRole} class="hover:text-brand-yellow"
+						<a href={ROUTES.signUp.account} class="hover:text-brand-yellow"
 							>Get Started</a
 						>
 					</li>

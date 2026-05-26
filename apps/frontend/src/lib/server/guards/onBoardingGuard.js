@@ -12,15 +12,13 @@ export function onboardingGuard(event, routeType) {
 	// Not logged in — send to sign in
 	if (!event.locals.user) throw redirect(303, ROUTES.signIn);
 
+	if (event.url.pathname === ROUTES.signUp.chooseRole) {
+		return;
+	}
+
 	// Logged in + already done onboarding — send to app
 	if (isOnboardingComplete(event.locals.user))
 		throw redirect(303, ROUTES.account);
-
-	// Special case: /sign-up requires role to have been chosen first
-	if (event.url.pathname === ROUTES.signUp.account) {
-		const pendingRole = event.cookies.get('pending_role');
-		if (!pendingRole) throw redirect(303, ROUTES.signUp.chooseRole);
-	}
 
 	return null; // all good, let through
 }

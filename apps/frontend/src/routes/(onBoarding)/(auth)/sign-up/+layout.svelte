@@ -6,16 +6,20 @@
 
 	let { children } = $props();
 
+	// Map specific routes to their previous step
 	const backMap = {
-		[ROUTES.signUp.account]: ROUTES.signUp.chooseRole,
-		[ROUTES.signUp.customer.profile]: ROUTES.signUp.account,
-		[ROUTES.signUp.business.details]: ROUTES.signUp.account,
+		[ROUTES.signUp.account]: null, // Use browser history only
+		[ROUTES.signUp.chooseRole]: ROUTES.signUp.account, // Back to signup form
 		[ROUTES.signUp.business.setup]: ROUTES.signUp.business.details,
-		[ROUTES.signUp.review]: ROUTES.signUp.customer.profile // Default for review, might need more logic
+		[ROUTES.signUp.business.details]: ROUTES.signUp.chooseRole,
+		[ROUTES.signUp.customer.profile]: ROUTES.signUp.chooseRole
 	};
 
+	// Get back URL from map
 	let backUrl = $derived(
-		backMap[$page.url.pathname] ?? ROUTES.signUp.chooseRole
+		backMap.hasOwnProperty($page.url.pathname)
+			? backMap[$page.url.pathname]
+			: '/'
 	);
 </script>
 

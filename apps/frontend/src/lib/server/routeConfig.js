@@ -5,11 +5,11 @@ export const ROUTE_ACCESS = {
 	preAuth: [
 		// Accessible only to unauthenticated users
 		ROUTES.signIn,
-		ROUTES.signUp.chooseRole,
 		ROUTES.signUp.account
 	],
 	onboarding: [
 		// Requires auth, but onboarding may be incomplete
+		ROUTES.signUp.chooseRole,
 		ROUTES.signUp.customer.profile,
 		ROUTES.signUp.business.details,
 		ROUTES.signUp.business.setup,

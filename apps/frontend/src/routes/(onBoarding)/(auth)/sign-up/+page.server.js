@@ -2,35 +2,23 @@ import { fail, redirect } from '@sveltejs/kit';
 import { ApiError } from '$lib/api/error.js';
 import { ROUTES } from '$lib/utils/routes.js';
 import {
-	registerCustomer,
-	registerBusiness
-} from '$lib/api/registration.js';
-import {
 	getAccessCookieOptions,
 	getRefreshCookieOptions
 } from '$lib/server/auth/session.js';
+import { registerUser } from '$lib/api/registration';
 
 export const actions = {
 	default: async ({ request, cookies, url }) => {
 		const form = await request.formData();
+
 		const data = {
 			name: String(form.get('name') || '').trim(),
 			email: String(form.get('email') || '').trim(),
-			password: String(form.get('password') || ''),
-			role: String(form.get('role')).trim()
+			password: String(form.get('password') || '')
 		};
 
-		if (!['CUSTOMER', 'BUSINESS'].includes(data.role)) {
-			return fail(400, {
-				errors: { role: 'Please choose a valid account type.' }
-			});
-		}
-
 		try {
-			const tokens =
-				data.role === 'BUSINESS'
-					? await registerBusiness(data)
-					: await registerCustomer(data);
+			const tokens = await registerUser(data);
 
 			if (!tokens?.access) {
 				return fail(500, {
@@ -59,10 +47,7 @@ export const actions = {
 			});
 		}
 
-		const next =
-			data.role === 'BUSINESS'
-				? ROUTES.signUp.business.details
-				: ROUTES.signUp.customer.profile;
+		const next = ROUTES.signUp.chooseRole;
 
 		throw redirect(303, next);
 	}

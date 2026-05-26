@@ -4,17 +4,10 @@
 	import InputField from '$lib/components/ui/InputField.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
 	import { registration } from '$lib/stores/registration.svelte.js';
 	import { useFormValidation } from '$lib/hooks/useFormValidation.svelte.js';
-	import {
-		BUSINESS_SIGNUP_STEPS,
-		CUSTOMER_SIGNUP_STEPS
-	} from '$lib/utils/constants';
 	import StepTracker from '$lib/components/StepTracker.svelte';
 	import { accountSchema } from '$lib/validation/schemas';
-	import { ROUTES } from '$lib/utils/routes.js';
 	import { toastStore } from '$lib/stores/toasts.svelte.js';
 
 	let { form } = $props();
@@ -32,11 +25,8 @@
 
 	const errors = $derived({ ...schemaForm.errors, ...form?.errors });
 
-	const isBusiness = $derived(registration.role === 'BUSINESS');
-
-	const steps = $derived(
-		isBusiness ? BUSINESS_SIGNUP_STEPS : CUSTOMER_SIGNUP_STEPS
-	);
+	// Generic signup steps shown before role selection
+	const steps = $derived(['Account', 'Choose Role', 'Profile/Details']);
 
 	function handleSignUp(event) {
 		if (
@@ -75,12 +65,6 @@
 		class="flex shrink-0 flex-col items-center justify-center gap-2 px-8 pt-1.5 pb-8"
 	>
 		<Title size="medium">Sign Up</Title>
-		<span
-			class="mt-1 inline-block rounded-full px-3 py-0.5 text-xs text-white italic
-             {isBusiness ? 'bg-brand-dark' : 'bg-brand-yellow'}"
-		>
-			{isBusiness ? 'Business' : 'Customer'}
-		</span>
 	</div>
 
 	<StepTracker {steps} currentStep={0} />
@@ -90,12 +74,9 @@
 		use:enhance={handleSignUp}
 		class="flex shrink-0 flex-col gap-2.5 px-8"
 	>
-		<p>{registration.role}</p>
-		<input type="hidden" name="role" value={registration.role} />
-
 		<InputField
 			name="name"
-			placeholder={isBusiness ? "Owner's full name" : 'Full name'}
+			placeholder={'Full name'}
 			bind:value={registration.name}
 			error={errors.name}
 			onblur={() => schemaForm.touch('name')}
@@ -127,12 +108,6 @@
 			error={errors.confirmPassword}
 			onblur={() => schemaForm.touch('confirmPassword')}
 		/>
-
-		{#if isBusiness}
-			<p class="text-sm text-brand-gray italic">
-				You'll add your restaurant details in the next step.
-			</p>
-		{/if}
 
 		<div class="flex shrink-0 flex-col items-center gap-2.5 px-8 pt-3">
 			<div class="flex w-full items-center gap-4">

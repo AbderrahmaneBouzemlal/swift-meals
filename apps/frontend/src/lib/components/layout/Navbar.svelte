@@ -42,7 +42,7 @@
 					Sign In
 				</button>
 				<button
-					onclick={() => goto(resolve(ROUTES.signUp.chooseRole))}
+					onclick={() => goto(resolve(ROUTES.signUp.account))}
 					class="rounded-full bg-brand-yellow px-6 py-2.5 text-sm font-bold text-white italic shadow-lg shadow-brand-yellow/20 transition-all hover:scale-105 active:scale-95"
 				>
 					Get Started

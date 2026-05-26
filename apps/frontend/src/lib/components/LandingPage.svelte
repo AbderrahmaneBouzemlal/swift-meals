@@ -34,7 +34,7 @@
 				<PrimaryButton
 					text="Get Started Now"
 					icon="arrow-right"
-					onclick={() => goto(resolve(ROUTES.signUp.chooseRole))}
+					onclick={() => goto(resolve(ROUTES.signUp.account))}
 				/>
 				<button
 					onclick={() => goto(resolve(ROUTES.signIn))}
@@ -149,7 +149,7 @@
 			<PrimaryButton
 				text="Create Your Account"
 				icon="arrow-right"
-				onclick={() => goto(resolve(ROUTES.signUp.chooseRole))}
+				onclick={() => goto(resolve(ROUTES.signUp.account))}
 			/>
 		</div>
 	</section>

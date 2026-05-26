@@ -145,7 +145,7 @@
 			<button
 				class="text-left text-sm text-brand-yellow italic underline-offset-2
                hover:underline"
-				onclick={() => goto(resolve(ROUTES.signUp.account))}
+				onclick={() => goto(resolve(ROUTES.signUp.customer.profile))}
 			>
 				Edit account details
 			</button>

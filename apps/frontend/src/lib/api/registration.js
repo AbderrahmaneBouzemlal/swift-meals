@@ -1,12 +1,11 @@
 import { api } from '$lib/api/client.js';
 import { ENDPOINTS } from '$lib/api/endpoints.js';
 
-export async function registerCustomer(data) {
+export async function registerUser(data) {
 	const response = await api.post(ENDPOINTS.auth.register, {
 		email: data.email,
 		name: data.name,
-		password: data.password,
-		role: data.role || 'CUSTOMER'
+		password: data.password
 	});
 	return { access: response.access, refresh: response.refresh };
 }
@@ -22,7 +21,7 @@ export async function setUpProfile(data, token) {
 		{
 			phone_number: data.phone_number,
 			gender: data.gender,
-			default_pickup_location: data.default_pickup_location,
+			default_pickup_location: data.default_pickup_location
 		},
 		{ token }
 	);
@@ -32,16 +31,6 @@ export async function setUpProfile(data, token) {
 		form.append('profile_picture', data.profile_picture);
 		await api.patch(ENDPOINTS.profile.picture, form, { token });
 	}
-}
-
-export async function registerBusiness(data) {
-	const response = await api.post(ENDPOINTS.auth.register, {
-		email: data.email,
-		name: data.name,
-		password: data.password,
-		role: 'BUSINESS'
-	});
-	return { access: response?.access, refresh: response?.refresh };
 }
 
 export async function setUpBusiness(data, token) {

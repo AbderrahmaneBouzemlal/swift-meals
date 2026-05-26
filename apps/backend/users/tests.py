@@ -41,7 +41,6 @@ class UserTest(APITestCase, URLPatternsTestCase):
             "password": "Test@#23",
         }
         response = self.client.post(url, data)
-        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_list_all_users_as_admin(self):

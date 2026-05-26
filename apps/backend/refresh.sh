@@ -1,0 +1,2 @@
+#!/usr/bin/bash
+rm -rf db.sqlite3 && ./manage.py makemigrations && ./manage.py migrate

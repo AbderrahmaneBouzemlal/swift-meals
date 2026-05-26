@@ -1,5 +1,9 @@
 <script>
-	import { BUSINESS_TYPE, BUSINESS_SIGNUP_STEPS } from '$lib/utils/constants.js';
+	import { enhance } from '$app/forms';
+	import {
+		BUSINESS_TYPE,
+		BUSINESS_SIGNUP_STEPS
+	} from '$lib/utils/constants.js';
 	import InputField from '$lib/components/ui/InputField.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
@@ -74,7 +78,7 @@
 	</div>
 
 	<!-- Step indicator — 3 steps for business -->
-	<StepTracker steps={BUSINESS_SIGNUP_STEPS} currentStep={1} />
+	<StepTracker steps={BUSINESS_SIGNUP_STEPS} currentStep={2} />
 
 	<!-- Form -->
 	<div class="flex shrink-0 flex-col gap-2.5 px-8">

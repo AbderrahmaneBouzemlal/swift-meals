@@ -1,6 +1,6 @@
 import { registration } from '$lib/stores/registration.svelte';
-export const BUSINESS_SIGNUP_STEPS = ['Account', 'Details', 'Setup', 'Review'];
-export const CUSTOMER_SIGNUP_STEPS = ['Account', 'Profile', 'Review'];
+export const BUSINESS_SIGNUP_STEPS = ['Account', 'Choose Role', 'Details', 'Setup', 'Review'];
+export const CUSTOMER_SIGNUP_STEPS = ['Account', 'Choose Role', 'Profile', 'Review'];
 export const GENDER_OPTIONS = ['Male', 'Female'];
 export const BUSINESS_TYPE = ['Student Seller', 'Restaurant'];
 export const DAYS = [

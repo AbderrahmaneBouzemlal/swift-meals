@@ -8,7 +8,7 @@ export const actions = {
 		const token = cookies.get('access');
 
 		if (!token) {
-			throw redirect(303, ROUTES.signUp.account);
+			throw redirect(303, ROUTES.signIn);
 		}
 
 		const form = await request.formData();
