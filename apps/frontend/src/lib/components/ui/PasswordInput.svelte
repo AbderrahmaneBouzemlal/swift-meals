@@ -1,5 +1,6 @@
 <script>
 	import Icon from './Icon.svelte';
+	import InputField from './InputField.svelte';
 
 	let {
 		value = $bindable(),
@@ -15,16 +16,12 @@
 </script>
 
 <div class="relative w-full">
-	<input
+	<InputField
 		type={showPassword ? 'text' : 'password'}
 		{placeholder}
 		bind:value
 		{name}
 		{onblur}
-		class="box-border h-13 w-full rounded-lg border border-brand-gray-light
-		{error ? 'ring-2 ring-red-400' : 'border border-transparent'}
-		text-md bg-gray-50 pr-11 pl-4 font-abeezee text-brand-dark italic transition-colors duration-200 outline-none
-		placeholder:text-brand-gray focus:border-brand-yellow focus:bg-white"
 	/>
 	<button
 		class="absolute top-1/2 right-3.5 flex -translate-y-1/2 cursor-pointer items-center border-none bg-transparent p-0"

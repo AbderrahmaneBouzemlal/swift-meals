@@ -2,7 +2,6 @@
 	import { applyAction, enhance } from '$app/forms';
 	import SocialLoginButton from '$lib/components/ui/SocialLoginButton.svelte';
 	import InputField from '$lib/components/ui/InputField.svelte';
-	import PasswordInput from '$lib/components/ui/PasswordInput.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
 	import { goto } from '$app/navigation';
@@ -111,17 +110,19 @@
 			onblur={() => schemaForm.touch('email')}
 		/>
 
-		<PasswordInput
+		<InputField
 			name="password"
 			placeholder="Password"
+			type="password"
 			bind:value={password}
 			error={errors.password}
 			onblur={() => schemaForm.touch('password')}
 		/>
 
-		<PasswordInput
+		<InputField
 			name="confirmPassword"
 			placeholder="Confirm Password"
+			type="password"
 			bind:value={confirmPassword}
 			error={errors.confirmPassword}
 			onblur={() => schemaForm.touch('confirmPassword')}

@@ -4,7 +4,6 @@
 	import Header from '$lib/components/Header.svelte';
 	import SocialLoginButton from '$lib/components/ui/SocialLoginButton.svelte';
 	import InputField from '$lib/components/ui/InputField.svelte';
-	import PasswordInput from '$lib/components/ui/PasswordInput.svelte';
 	import PrimaryButton from '$lib/components/ui/PrimaryButton.svelte';
 	import Title from '$lib/components/ui/Title.svelte';
 	import { signInSchema } from '$lib/validation/schemas.js';
@@ -73,9 +72,10 @@
 			icon="mail"
 		/>
 
-		<PasswordInput
+		<InputField
 			name="password"
 			placeholder="Password"
+			type="password"
 			bind:value={password}
 			error={errors.password}
 			onblur={() => schemaForm.touch('password')}
