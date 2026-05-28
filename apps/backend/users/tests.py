@@ -46,7 +46,7 @@ class UserTest(APITestCase, URLPatternsTestCase):
     def test_update_business_profile_with_creatable_fields(self):
         """Test business profile update with custom/creatable cuisines and pickup locations"""
         # Create a business user
-        business_user = User.objects.create_user(
+        User.objects.create_user(
             email="business@test.com",
             password="password",
             role=User.Role.business

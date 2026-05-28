@@ -2,7 +2,6 @@ import { redirect } from '@sveltejs/kit';
 import { ROUTES } from '$lib/utils/routes.js';
 import {
 	isOnboardingComplete,
-	getOnboardingRoute
 } from '$lib/server/onBoarding';
 
 // Handles routes that require auth but allow incomplete onboarding

@@ -236,7 +236,7 @@ class OrderWriteSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("This slot has no menu assigned.")
 
             try:
-                menu_item = MenuItem.objects.get(
+                MenuItem.objects.get(
                     id=item["menu_item"], menu=slot.menu, is_available=True
                 )
             except MenuItem.DoesNotExist:

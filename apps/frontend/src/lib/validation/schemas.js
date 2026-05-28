@@ -34,7 +34,7 @@ export const accountSchema = z
 export const customerProfileSchema = z.object({
 	phone_number: z
 		.string()
-		.regex(/^\+?[\d\s\-]{7,15}$/, 'Enter a valid phone number')
+		.regex(/^\+?[\d\s-]{7,15}$/, 'Enter a valid phone number')
 		.or(z.literal(''))
 		.optional(),
 
@@ -59,7 +59,7 @@ export const businessDetailsSchema = z.object({
 
 	phone_number: z
 		.string()
-		.regex(/^\+?[\d\s\-]{7,15}$/, 'Enter a valid phone number')
+		.regex(/^\+?[\d\s-]{7,15}$/, 'Enter a valid phone number')
 		.or(z.literal(''))
 		.optional(),
 
