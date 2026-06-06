@@ -15,7 +15,7 @@ export const actions = {
 		if (!token) redirect(303, ROUTES.signIn);
 
 		const form = await request.formData();
-		const role = locals.user?.role?.toLowerCase();
+		const role = locals.user?.rolse;
 
 		try {
 			if (role === 'BUSINESS') {

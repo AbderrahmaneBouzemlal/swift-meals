@@ -5,7 +5,7 @@
 	/** @type {{ children: import('svelte').Snippet, user: any }} */
 	let { children, user } = $props();
 
-	const role = $derived((user?.role ?? '').toLowerCase());
+	const role = $derived(user?.role ?? '');
 </script>
 
 <div class="flex min-h-dvh w-full bg-[#f8f9fa] lg:flex-row">

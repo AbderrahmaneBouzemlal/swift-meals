@@ -96,8 +96,8 @@ class ProfileViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=["PATCH"], url_path="customer/update")
     def update_customer(self, request):
         user = request.user
-        if user.role != User.Role.customer:
-            user.role = User.Role.customer
+        if user.role != "CUSTOMER":
+            user.role = "CUSTOMER"
             user.save()
             if hasattr(user, "business_profile"):
                 user.business_profile.delete()
@@ -113,8 +113,8 @@ class ProfileViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=["PATCH"], url_path="business/update")
     def update_business(self, request):
         user = request.user
-        if user.role != User.Role.business:
-            user.role = User.Role.business
+        if user.role != "BUSINESS":
+            user.role = "BUSINESS"
             user.save()
             if hasattr(user, "customer_profile"):
                 user.customer_profile.delete()

@@ -37,10 +37,7 @@ export const actions = {
 			const formData = new FormData();
 			// field name matches what Django expects per role
 			const fieldName =
-				locals.user.role?.toLowerCase() === 'BUSINESS'
-					? 'logo'
-					: 'profile_picture';
-
+			locals.user.role === 'BUSINESS'
 			formData.append(fieldName, file);
 			await api.patch(ENDPOINTS.profile.picture, formData, { token });
 		} catch (err) {

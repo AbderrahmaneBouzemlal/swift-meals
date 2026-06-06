@@ -6,9 +6,9 @@ from .models import User, CustomerProfile, BusinessProfile
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        if instance.role == User.Role.customer:
+        if instance.role == "CUSTOMER":
             CustomerProfile.objects.create(user=instance)
-        elif instance.role == User.Role.business:
+        elif instance.role == "BUSINESS":
             BusinessProfile.objects.create(user=instance)
 
 

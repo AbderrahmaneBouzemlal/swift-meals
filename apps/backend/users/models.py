@@ -58,7 +58,7 @@ class CustomerProfile(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="customer_profile",
-        limit_choices_to={"role": User.Role.customer},
+        limit_choices_to={"role": "CUSTOMER"},
     )
     profile_picture = models.ImageField(
         upload_to="profile_pictures/",
@@ -149,7 +149,7 @@ class BusinessProfile(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="business_profile",
-        limit_choices_to={"role": User.Role.business},
+        limit_choices_to={"role": "BUSINESS"},
     )
     restaurant_name = models.CharField(max_length=150)
     location = models.CharField(max_length=200)

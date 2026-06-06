@@ -10,7 +10,7 @@
 	let { data, form } = $props();
 
 	const user = $derived(data.user);
-	const isBusiness = $derived(user?.role?.toLowerCase() === 'BUSINESS');
+	const isBusiness = $derived(user?.role === 'BUSINESS');
 
 	const currentUrl = $derived(
 		isBusiness

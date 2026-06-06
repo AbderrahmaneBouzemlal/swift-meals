@@ -18,6 +18,7 @@ export const actions = {
 			const data = Object.fromEntries(form.entries());
 
 			if (role === 'BUSINESS') {
+				console.log(data, token);
 				await setUpBusiness(data, token);
 			} else {
 				await setUpProfile(data, token);
@@ -26,13 +27,13 @@ export const actions = {
 			if (err instanceof ApiError) {
 				if (err.type === 'validation') {
 					return fail(400, {
-						errors: err.fieldErrors // already a plain object { field: 'message' }
+						errors: err.fieldErrors
 					});
 				}
 
 				return fail(500, {
 					errors: {
-						server: err.message // string only
+						server: err.message
 					}
 				});
 			}

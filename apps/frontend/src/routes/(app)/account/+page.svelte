@@ -8,8 +8,9 @@
 	let { data } = $props();
 
 	const user = $derived(data?.user ?? null);
-	const role = $derived((user?.role ?? '').toLowerCase());
+	const role = $derived(user?.role ?? '');
 	const isBusiness = $derived(role === 'BUSINESS');
+
 	const customerProfile = $derived(user?.customer_profile ?? {});
 	const businessProfile = $derived(user?.business_profile ?? {});
 

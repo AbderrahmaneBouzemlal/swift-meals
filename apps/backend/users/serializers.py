@@ -17,7 +17,7 @@ class CreatableSlugRelatedField(serializers.SlugRelatedField):
                 obj.save()
             return obj
         except (TypeError, ValueError):
-            self.fail('invalid')
+            self.fail("invalid")
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -133,19 +133,21 @@ class UserDetailSerializer(serializers.ModelSerializer):
         read_only_fields = ["uid", "date_joined", "role"]
 
     def get_customer_profile(self, obj):
-        if hasattr(obj, "customer_profile"):
+        try:
             return CustomerProfileSerializer(
                 obj.customer_profile,
                 context=self.context,
             ).data
-        return None
+        except CustomerProfile.DoesNotExist:
+            return None
 
     def get_business_profile(self, obj):
-        if hasattr(obj, "business_profile"):
+        try:
             return BusinessProfileSerializer(
                 obj.business_profile, context=self.context
             ).data
-        return None
+        except BusinessProfile.DoesNotExist:
+            return None
 
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
@@ -196,15 +198,18 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
         slug_field="name",
         queryset=Cuisine.objects.filter(is_active=True),
     )
-    pickup_locations = CreatableSlugRelatedField(
+    pickup_locations_list = CreatableSlugRelatedField(
         many=True,
         read_only=False,
         slug_field="name",
         queryset=PickupLocation.objects.filter(is_active=True),
+        source="pickup_locations",
     )
     email = serializers.EmailField(source="user.email", read_only=True)
     owner_name = serializers.CharField(source="user.name", read_only=True)
     logo_url = serializers.SerializerMethodField()
+    cuisine_type = serializers.SerializerMethodField()
+    pickup_locations = serializers.SerializerMethodField()
 
     def get_logo_url(self, obj):
         if not obj.logo:
@@ -213,6 +218,16 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
         if request:
             return request.build_absolute_uri(obj.logo.url)
         return obj.logo.url
+
+    def get_cuisine_type(self, obj):
+        """Return cuisines as comma-separated string for frontend compatibility"""
+        cuisines = obj.cuisines.all().values_list("name", flat=True)
+        return ", ".join(cuisines) if cuisines else ""
+
+    def get_pickup_locations(self, obj):
+        """Return pickup locations as comma-separated string for frontend compatibility"""
+        locations = obj.pickup_locations.all().values_list("name", flat=True)
+        return ", ".join(locations) if locations else ""
 
     class Meta:
         model = BusinessProfile
@@ -228,11 +243,19 @@ class BusinessProfileSerializer(serializers.ModelSerializer):
             "logo",
             "logo_url",
             "ssm_registration",
-            "pickup_locations",
             "cuisines",
+            "cuisine_type",
+            "pickup_locations",
+            "pickup_locations_list",
             "is_live",
         ]
-        read_only_fields = ["id", "email", "owner_name"]
+        read_only_fields = [
+            "id",
+            "email",
+            "owner_name",
+            "cuisine_type",
+            "pickup_locations",
+        ]
 
 
 class CustomerPictureSerializer(serializers.ModelSerializer):

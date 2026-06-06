@@ -5,7 +5,7 @@ import { ENDPOINTS } from '$lib/api/endpoints.js';
 import { ROUTES } from '$lib/utils/routes.js';
 
 export async function load({ locals, cookies }) {
-	if (!locals.user || locals.user.role?.toLowerCase() !== 'BUSINESS') {
+	if (!locals.user || locals.user.role !== 'BUSINESS') {
 		redirect(303, ROUTES.account);
 	}
 
